@@ -1,0 +1,9 @@
+{"protocol":"json","version":1}  - ужно отправить что бы начать работать с WSS
+
+
+{"type":1,"target":"JoinDialog","arguments":["1"]} - коннект на диалог
+
+
+{"type":1,"target":"SendMessage","arguments":["Привет из Postman!","1","user42"]} - отправка сообщения 
+
+{"type":6} - ping

@@ -1,0 +1,88 @@
+.Auth__body{
+    background-image: url(/img/auth-bg.jpg);
+    background-size:cover;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.Auth__container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 30px 20px;
+    min-width: 300px;
+    min-height: 400px;
+    color: white;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 5.5);
+    position: relative;
+}
+
+.Auth__buttons-container{
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.Auth__link-button{
+    border: none;
+    background-color: inherit;
+    color: white;
+    font-size: 1rem;
+
+    border-bottom: 2px solid inherit;
+}
+
+.link__active{
+    border-bottom: 2px solid #72e5f0;
+}
+
+
+.Auth__form{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.Auth__input{
+    background-color: inherit;
+    border: none;
+    border-bottom: 2px solid white;
+    min-width: 250px;
+    font-size: 1rem;
+    color: white;
+    padding: 2px;
+}
+
+.Auth__input::placeholder{
+     color: white;
+}
+
+.Auth__input:hover{
+    border-bottom: 2px solid white;
+}
+
+.Auth__input:focus{
+    outline: none;
+}
+
+.Auth__button{
+    width: fit-content;
+    padding: 10px 40px;
+    border-radius: 15px;
+    border: none;
+}
+
+.Auth__button:hover{
+    background-color: #72e5f0;
+    color: white;
+    transition: all .2s ease-in-out;
+}

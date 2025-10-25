@@ -1,0 +1,114 @@
+.LeftSideBar__container{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    outline: 1px solid  black;
+}
+
+.Chats__container{
+    display: flex;
+    flex: 1;
+    background-color: #e9e8eb;
+     outline: 1px solid #d4d2d2;
+}
+
+.Chats__list{
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100vh - 50px);
+  border: none;
+  width: 100%;
+}
+
+.Chats__list::-webkit-scrollbar {
+  width: 6px;               /* ширина scrollbar */
+}
+.Chats__list::-webkit-scrollbar-track {
+  background: #d4d2d2;
+  width: 8px;
+}
+.Chats__list::-webkit-scrollbar-thumb {
+  background-color: rgb(87, 87, 87);    /* цвет плашки */
+  border-radius: 20px; 
+}
+
+
+
+.Search{
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 50px;
+  padding: 0 5px;
+  position: relative;
+}
+
+.Search__input{ 
+  height: 25px;
+  width: 250px;
+  font-size: large;
+  border-radius: 20px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #d4d2d2;
+}
+
+.Search__input:focus{
+  outline: solid 1px #d4d2d2;
+  background-color: white;
+}
+
+.Search__input:focus::placeholder {
+  color: transparent;
+}
+
+.ChatCard__text-container{
+  flex: 1;
+}
+
+.ChatCard__img{
+  width: 25%;
+}
+
+.ChatCard{
+  display: flex;
+  padding: 5px;
+  background-color: #fff;
+  border: none;
+}
+
+.active-chat{
+  background-color: #ffffff5a;
+}
+
+.Search__result-container{
+  position: absolute;
+  list-style: none;
+  width: 100%;
+  background-color: white;
+  top: 2px;
+  left:100%;
+  outline: 1px solid grey;
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  /* если что удалить */
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  /* __________ */
+  opacity: 0;
+  transform: translateX(-5px);
+  animation: fadeIn 0.2s forwards ease-out;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
