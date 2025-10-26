@@ -20,9 +20,15 @@ export default function ChatCard({setSearchValue=null,refreshContacts=null,isSea
                             userKey2:contact.id
                         })
                     }
+<<<<<<< HEAD
                 )
                 refreshContacts()
                 setSearchValue()
+=======
+                ).then(()=>{refreshContacts();
+                    setSearchValue(null)
+                })
+>>>>>>> newcontent
             }
         }} className={`ChatCard ${styleActive === contact.id ? "active-chat" : ""}`}>
             <img className="ChatCard__img" src={null} alt="Аватарка" />
