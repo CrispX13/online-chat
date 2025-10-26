@@ -8,6 +8,8 @@ namespace OnlineChatBackend.Models
         [Key]
         public int Id { get; set; }
 
+        public int UserId { get; set; }
+
         public int DialogId { get; set; }
         [Required]
         public string MessageText { get; set; }

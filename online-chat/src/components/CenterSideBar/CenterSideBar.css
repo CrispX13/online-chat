@@ -97,6 +97,11 @@
   position: relative;
 }
 
+.message_right{
+  margin-left: auto;
+  margin-right: 30px;
+}
+
 .message__text{
   word-break:break-all;
   margin: 0;

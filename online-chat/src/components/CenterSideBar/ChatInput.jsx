@@ -3,7 +3,7 @@ import { AuthContext } from "../AuthContext"
 
 export default function ChatInput({connRef,setRefetch,dialogKey})
 {
-    const {jwtKey} = useContext(AuthContext)
+    const {userId} = useContext(AuthContext)
     const taRef = useRef(null)
     const [text,setText] = useState("")
     const textChange = (event) => {
@@ -35,7 +35,7 @@ export default function ChatInput({connRef,setRefetch,dialogKey})
     const submit = async () => {
        
         const conn = connRef.current;
-        await conn.invoke("SendMessage", text.trim(), String(dialogKey), String(""));
+        await conn.invoke("SendMessage", text.trim(), String(dialogKey), String(userId));
 
         // const message = {
         //     dialogId: dialogKey,

@@ -36,15 +36,20 @@ namespace OnlineChatBackend.Hubs
 
         public async Task SendMessage(string Message,string DialogId, string UserId)
         {
-            var answer = new {Message,DialogId,UserId};
             Message newMessage = new Message
             {
                 MessageText = Message,
                 DialogId = Int32.Parse(DialogId),
                 MessageDateTime = DateTime.UtcNow,
+                UserId = Int32.Parse(UserId)
             };
             await Clients.Group($"dialog:{DialogId}").SendAsync("MessageCreated", newMessage);
             messageRepository.Add(newMessage);
+        }
+
+        public async Task SendNotification(string fromContactId,string toContactId)
+        {
+            await Clients.Group(toContactId).SendAsync("NewNotifications", fromContactId);
         }
     }
 }
