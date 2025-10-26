@@ -27,10 +27,6 @@ export default function CenterSideBar({connection,connRef,contact,dialogKey}){
     setMessages(prev => {
         // опционально: дедуп по id, если сервер его шлёт
         // if (prev.some(m => m.id === message.id)) return prev;
-<<<<<<< HEAD
-        console.log([...prev, message])
-=======
->>>>>>> newcontent
         return [...prev, message];
     });
     console.log(messages)
