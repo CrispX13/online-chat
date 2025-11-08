@@ -1,4 +1,8 @@
+import { useContext } from "react";
+import { AuthContext } from "../../AuthContext";
+
 export default function Message({info,index}){
+    const {userId} = useContext(AuthContext)
 
     const isoString = info.messageDateTime;
     const date = new Date(isoString);
@@ -6,7 +10,7 @@ export default function Message({info,index}){
     const hours = date.getHours();
     const minutes = date.getMinutes();
     return (
-        <div key={index} className="message">
+        <div key={index} className={`message ${userId===String(info.userId)?" message_right":""}`}>
             <p className="message__text">{info.messageText}</p>
             <span className="message__time">{`${hours}:${minutes.toString().padStart(2, "0")}`}</span>
         </div>

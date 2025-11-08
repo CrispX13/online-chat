@@ -4,11 +4,11 @@ import "./LeftSideBarStyles.css"
 import { AuthContext } from "../AuthContext"
 import { useCallback,useState,useContext,useEffect} from "react"
 
-export default function LeftSideBar({setAnotherUserKey}){
-     const [contacts,setContacts] = useState([])
+export default function LeftSideBar({contacts,setContacts,setAnotherUserKey}){
      const {jwtKey,userId} = useContext(AuthContext)
 
      const fetchContacts = useCallback(()=>{
+        // получаю список контактов для конкретного пользователя
         fetch(`/api/contacts/all-for-id/${userId}`,{
                      method: "GET",
                      headers: { 

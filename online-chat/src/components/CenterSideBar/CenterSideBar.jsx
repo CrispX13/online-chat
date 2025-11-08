@@ -5,12 +5,12 @@ import ChatFooter from "./ChatFooter"
 import "./CenterSideBar.css"
 import {AuthContext} from "../AuthContext"
 
-export default function CenterSideBar({connection,connRef,contact,dialogKey}){
+export default function CenterSideBar({ setContacts,connection,connRef,contact,dialogKey}){
     const [messages,setMessages] = useState([])
     const [refetch, setRefetch] = useState(0)
     const messagesEndRef = useRef(null)
 
-    const {jwtKey} = useContext(AuthContext)
+    const {jwtKey, userId} = useContext(AuthContext)
 
     useEffect(() => {
         if(dialogKey != null){
@@ -24,13 +24,20 @@ export default function CenterSideBar({connection,connRef,contact,dialogKey}){
     }, [refetch,dialogKey])
 
     const AddMessage = useCallback((message) => {
-    setMessages(prev => {
-        // опционально: дедуп по id, если сервер его шлёт
-        // if (prev.some(m => m.id === message.id)) return prev;
-        return [...prev, message];
-    });
-    console.log(messages)
-    }, []);
+        setMessages(prev => {
+            // опционально: дедуп по id, если сервер его шлёт
+            // if (prev.some(m => m.id === message.id)) return prev;
+            return [...prev, message];
+        });
+        console.log(messages)
+        // отправка уведомления при новом сообщении 
+        if(userId !== String(message.userId)){
+            setContacts(prev=>
+                prev.map(contact=>contact.id === message.userId?{ ...contact, notification: true }:contact)
+            )
+            // setContacts([])
+        }
+    }, [setContacts,userId]);
 
     useEffect(()=>{
         if(connection===true){
