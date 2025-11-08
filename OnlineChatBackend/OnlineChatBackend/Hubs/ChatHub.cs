@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.SignalR;
 using OnlineChatBackend.Interfaces;
 using OnlineChatBackend.Models;
 using SignalRSwaggerGen.Attributes;
+using System.Collections.Concurrent;
 
 namespace OnlineChatBackend.Hubs
 {
@@ -13,6 +14,8 @@ namespace OnlineChatBackend.Hubs
         public IMessageRepository messageRepository { get; set; }
 
         private readonly ILogger<ChatHub> _log;
+
+        private static readonly ConcurrentDictionary<string, HashSet<string>> usersConnections;
 
         public ChatHub(IMessageRepository messageRepository, ILogger<ChatHub> log)
         {
@@ -25,6 +28,9 @@ namespace OnlineChatBackend.Hubs
             _log.LogInformation("Connected: {ConnId}, Authenticated: {Auth}, Name: {Name}",
             Context.ConnectionId, Context.User?.Identity?.IsAuthenticated, Context.User?.Identity?.Name);
             await Groups.AddToGroupAsync(Context.ConnectionId, $"dialog:{DialogId}");
+
+            string userId = Context.UserIdentifier; 
+            var connectionId = Context.ConnectionId;
         }
 
         public async Task LeaveDialog(string DialogId)

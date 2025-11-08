@@ -24,7 +24,7 @@ export default function ChatCard({setSearchValue=null,refreshContacts=null,isSea
                     setSearchValue(null)
                 })
             }
-        }} className={`ChatCard ${styleActive === contact.id ? "active-chat" : ""}`}>
+        }} className={`ChatCard ${styleActive === contact.id ? "active-chat" : ""} ${contact.notification ? "notification" : ""}`}>
             <img className="ChatCard__img" src={null} alt="Аватарка" />
             <div className="ChatCard__text-container">
                 <h3 className="ChatCard__name">{contact.name}</h3>

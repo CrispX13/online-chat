@@ -5,10 +5,16 @@ import { AuthContext } from './components/AuthContext'
 import { HubConnectionBuilder, HubConnectionState, LogLevel} from "@microsoft/signalr";
 
 function App() {
+  // id для другово пользователя, что бы отправлять сообщения 
   const [anotherUserKey, setAnotherUserKey] = useState()
+  // id диалога, который открыт в данный момент
   const [dialogKey, setDialogKey] = useState()
+
   const { jwtKey, userId } = useContext(AuthContext)
+  // ссылка на подключение для SignalR
   const connRef = useRef(null);
+  // список контактов для пользователя
+  const [contacts,setContacts] = useState([])
 
   let [connection, setConnection] = useState(false);
 
@@ -30,8 +36,10 @@ function App() {
   }, [jwtKey])
 
 
+  // при каждом выборе нового пользователя, подгружается id диалога с ним
   useEffect(() => {
     if (anotherUserKey != null) {
+      // получение id для диалога
       fetch(`/api/Dialog?UserKey1=${userId}&UserKey2=${anotherUserKey.id}`, {
         method: "GET",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${jwtKey}`, }
@@ -39,9 +47,14 @@ function App() {
       )
         .then(response => response.json())
         .then(json => setDialogKey(json.dialogKey.id));
+      
+      setContacts(prev=>
+              prev.map(contact=>contact.id === anotherUserKey.id?{ ...contact, notification: false }:contact)
+          )
     }
   }, [anotherUserKey])
 
+  // подключаю слушатель диалога SignalR
   useEffect(()=>{
       const conn = connRef.current
 
@@ -55,8 +68,8 @@ function App() {
 
   return (
     <>
-      <LeftSideBar setAnotherUserKey={setAnotherUserKey}></LeftSideBar>
-      <CenterSideBar connection={connection} connRef={connRef} contact={anotherUserKey} dialogKey={dialogKey}></CenterSideBar>
+      <LeftSideBar contacts={contacts} setContacts={setContacts} setAnotherUserKey={setAnotherUserKey}></LeftSideBar>
+      <CenterSideBar  setContacts={setContacts} connection={connection} connRef={connRef} contact={anotherUserKey} dialogKey={dialogKey}></CenterSideBar>
     </>
 
   )
