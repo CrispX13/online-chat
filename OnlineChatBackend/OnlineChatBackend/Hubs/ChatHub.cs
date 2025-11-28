@@ -15,8 +15,6 @@ namespace OnlineChatBackend.Hubs
 
         private readonly ILogger<ChatHub> _log;
 
-        private static readonly ConcurrentDictionary<string, HashSet<string>> usersConnections;
-
         public ChatHub(IMessageRepository messageRepository, ILogger<ChatHub> log)
         {
             this.messageRepository = messageRepository;

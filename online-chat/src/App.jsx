@@ -4,6 +4,7 @@ import CenterSideBar from './components/CenterSideBar/CenterSideBar'
 import { AuthContext } from './components/AuthContext'
 import { HubConnectionBuilder, HubConnectionState, LogLevel} from "@microsoft/signalr";
 
+
 function App() {
   // id для другово пользователя, что бы отправлять сообщения 
   const [anotherUserKey, setAnotherUserKey] = useState()
