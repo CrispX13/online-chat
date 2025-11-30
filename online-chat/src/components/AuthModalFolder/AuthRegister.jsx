@@ -1,3 +1,5 @@
+import React from 'react'
+
 export default function AuthRegister({toSwitch}){
     const handleSubmit = (e) => {
         e.preventDefault();
