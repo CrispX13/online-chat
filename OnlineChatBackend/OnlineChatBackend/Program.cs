@@ -97,6 +97,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("client");
 
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($"REQ: {context.Request.Method} {context.Request.Scheme}://{context.Request.Host}{context.Request.Path}{context.Request.QueryString}");
+    await next();
+});
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
