@@ -1,10 +1,12 @@
 import { useContext, useRef } from "react"
 import { AuthContext } from "../AuthContext"
-export default function ChatCard({setSearchValue=null,refreshContacts=null,isSearch = false,contact, setAnotherUserKey,setStyleActive=null,styleActive=false}){
+import { SignalRContext } from "../SignalRConf/SignalRContext"
+export default function ChatCard({setSearchValue=null,refreshContacts=null,isSearch = false,contact,setStyleActive=null,styleActive=false}){
     const {jwtKey,userId} = useContext(AuthContext)
+    const {setActiveUser} = useContext(SignalRContext)
     const liRef = useRef()
     return (
-        <li ref={liRef} onClick={() => {setAnotherUserKey(contact)
+        <li ref={liRef} onClick={() => {setActiveUser(contact)
             if(setStyleActive!= null)
                 setStyleActive(contact.id)
             if(isSearch){

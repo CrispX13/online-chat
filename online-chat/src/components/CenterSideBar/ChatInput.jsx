@@ -1,9 +1,10 @@
 import { useState, useRef, useContext } from "react"
-import { AuthContext } from "../AuthContext"
+import { SignalRContext } from "../SignalRConf/SignalRContext"
 
-export default function ChatInput({connRef,setRefetch,dialogKey})
+export default function ChatInput({dialogKey})
 {
-    const {userId} = useContext(AuthContext)
+    const {activeUser} = useContext(SignalRContext)
+    const {connection} = useContext(SignalRContext)
     const taRef = useRef(null)
     const [text,setText] = useState("")
     const textChange = (event) => {
@@ -34,28 +35,8 @@ export default function ChatInput({connRef,setRefetch,dialogKey})
 
     const submit = async () => {
        
-        const conn = connRef.current;
-        await conn.invoke("SendMessage", text.trim(), String(dialogKey), String(userId));
-
-        // const message = {
-        //     dialogId: dialogKey,
-        //     textMessage: text.trim()
-        // }
-
-        // const res = await fetch("/api/chat", {
-        // method: "POST",
-        // headers: { "Content-Type": "application/json", Authorization: `Bearer ${jwtKey}` },
-        // body: JSON.stringify( message )
-        // })
-
-        // // console.log(res[[PromiseResult]])
-        // if (res.ok){
-        //     setText("");
-        //     setRefetch(r => r+1)
-        //     taRef.current.value = ""
-        // }else{
-        //     alert("Все хуета, переделывай")
-        // }
+        console.log(text.trim(),String(dialogKey), String(activeUser.id))
+        await connection.invoke("SendMessage", text.trim(), String(dialogKey), String(activeUser.id));
     }
 
     return(

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState,useRef } from "react"
 import { AuthContext } from "../AuthContext"
 import SearchResultBlock from "./SearchResultBlock"
 
-export default function Search({refreshContacts,setAnotherUserKey}){
+export default function Search({refreshContacts}){
     const [searchValue,setSearchValue] = useState()
     const [searchResult,setSearchResult] = useState(null)
     const {jwtKey} = useContext(AuthContext)
@@ -34,7 +34,7 @@ export default function Search({refreshContacts,setAnotherUserKey}){
     return (
         <div className="Search">
             <input onChange={(e)=>{setSearchValue(e.target.value)}} className="Search__input" type="text" placeholder="Search"/>
-            <SearchResultBlock  setSearchValue={setSearchValue} refreshContacts={refreshContacts} setAnotherUserKey={setAnotherUserKey} searchResult={searchResult}></SearchResultBlock>
+            <SearchResultBlock  setSearchValue={setSearchValue} refreshContacts={refreshContacts} searchResult={searchResult}></SearchResultBlock>
         </div>
     )
 }

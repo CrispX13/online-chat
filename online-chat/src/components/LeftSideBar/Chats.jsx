@@ -1,14 +1,14 @@
 import { useState, useEffect, useContext } from "react"
 import ChatCard from "./ChatCard"
 
-export default function Chats({contacts,setAnotherUserKey}){
+export default function Chats({contacts}){
     const [styleActive, setStyleActive] = useState(null)
 
 
     let ChatCards = []
 
     contacts.forEach(element => {
-        ChatCards.push(<ChatCard styleActive={styleActive} setStyleActive = {setStyleActive} setAnotherUserKey = {setAnotherUserKey} key={element.id} contact = {element}></ChatCard>)
+        ChatCards.push(<ChatCard styleActive={styleActive} setStyleActive = {setStyleActive} key={element.id} contact = {element}></ChatCard>)
     });
     
 

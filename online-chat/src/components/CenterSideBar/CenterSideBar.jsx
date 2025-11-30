@@ -4,14 +4,16 @@ import ChatBody from "./CenterChatBar/ChatSide"
 import ChatFooter from "./ChatFooter"
 import "./CenterSideBar.css"
 import {AuthContext} from "../AuthContext"
+import { SignalRContext } from "../SignalRConf/SignalRContext"
 
-export default function CenterSideBar({ setContacts,connection,connRef,contact,dialogKey}){
+export default function CenterSideBar({ setContacts,contact,dialogKey}){
     const [messages,setMessages] = useState([])
-    const [refetch, setRefetch] = useState(0)
     const messagesEndRef = useRef(null)
 
     const {jwtKey, userId} = useContext(AuthContext)
+    const {connection,isConnected} = useContext(SignalRContext)
 
+    // Получаю сообщения из диалога для активного контакта
     useEffect(() => {
         if(dialogKey != null){
             fetch(`/api/chat?DialogKey=${dialogKey}`,{
@@ -21,7 +23,7 @@ export default function CenterSideBar({ setContacts,connection,connRef,contact,d
               .then(response => response.json())
               .then(json => setMessages(json))
         }
-    }, [refetch,dialogKey])
+    }, [dialogKey])
 
     const AddMessage = useCallback((message) => {
         setMessages(prev => {
@@ -40,13 +42,12 @@ export default function CenterSideBar({ setContacts,connection,connRef,contact,d
     }, [setContacts,userId]);
 
     useEffect(()=>{
-        if(connection===true){
-            const conn = connRef?.current
-            if(!conn) return
+        if(isConnected){
+            if(!connection) return
     
-            conn.on("MessageCreated", AddMessage)
+            connection.on("MessageCreated", AddMessage)
         }
-    },[connRef, AddMessage,connection])
+    },[AddMessage,isConnected])
 
     useEffect(() => {
             messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -56,7 +57,7 @@ export default function CenterSideBar({ setContacts,connection,connRef,contact,d
         <div className="CenterSideBar__container">
             {contact ? <ChatHeading>{contact}</ChatHeading> : null}
             <ChatBody ref={messagesEndRef} messages={messages}></ChatBody>
-            <ChatFooter connRef={connRef} dialogKey={dialogKey} setRefetch={setRefetch}></ChatFooter>
+            <ChatFooter dialogKey={dialogKey} ></ChatFooter>
         </div>
     )
 }

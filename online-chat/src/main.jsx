@@ -3,11 +3,14 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import AuthGate from './components/AuthGate.jsx'
 import AuthProvider from './components/AuthProvider.jsx'
+import SignalRProvider from './components/SignalRConf/SignalRProvider.jsx'
 
 createRoot(document.getElementById('root')).render(
 
-    <AuthProvider>
+  <AuthProvider>
+    <SignalRProvider>
       <AuthGate/>
-    </AuthProvider>
+    </SignalRProvider>
+  </AuthProvider>
 
 )

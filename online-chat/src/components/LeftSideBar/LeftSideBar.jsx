@@ -4,7 +4,7 @@ import "./LeftSideBarStyles.css"
 import { AuthContext } from "../AuthContext"
 import { useCallback,useState,useContext,useEffect} from "react"
 
-export default function LeftSideBar({contacts,setContacts,setAnotherUserKey}){
+export default function LeftSideBar({contacts,setContacts}){
      const {jwtKey,userId} = useContext(AuthContext)
 
      const fetchContacts = useCallback(()=>{
@@ -20,13 +20,16 @@ export default function LeftSideBar({contacts,setContacts,setAnotherUserKey}){
                )
      },[jwtKey, userId])
 
-     useEffect(() => {
-        fetchContacts();
-           }, [fetchContacts])
+     useEffect(() =>
+        {
+            fetchContacts();
+        }, [fetchContacts]
+    )
+
     return(
         <div className="LeftSideBar__container">
-            <Search  refreshContacts={fetchContacts} setAnotherUserKey={setAnotherUserKey}></Search>
-            <Chats contacts={contacts} setAnotherUserKey = {setAnotherUserKey}></Chats>
+            <Search  refreshContacts={fetchContacts}></Search>
+            <Chats contacts={contacts}></Chats>
         </div>
     )
 }
