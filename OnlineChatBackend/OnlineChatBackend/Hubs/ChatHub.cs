@@ -45,10 +45,13 @@ namespace OnlineChatBackend.Hubs
             {
                 MessageText = Message,
                 DialogId = Int32.Parse(DialogId),
+                UserId = Int32.Parse(UserId),
                 MessageDateTime = DateTime.UtcNow
             };
 
+            await Clients.Caller.SendAsync("MessageCreated", newMessage);
             await Clients.User(UserId).SendAsync("MessageCreated", newMessage);
+
             messageRepository.Add(newMessage);
 
         }

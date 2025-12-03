@@ -4,13 +4,14 @@ import ChatBody from "./CenterChatBar/ChatSide"
 import ChatFooter from "./ChatFooter"
 import "./CenterSideBar.css"
 import {AuthContext} from "../AuthContext"
+import {MessagesContext} from "../MessagesService/MessagesContext"
 import { SignalRContext } from "../SignalRConf/SignalRContext"
 
 export default function CenterSideBar({ setContacts,contact,dialogKey}){
-    const [messages,setMessages] = useState([])
+    const {messages, AddMessage,SetAllMessages} = useContext(MessagesContext)
     const messagesEndRef = useRef(null)
 
-    const {jwtKey, userId} = useContext(AuthContext)
+    const {jwtKey} = useContext(AuthContext)
     const {connection,isConnected} = useContext(SignalRContext)
 
     // Получаю сообщения из диалога для активного контакта
@@ -21,25 +22,10 @@ export default function CenterSideBar({ setContacts,contact,dialogKey}){
                 headers: { "Content-Type": "application/json" , Authorization: `Bearer ${jwtKey}`},
             })
               .then(response => response.json())
-              .then(json => setMessages(json))
+              .then(json => {SetAllMessages(json);}
+            );
         }
     }, [dialogKey])
-
-    const AddMessage = useCallback((message) => {
-        setMessages(prev => {
-            // опционально: дедуп по id, если сервер его шлёт
-            // if (prev.some(m => m.id === message.id)) return prev;
-            return [...prev, message];
-        });
-        console.log(messages)
-        // отправка уведомления при новом сообщении 
-        if(userId !== String(message.userId)){
-            setContacts(prev=>
-                prev.map(contact=>contact.id === message.userId?{ ...contact, notification: true }:contact)
-            )
-            // setContacts([])
-        }
-    }, [setContacts,userId]);
 
     useEffect(()=>{
         if(isConnected){

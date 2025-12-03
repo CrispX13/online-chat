@@ -3,8 +3,7 @@ import { SignalRContext } from "../SignalRConf/SignalRContext"
 
 export default function ChatInput({dialogKey})
 {
-    const {activeUser} = useContext(SignalRContext)
-    const {connection} = useContext(SignalRContext)
+    const {activeUser,connection} = useContext(SignalRContext)
     const taRef = useRef(null)
     const [text,setText] = useState("")
     const textChange = (event) => {
@@ -13,7 +12,7 @@ export default function ChatInput({dialogKey})
         el.style.height = el.scrollHeight + "px"
         setText(el.value)
     }
-
+    
     const onKeyDown = (e) => {
         // не мешаем IME-композиции (китайский/японский и т.п.)
         if (e.isComposing) return;

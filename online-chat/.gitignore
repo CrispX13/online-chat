@@ -17,3 +17,9 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+
+../OnlineChatBackend/.vs/  
+../OnlineChatBackend/OnlineChatBackend/OnlineChatBackend.csproj.user
+../OnlineChatBackend/OnlineChatBackend/bin/
+../OnlineChatBackend/OnlineChatBackend/obj/

@@ -7,7 +7,7 @@ using System.Security.Claims;
 using System.Text;
 
 namespace OnlineChatBackend.Services
-{
+{ 
     public class JwtService(IOptions<AuthSettings> options)
     {
         public string GenerateToken(Contact account)
@@ -16,7 +16,7 @@ namespace OnlineChatBackend.Services
             {
                 new Claim("userName", account.Name),
                 new Claim("id", account.Id.ToString()),
-                //new Claim(ClaimTypes.NameIdentifier, account.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, account.Id.ToString())
             };
             var jwtToken = new JwtSecurityToken(
                 expires: DateTime.UtcNow.Add(options.Value.Expires),
