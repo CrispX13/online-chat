@@ -11,6 +11,8 @@ namespace OnlineChatBackend.DbContexts
 
         public DbSet<Dialog> Dialogs { get; set; }
 
+        public DbSet<Notification> Notifications { get; set; }
+
         protected override void OnModelCreating(ModelBuilder b)
         {
             base.OnModelCreating(b);
@@ -36,6 +38,15 @@ namespace OnlineChatBackend.DbContexts
                 .WithMany(m => m.Messages)
                 .HasForeignKey(d => d.DialogId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            b.Entity<Notification>()
+                .HasKey(n => new { n.DialogId, n.UserId })
+                .HasName("PK_Notifications")  // Опционально для KeyBuilder
+                ;
+
+            b.Entity<Notification>()  // Отдельная настройка
+                .ToTable("notifications")
+                .HasIndex(n => n.UserId);
         }
     }
 }

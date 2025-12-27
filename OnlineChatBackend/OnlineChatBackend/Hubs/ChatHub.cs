@@ -21,31 +21,17 @@ namespace OnlineChatBackend.Hubs
             _log = log;
         }
 
-        public async Task JoinDialog(string DialogId)
-        {
-            _log.LogInformation("Connected: {ConnId}, Authenticated: {Auth}, Name: {Name}",
-            Context.ConnectionId, Context.User?.Identity?.IsAuthenticated, Context.User?.Identity?.Name);
-            await Groups.AddToGroupAsync(Context.ConnectionId, $"dialog:{DialogId}");
-
-            string userId = Context.UserIdentifier; 
-            var connectionId = Context.ConnectionId;
-        }
-
-        public async Task LeaveDialog(string DialogId)
-        {
-            _log.LogInformation("JoinDialog called. Conn={ConnId}, DialogId={DialogId}",
-            Context.ConnectionId, DialogId);
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"dialog:{DialogId}");
-        }
-
         public async Task SendMessage(string Message,string DialogId, string UserId)
         {
+
+            var callerUserIdentifier = Context.UserIdentifier;
 
             Message newMessage = new Message
             {
                 MessageText = Message,
                 DialogId = Int32.Parse(DialogId),
-                UserId = Int32.Parse(UserId),
+                ToUserId = Int32.Parse(UserId),
+                FromUserId = Int32.Parse(callerUserIdentifier),
                 MessageDateTime = DateTime.UtcNow
             };
 
@@ -55,10 +41,6 @@ namespace OnlineChatBackend.Hubs
             messageRepository.Add(newMessage);
 
         }
-
-        public async Task SendNotification(string fromContactId,string toContactId)
-        {
-            await Clients.Group(toContactId).SendAsync("NewNotifications", fromContactId);
-        }
+ 
     }
 }

@@ -8,7 +8,9 @@ namespace OnlineChatBackend.Models
         [Key]
         public int Id { get; set; }
 
-        public int UserId { get; set; }
+        public int ToUserId { get; set; }
+
+        public int FromUserId { get; set; }
 
         public int DialogId { get; set; }
         [Required]
@@ -19,6 +21,6 @@ namespace OnlineChatBackend.Models
         public bool Changed { get; set; } = false;
 
         public Dialog Dialog { get; set; }
-
+ 
     }
 }
