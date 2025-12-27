@@ -5,14 +5,20 @@ import AuthGate from './components/AuthGate.jsx'
 import AuthProvider from './components/AuthProvider.jsx'
 import SignalRProvider from './components/SignalRConf/SignalRProvider.jsx'
 import MessagesProvider from "./components/MessagesService/MessagesProvider.jsx"
+import DialogProvider from "./components/DialogService/DialogProvider.jsx"
+import ContactsProvider from "./components/ContactService/ContactsProvider.jsx"
 
 createRoot(document.getElementById('root')).render(
 
   <AuthProvider>
     <SignalRProvider>
-      <MessagesProvider>
-        <AuthGate/>
-      </MessagesProvider>
+      <ContactsProvider>
+        <DialogProvider>
+          <MessagesProvider>
+            <AuthGate/>
+          </MessagesProvider>
+        </DialogProvider>
+      </ContactsProvider>
     </SignalRProvider>
   </AuthProvider>
 

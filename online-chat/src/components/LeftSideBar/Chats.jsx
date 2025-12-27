@@ -1,9 +1,10 @@
-import { useState, useEffect, useContext } from "react"
+import { useState, useContext } from "react"
 import ChatCard from "./ChatCard"
+import {ContactsContext} from "../ContactService/ContactsContext"
 
-export default function Chats({contacts}){
+export default function Chats(){
     const [styleActive, setStyleActive] = useState(null)
-
+    const {contacts} = useContext(ContactsContext)
 
     let ChatCards = []
 

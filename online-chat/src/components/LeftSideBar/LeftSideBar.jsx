@@ -1,35 +1,12 @@
 import Search from "./Search" 
 import Chats from "./Chats"
 import "./LeftSideBarStyles.css"
-import { AuthContext } from "../AuthContext"
-import { useCallback,useState,useContext,useEffect} from "react"
 
-export default function LeftSideBar({contacts,setContacts}){
-     const {jwtKey,userId} = useContext(AuthContext)
-
-     const fetchContacts = useCallback(()=>{
-        // получаю список контактов для конкретного пользователя
-        fetch(`/api/contacts/all-for-id/${userId}`,{
-                     method: "GET",
-                     headers: { 
-                         "Content-Type": "application/json" ,
-                         Authorization: `Bearer ${jwtKey}`,
-                     }})
-               .then(response => response.json())
-               .then(json => setContacts(json)
-               )
-     },[jwtKey, userId])
-
-     useEffect(() =>
-        {
-            fetchContacts();
-        }, [fetchContacts]
-    )
-
+export default function LeftSideBar(){
     return(
         <div className="LeftSideBar__container">
-            <Search  refreshContacts={fetchContacts}></Search>
-            <Chats contacts={contacts}></Chats>
+            <Search></Search>
+            <Chats></Chats>
         </div>
     )
 }

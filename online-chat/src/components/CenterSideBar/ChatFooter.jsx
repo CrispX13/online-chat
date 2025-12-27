@@ -1,10 +1,10 @@
 import ChatInput from "./ChatInput"
 
-export default function ChatFooter({dialogKey})
+export default function ChatFooter()
 {
     return(
         <div className="ChatFooter__container">
-            <ChatInput dialogKey= {dialogKey} ></ChatInput>
+            <ChatInput></ChatInput>
         </div>
     )
 }

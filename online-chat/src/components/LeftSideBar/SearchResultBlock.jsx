@@ -1,10 +1,10 @@
 import ChatCard from "./ChatCard";
 
-export default function SearchResultBlock({setSearchValue,refreshContacts,searchResult}){
+export default function SearchResultBlock({setSearchValue,searchResult}){
     let ChatCards = []
     if(searchResult != null && searchResult.length>0){
             searchResult.forEach(element => {
-                ChatCards.push(<ChatCard setSearchValue={setSearchValue} refreshContacts={refreshContacts} isSearch={true} key={element.id} contact = {element}></ChatCard>)
+                ChatCards.push(<ChatCard setSearchValue={setSearchValue} isSearch={true} key={element.id} contact = {element}></ChatCard>)
             });
             return (
             <ul className="Search__result-container">

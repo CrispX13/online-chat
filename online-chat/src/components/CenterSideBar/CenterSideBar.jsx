@@ -1,18 +1,20 @@
-import { useState, useEffect, useRef, useContext, useCallback} from "react"
+import {useEffect, useRef, useContext} from "react"
 import ChatHeading from "./ChatHeading"
 import ChatBody from "./CenterChatBar/ChatSide"
 import ChatFooter from "./ChatFooter"
 import "./CenterSideBar.css"
 import {AuthContext} from "../AuthContext"
 import {MessagesContext} from "../MessagesService/MessagesContext"
+import {DialogContext} from "../DialogService/DialogContext"
 import { SignalRContext } from "../SignalRConf/SignalRContext"
 
-export default function CenterSideBar({ setContacts,contact,dialogKey}){
-    const {messages, AddMessage,SetAllMessages} = useContext(MessagesContext)
+export default function CenterSideBar(){
+    const {messages,SetAllMessages} = useContext(MessagesContext)
     const messagesEndRef = useRef(null)
+    const {dialogKey} = useContext(DialogContext)
+    const {activeUser} = useContext(SignalRContext)
 
     const {jwtKey} = useContext(AuthContext)
-    const {connection,isConnected} = useContext(SignalRContext)
 
     // Получаю сообщения из диалога для активного контакта
     useEffect(() => {
@@ -27,23 +29,15 @@ export default function CenterSideBar({ setContacts,contact,dialogKey}){
         }
     }, [dialogKey])
 
-    useEffect(()=>{
-        if(isConnected){
-            if(!connection) return
-    
-            connection.on("MessageCreated", AddMessage)
-        }
-    },[AddMessage,isConnected])
-
     useEffect(() => {
             messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
     }, [messages])
   
     return (
         <div className="CenterSideBar__container">
-            {contact ? <ChatHeading>{contact}</ChatHeading> : null}
-            <ChatBody ref={messagesEndRef} messages={messages}></ChatBody>
-            <ChatFooter dialogKey={dialogKey} ></ChatFooter>
+            {activeUser ? <ChatHeading></ChatHeading> : null}
+            <ChatBody ref={messagesEndRef}></ChatBody>
+            <ChatFooter></ChatFooter>
         </div>
     )
 }

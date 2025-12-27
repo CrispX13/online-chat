@@ -1,8 +1,10 @@
 import { useState, useRef, useContext } from "react"
 import { SignalRContext } from "../SignalRConf/SignalRContext"
+import { DialogContext } from "../DialogService/DialogContext"
 
-export default function ChatInput({dialogKey})
+export default function ChatInput()
 {
+    const {dialogKey} = useContext(DialogContext)
     const {activeUser,connection} = useContext(SignalRContext)
     const taRef = useRef(null)
     const [text,setText] = useState("")
@@ -21,20 +23,20 @@ export default function ChatInput({dialogKey})
         if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault(); // чтобы не вставлялся перенос строки
         submit();
-        taRef.current.style.height = "40px"
+        taRef.current.style.height = "50px"
         }
 
         // Альтернатива: Ctrl/Cmd+Enter — тоже отправка
         if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
         e.preventDefault();
         submit();
-        taRef.current.style.height = "40px"
+        taRef.current.style.height = "50px"
         }
     }
 
     const submit = async () => {
        
-        console.log(text.trim(),String(dialogKey), String(activeUser.id))
+        taRef.current.value = ""
         await connection.invoke("SendMessage", text.trim(), String(dialogKey), String(activeUser.id));
     }
 

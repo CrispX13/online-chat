@@ -10,7 +10,7 @@ export default function Message({info,index}){
     const hours = date.getHours();
     const minutes = date.getMinutes();
     return (
-        <div key={index} className={`message ${userId!==String(info.userId)?" message_right":""}`}>
+        <div key={index} className={`message ${userId!==String(info.toUserId)?" message_right":""}`}>
             <p className="message__text">{info.messageText}</p>
             <span className="message__time">{`${hours}:${minutes.toString().padStart(2, "0")}`}</span>
         </div>

@@ -1,12 +1,25 @@
 import { useContext, useRef } from "react"
 import { AuthContext } from "../AuthContext"
 import { SignalRContext } from "../SignalRConf/SignalRContext"
-export default function ChatCard({setSearchValue=null,refreshContacts=null,isSearch = false,contact,setStyleActive=null,styleActive=false}){
+import { ContactsContext } from "../ContactService/ContactsContext"
+
+export default function ChatCard(
+        {
+            setSearchValue=null,
+            isSearch = false,
+            contact,
+            setStyleActive=null,
+            styleActive=false
+        }
+){
+
     const {jwtKey,userId} = useContext(AuthContext)
     const {setActiveUser} = useContext(SignalRContext)
+    const {refreshContacts} = useContext(ContactsContext)
     const liRef = useRef()
     return (
-        <li ref={liRef} onClick={() => {setActiveUser(contact)
+        <li ref={liRef} onClick={() => {
+            setActiveUser(contact)
             if(setStyleActive!= null)
                 setStyleActive(contact.id)
             if(isSearch){
@@ -33,5 +46,6 @@ export default function ChatCard({setSearchValue=null,refreshContacts=null,isSea
                 <span className="ChatCard__last-message"></span>
             </div>
         </li>
+        
     )
 }
