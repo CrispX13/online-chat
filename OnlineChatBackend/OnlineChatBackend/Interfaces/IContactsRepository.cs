@@ -1,4 +1,5 @@
-﻿using OnlineChatBackend.Models;
+﻿using OnlineChatBackend.DTOs;
+using OnlineChatBackend.Models;
 
 namespace OnlineChatBackend.Interfaces
 {
@@ -12,7 +13,7 @@ namespace OnlineChatBackend.Interfaces
 
         Contact AddByName(string Name);
 
-        IEnumerable<Contact> FindAllForId(int Id);
+        IEnumerable<ContactWithStatusDto> FindAllForId(int Id);
 
         IEnumerable<Contact>? Search(string PartOfName);
     }

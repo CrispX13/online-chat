@@ -17,6 +17,15 @@ namespace OnlineChatBackend.Repositories
         public void Add(Message message)
         {
             _context.Messages.Add(message);
+
+            var notification = _context.Notifications
+                .FirstOrDefault(n => n.DialogId == message.DialogId && n.UserId == message.ToUserId);
+
+            if (notification != null)
+            {
+                notification.NewNotifications = true;
+            }
+
             _context.SaveChanges();
         }
 
@@ -33,9 +42,21 @@ namespace OnlineChatBackend.Repositories
             return null;
         }
 
-        public List<Message> GetAll(int DialogId)
+        public List<Message> GetAll(int DialogId, int? UserId)
         {
             List<Message> messages = _context.Messages.Where(x =>  x.DialogId == DialogId).ToList();
+
+            if (UserId.HasValue)
+            {
+                var notification = _context.Notifications
+                    .FirstOrDefault(n => n.DialogId == DialogId && n.UserId == UserId);
+
+                if (notification != null)
+                {
+                    notification.NewNotifications = false;
+                }
+            }
+
             return messages;
         }
 

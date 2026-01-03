@@ -19,6 +19,8 @@ namespace OnlineChatBackend.Models
 
         public List<Dialog> DialogsAsSecondUser { get; set; } = new();
 
+        public List<Notification> Notifications { get; set; } = new();
+
         //[Required]
         //public string TagName { get; set; }
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OnlineChatBackend.Models;
+using System.Reflection.Emit;
 
 namespace OnlineChatBackend.DbContexts
 {
@@ -41,12 +42,24 @@ namespace OnlineChatBackend.DbContexts
 
             b.Entity<Notification>()
                 .HasKey(n => new { n.DialogId, n.UserId })
-                .HasName("PK_Notifications")  // Опционально для KeyBuilder
+                .HasName("PK_Notifications") 
                 ;
 
-            b.Entity<Notification>()  // Отдельная настройка
-                .ToTable("notifications")
+            b.Entity<Notification>() 
+                .ToTable("Notifications")
                 .HasIndex(n => n.UserId);
+
+            b.Entity<Notification>()
+               .HasOne(n => n.Dialog)
+               .WithMany(d => d.Notifications)
+               .HasForeignKey(n => n.DialogId)
+               .OnDelete(DeleteBehavior.Cascade);
+
+            b.Entity<Notification>()
+                .HasOne(n => n.User)
+                .WithMany(c => c.Notifications)
+                .HasForeignKey(n => n.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

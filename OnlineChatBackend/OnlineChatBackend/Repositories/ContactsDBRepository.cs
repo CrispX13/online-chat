@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using OnlineChatBackend.DbContexts;
+using OnlineChatBackend.DTOs;
 using OnlineChatBackend.Interfaces;
 using OnlineChatBackend.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -77,14 +78,27 @@ namespace OnlineChatBackend.Repositories
             return _context.Contacts.FirstOrDefault(x => x.Name == Name);
         }
 
-        public IEnumerable<Contact> FindAllForId(int id)
+        public IEnumerable<ContactWithStatusDto> FindAllForId(int id)
         {
-            var contacts =  _context.Dialogs
+            var contacts = _context.Dialogs
                 .Where(d => d.FirstUserId == id || d.SecondUserId == id)
-                .Select(d => d.FirstUserId == id ? d.SecondUser : d.FirstUser)
-                .Distinct()                
+                .Select(d => new
+                {
+                    Dialog = d,
+                    OtherUser = d.FirstUserId == id ? d.SecondUser : d.FirstUser,
+                    OtherUserId = d.FirstUserId == id ? d.SecondUserId : d.FirstUserId
+                })
+                .Select(x => new ContactWithStatusDto
+                {
+                    Contact = x.OtherUser,
+                    NewNotifications = _context.Notifications
+                        .Any(n => n.DialogId == x.Dialog.Id
+                                  && n.UserId == x.OtherUserId
+                                  && n.NewNotifications)
+                })
                 .AsNoTracking()
                 .ToList();
+
             return contacts;
         }
 

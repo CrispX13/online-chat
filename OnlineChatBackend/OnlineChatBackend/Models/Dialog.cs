@@ -25,5 +25,7 @@ namespace OnlineChatBackend.Models
         public Contact FirstUser { get; set; }
 
         public Contact SecondUser { get; set; }
+
+        public List<Notification> Notifications { get; set; } = new();
     }
 }

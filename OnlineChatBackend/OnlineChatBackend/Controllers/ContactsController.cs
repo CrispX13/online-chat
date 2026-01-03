@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using OnlineChatBackend.DTOs;
 using OnlineChatBackend.Interfaces;
 using OnlineChatBackend.Models;
 
@@ -86,7 +87,7 @@ namespace OnlineChatBackend.Controllers
         }
 
         [HttpGet("all-for-id/{id}")]
-        public IEnumerable<Contact> GetAllForId(int id)
+        public IEnumerable<ContactWithStatusDto> GetAllForId(int id)
         {
             return ContactsRepository.FindAllForId(id);
         }

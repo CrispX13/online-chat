@@ -11,7 +11,7 @@ namespace OnlineChatBackend.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "notifications",
+                name: "Notifications",
                 columns: table => new
                 {
                     DialogId = table.Column<int>(type: "integer", nullable: false),
@@ -24,8 +24,8 @@ namespace OnlineChatBackend.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_notifications_UserId",
-                table: "notifications",
+                name: "IX_Notifications_UserId",
+                table: "Notifications",
                 column: "UserId");
         }
 
@@ -33,7 +33,7 @@ namespace OnlineChatBackend.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "notifications");
+                name: "Notifications");
         }
     }
 }

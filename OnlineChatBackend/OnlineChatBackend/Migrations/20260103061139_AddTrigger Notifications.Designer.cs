@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OnlineChatBackend.DbContexts;
@@ -11,9 +12,11 @@ using OnlineChatBackend.DbContexts;
 namespace OnlineChatBackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260103061139_AddTrigger Notifications")]
+    partial class AddTriggerNotifications
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,7 +120,7 @@ namespace OnlineChatBackend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("notifications", (string)null);
                 });
 
             modelBuilder.Entity("OnlineChatBackend.Models.Dialog", b =>
@@ -150,39 +153,16 @@ namespace OnlineChatBackend.Migrations
                     b.Navigation("Dialog");
                 });
 
-            modelBuilder.Entity("OnlineChatBackend.Models.Notification", b =>
-                {
-                    b.HasOne("OnlineChatBackend.Models.Dialog", "Dialog")
-                        .WithMany("Notifications")
-                        .HasForeignKey("DialogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("OnlineChatBackend.Models.Contact", "User")
-                        .WithMany("Notifications")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Dialog");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("OnlineChatBackend.Models.Contact", b =>
                 {
                     b.Navigation("DialogsAsFirstUser");
 
                     b.Navigation("DialogsAsSecondUser");
-
-                    b.Navigation("Notifications");
                 });
 
             modelBuilder.Entity("OnlineChatBackend.Models.Dialog", b =>
                 {
                     b.Navigation("Messages");
-
-                    b.Navigation("Notifications");
                 });
 #pragma warning restore 612, 618
         }
