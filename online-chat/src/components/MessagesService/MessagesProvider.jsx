@@ -23,7 +23,7 @@ export default function MessagesProvider({children}){
         if (dialogKey !== message.dialogId ){
             if(userId === String(message.toUserId)){
                 setContacts(prev=>
-                    prev.map(contact=>contact.id === message.fromUserId?{ ...contact, notification: true }:contact)
+                    prev.map(contact=>contact.contact.id === message.fromUserId?{ ...contact, newNotifications: true }:contact)
                 )
                 console.log(contacts)
             }

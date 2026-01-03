@@ -9,7 +9,12 @@ export default function Chats(){
     let ChatCards = []
 
     contacts.forEach(element => {
-        ChatCards.push(<ChatCard styleActive={styleActive} setStyleActive = {setStyleActive} key={element.id} contact = {element}></ChatCard>)
+        let contact = {
+                id: element.contact.id,
+                name:element.contact.name,
+                newNotifications: element.newNotifications
+        }
+        ChatCards.push(<ChatCard styleActive={styleActive} setStyleActive = {setStyleActive} key={contact.id} contact = {contact}></ChatCard>)
     });
     
 

@@ -54,6 +54,7 @@ namespace OnlineChatBackend.Repositories
                 if (notification != null)
                 {
                     notification.NewNotifications = false;
+                    _context.SaveChanges();
                 }
             }
 

@@ -39,7 +39,7 @@ export default function ChatCard(
                     setSearchValue(null)
                 })
             }
-        }} className={`ChatCard ${styleActive === contact.id ? "active-chat" : ""} ${contact.notification ? "notification" : ""}`}>
+        }} className={`ChatCard ${styleActive === contact.id ? "active-chat" : ""} ${contact.newNotifications ? "notification" : ""}`}>
             <img className="ChatCard__img" src={null} alt="Аватарка" />
             <div className="ChatCard__text-container">
                 <h3 className="ChatCard__name">{contact.name}</h3>

@@ -25,21 +25,21 @@ export default function ContactsProvider({children}){
                .then(response => response.json())
                .then(json => setContacts(json)
             )
-            console.log(contacts)
      },[jwtKey, userId, refresh])
 
     useEffect(()=>{
         
+        console.log(contacts)
         let notifFlag = false
         contacts.forEach((element)=>{
-            if(element.id === activeUser.id){
+            if(element.contact.id === activeUser.id){
                 notifFlag = true
             }                                                                                                                                  
         })
 
         if (notifFlag){
             setContacts(prev=>
-                prev.map(contact=>contact.id === activeUser.id?{ ...contact, notification: false }:contact)
+                prev.map(contact=>contact.contact.id === activeUser.id?{ ...contact, newNotifications: false }:contact)
             )
         }
     },[activeUser])

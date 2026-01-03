@@ -32,9 +32,9 @@ namespace OnlineChatBackend.Controllers
         }
 
         [HttpGet]
-        public IActionResult ReadAll(int DialogKey)
+        public IActionResult ReadAll(int DialogKey, int UserId)
         {
-            List<Message> messages = messageRepository.GetAll(DialogKey);
+            List<Message> messages = messageRepository.GetAll(DialogKey, UserId);
             return Ok(messages);
         }
     }

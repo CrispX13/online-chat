@@ -14,12 +14,12 @@ export default function CenterSideBar(){
     const {dialogKey} = useContext(DialogContext)
     const {activeUser} = useContext(SignalRContext)
 
-    const {jwtKey} = useContext(AuthContext)
+    const {jwtKey,userId} = useContext(AuthContext)
 
     // Получаю сообщения из диалога для активного контакта
     useEffect(() => {
         if(dialogKey != null){
-            fetch(`/api/chat?DialogKey=${dialogKey}`,{
+            fetch(`/api/chat?DialogKey=${dialogKey}&UserId=${userId}`,{
                 method: "GET",
                 headers: { "Content-Type": "application/json" , Authorization: `Bearer ${jwtKey}`},
             })
