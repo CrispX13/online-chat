@@ -2,50 +2,38 @@ version: "3.9"
 
 services:
   db:
-    image: postgres:16
-    container_name: onlinechat_postgres
-    restart: always
+    image: postgres:16-alpine
+    container_name: onlinechat-db
     environment:
-      POSTGRES_DB: online_chat
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      - POSTGRES_DB=online_chat
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=asus56asus56   # тот самый пароль
     volumes:
       - pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d online_chat"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    ports:
+      - "5432:5432"
 
   api:
-    build:
-      context: ./OnlineChatBackend/OnlineChatBackend
-      dockerfile: Dockerfile
-    container_name: onlinechat_api
-    depends_on:
-      db:
-        condition: service_healthy
+    build: ./OnlineChatBackend/OnlineChatBackend
+    container_name: onlinechat-api
     environment:
-      ASPNETCORE_ENVIRONMENT: Production
-      ConnectionStrings__Pg: "Host=db;Port=5432;Database=online_chat;Username=postgres;Password=${POSTGRES_PASSWORD};Pooling=true;Maximum Pool Size=50"
-      AuthSettings__SecretKey: "${JWT_SECRET_KEY}"
-      # Опционально, если хочешь оставить CORS для внешних доменов:
-      # FrontendOrigin: "http://localhost"
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__Pg=Host=db;Port=5432;Database=online_chat;Username=postgres;Password=asus56asus56;Pooling=true;Maximum Pool Size=50
+      - AuthSettings__SecretKey=regvguiarhfupahfPJAWEPVMRJBNVAEYFGywgfywavhrhvourvjsremvk[r
+      - AuthSettings__Expires=00:30:00
+    depends_on:
+      - db
     expose:
-      - "8080" # доступен только внутри сети Docker
-    # Если хочешь протестировать API отдельно:
-    # ports:
-    #   - "8080:8080"
-
+      - "80"
+  
   web:
-    build:
-      context: ./online-chat
-      dockerfile: Dockerfile
-    container_name: onlinechat_web
+    build: ./online-chat
+    container_name: onlinechat-web
+    ports:
+      - "80:80"
     depends_on:
       - api
-    ports:
-      - "80:80" # фронт откроется на http://localhost
+
 
 volumes:
   pgdata:
