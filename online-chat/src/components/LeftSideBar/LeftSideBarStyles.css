@@ -81,10 +81,16 @@
 }
 
 .ChatCard{
+  position: relative;
   display: flex;
   padding: 5px;
   background-color: #fff;
   border: none;
+}
+
+.contact__badge{
+  position: absolute;
+  right: 10px;
 }
 
 .active-chat{
@@ -95,9 +101,6 @@
   background-color: rgb(183, 177, 8);
 }
 
-.newContact{
-  border: 1px solid red;
-}
 
 .Search__result-container{
   position: absolute;
