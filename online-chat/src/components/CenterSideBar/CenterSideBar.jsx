@@ -1,4 +1,4 @@
-import {useEffect, useRef, useContext} from "react"
+import {useEffect, useRef, useContext, useState} from "react"
 import ChatHeading from "./ChatHeading"
 import ChatBody from "./CenterChatBar/ChatSide"
 import ChatFooter from "./ChatFooter"
@@ -7,8 +7,17 @@ import {AuthContext} from "../AuthContext"
 import {MessagesContext} from "../MessagesService/MessagesContext"
 import {DialogContext} from "../DialogService/DialogContext"
 import { SignalRContext } from "../SignalRConf/SignalRContext"
+import EmojiPicker from 'emoji-picker-react';
 
 export default function CenterSideBar(){
+
+    // useState для текста сообщения и эмодзи 
+    const [inputText, setInputText] = useState("");
+
+    const handleEmojiClick = (emojiData) => {
+        setInputText((prev) => prev + emojiData.emoji);
+    };
+
     const {messages,SetAllMessages} = useContext(MessagesContext)
     const messagesEndRef = useRef(null)
     const {dialogKey} = useContext(DialogContext)
@@ -35,9 +44,23 @@ export default function CenterSideBar(){
   
     return (
         <div className="CenterSideBar__container">
-            {activeUser ? <ChatHeading></ChatHeading> : null}
-            <ChatBody ref={messagesEndRef}></ChatBody>
-            <ChatFooter></ChatFooter>
+            <div className="Chat__container">
+                {activeUser && (<ChatHeading></ChatHeading>)}
+                <ChatBody ref={messagesEndRef}></ChatBody>
+                <ChatFooter
+                    text={inputText}
+                    setText={setInputText}
+                />
+            </div>
+            <div className="EmojiSidebar">
+                <EmojiPicker
+                onEmojiClick={handleEmojiClick}
+                height="100%"      
+                previewConfig={{
+                    showPreview: false
+                }}
+                />
+            </div>
         </div>
     )
 }

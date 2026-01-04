@@ -12,6 +12,13 @@
      outline: 1px solid #d4d2d2;
 }
 
+.EmojiSidebar{
+    width: 280px;
+    height: 100%;
+    background-color: #e9e8eb; /* твой цвет */
+    display: flex;
+}
+
 .Chats__list{
   display: flex;
   flex-direction: column;
