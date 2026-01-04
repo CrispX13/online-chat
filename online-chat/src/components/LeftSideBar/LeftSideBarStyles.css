@@ -92,7 +92,11 @@
 }
 
 .notification{
-  background-color: rebeccapurple;
+  background-color: rgb(183, 177, 8);
+}
+
+.newContact{
+  border: 1px solid red;
 }
 
 .Search__result-container{

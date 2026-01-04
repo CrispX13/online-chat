@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using OnlineChatBackend.DTOs;
 using OnlineChatBackend.Interfaces;
 using OnlineChatBackend.Models;
 using SignalRSwaggerGen.Attributes;
@@ -13,12 +14,22 @@ namespace OnlineChatBackend.Hubs
     {
         public IMessageRepository messageRepository { get; set; }
 
+        public IDialogsRepository dialogsRepository { get; set; }
+
+        public IContactsRepository contactsRepository { get; set; }
+
         private readonly ILogger<ChatHub> _log;
 
-        public ChatHub(IMessageRepository messageRepository, ILogger<ChatHub> log)
+        public ChatHub(
+            IMessageRepository messageRepository, 
+            ILogger<ChatHub> log,
+            IDialogsRepository dialogsRepository,
+            IContactsRepository contactsRepository)
         {
             this.messageRepository = messageRepository;
+            this.dialogsRepository = dialogsRepository;
             _log = log;
+            this.contactsRepository = contactsRepository;
         }
 
         public async Task SendMessage(string Message,string DialogId, string UserId)
@@ -41,6 +52,6 @@ namespace OnlineChatBackend.Hubs
             messageRepository.Add(newMessage);
 
         }
- 
+
     }
 }

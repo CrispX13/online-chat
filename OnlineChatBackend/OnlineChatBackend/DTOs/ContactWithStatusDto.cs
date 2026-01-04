@@ -6,5 +6,7 @@ namespace OnlineChatBackend.DTOs
     {
         public Contact Contact { get; set; }
         public bool NewNotifications { get; set; }
+
+        public bool NewContact { get; set; } = false;
     }
 }

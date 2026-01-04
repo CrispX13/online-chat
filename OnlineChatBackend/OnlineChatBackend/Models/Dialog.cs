@@ -16,8 +16,11 @@ namespace OnlineChatBackend.Models
         public Dialog() { }
         public Dialog(int FirstUserId, int SecondUserId)
         {
-            this.FirstUserId =  FirstUserId>SecondUserId?SecondUserId:FirstUserId;
+            //нормализую ID для ускорения поиска
+
+            this.FirstUserId = FirstUserId > SecondUserId ? SecondUserId : FirstUserId;
             this.SecondUserId = FirstUserId < SecondUserId ? SecondUserId : FirstUserId;
+
         }
 
         public List<Message> Messages{ get; set; } = new List<Message>();

@@ -9,5 +9,13 @@
             if (UserKey1 > UserKey2)
                 (UserKey1, UserKey2) = (UserKey2, UserKey1);
         }
+
+        public DialogPostDTO() { }
+
+        public DialogPostDTO(int UserKey1, int UserKey2)
+        {
+            this.UserKey1 = UserKey1;
+            this.UserKey2 = UserKey2;
+        }
     }
 }

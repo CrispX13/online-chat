@@ -33,7 +33,10 @@ namespace OnlineChatBackend.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-
+            migrationBuilder.Sql(@"
+                DROP TRIGGER IF EXISTS trg_dialog_insert_notifications ON ""Dialogs"";
+                DROP FUNCTION IF EXISTS dialog_insert_notifications();
+            ");
         }
     }
 }

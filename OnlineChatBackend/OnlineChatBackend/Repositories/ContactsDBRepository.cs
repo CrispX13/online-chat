@@ -94,8 +94,12 @@ namespace OnlineChatBackend.Repositories
                     NewNotifications = _context.Notifications
                         .Any(n => n.DialogId == x.Dialog.Id
                                   && n.UserId == id
-                                  && n.NewNotifications)
-                })
+                                  && n.NewNotifications),
+                    NewContact = _context.Notifications
+                        .Any(n => n.DialogId == x.Dialog.Id
+                                  && n.UserId == id
+                                  && n.NewContact)
+                            })
                 .AsNoTracking()
                 .ToList();
 

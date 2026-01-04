@@ -17,9 +17,16 @@ export default function ChatCard(
     const {setActiveUser} = useContext(SignalRContext)
     const {refreshContacts} = useContext(ContactsContext)
     const liRef = useRef()
+
+    const className = [
+        "ChatCard",
+        styleActive === contact.id && "active-chat",
+        contact.newNotifications && "notification",
+        contact.newContact && "newContact",
+    ].filter(Boolean).join(" ");
+
     return (
         <li ref={liRef} onClick={() => {
-            setActiveUser(contact)
             if(setStyleActive!= null)
                 setStyleActive(contact.id)
             if(isSearch){
@@ -38,8 +45,10 @@ export default function ChatCard(
                 ).then(()=>{refreshContacts();
                     setSearchValue(null)
                 })
+            }else{
+                setActiveUser(contact)
             }
-        }} className={`ChatCard ${styleActive === contact.id ? "active-chat" : ""} ${contact.newNotifications ? "notification" : ""}`}>
+        }} className={className}>
             <img className="ChatCard__img" src={null} alt="Аватарка" />
             <div className="ChatCard__text-container">
                 <h3 className="ChatCard__name">{contact.name}</h3>

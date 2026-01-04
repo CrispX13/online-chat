@@ -8,6 +8,8 @@ namespace OnlineChatBackend.Models
         public int UserId { get; set; }
         public bool NewNotifications { get; set; }
 
+        public bool NewContact {  get; set; }
+
         public Dialog Dialog { get; set; }
         public Contact User { get; set; }
     }

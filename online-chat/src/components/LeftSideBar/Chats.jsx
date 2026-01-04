@@ -12,7 +12,8 @@ export default function Chats(){
         let contact = {
                 id: element.contact.id,
                 name:element.contact.name,
-                newNotifications: element.newNotifications
+                newNotifications: element.newNotifications,
+                newContact: element.newContact
         }
         ChatCards.push(<ChatCard styleActive={styleActive} setStyleActive = {setStyleActive} key={contact.id} contact = {contact}></ChatCard>)
     });
