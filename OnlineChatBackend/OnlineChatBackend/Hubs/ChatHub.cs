@@ -53,5 +53,15 @@ namespace OnlineChatBackend.Hubs
 
         }
 
+        public async Task NewContact(int UserId, int NewContactId)
+        {
+
+            Dialog NewDialog = dialogsRepository.AddDialog(new DialogPostDTO(UserId, NewContactId));
+
+            await Clients.Caller.SendAsync("NewDialog", true);
+            await Clients.User(NewContactId.ToString()).SendAsync("NewDialog", true);
+
+        }
+
     }
 }

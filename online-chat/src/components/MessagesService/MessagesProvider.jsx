@@ -29,8 +29,6 @@ export default function MessagesProvider({children}){
             }
         }
     };
-
-    //  [activeUser,userId]
             
     const SetAllMessages = useCallback((arr) => {
     setMessages(arr);

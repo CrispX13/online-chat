@@ -13,9 +13,9 @@ export default function ChatCard(
         }
 ){
 
-    const {jwtKey,userId} = useContext(AuthContext)
-    const {setActiveUser} = useContext(SignalRContext)
-    const {refreshContacts} = useContext(ContactsContext)
+    const {userId} = useContext(AuthContext)
+    const {setActiveUser,connection} = useContext(SignalRContext)
+    const {refreshContacts,clearNewContactFlag } = useContext(ContactsContext)
     const liRef = useRef()
 
     const className = [
@@ -25,28 +25,17 @@ export default function ChatCard(
     ].filter(Boolean).join(" ");
 
     return (
-        <li ref={liRef} onClick={() => {
+        <li ref={liRef} onClick={async () => {
             if(setStyleActive!= null)
                 setStyleActive(contact.id)
             if(isSearch){
-                fetch("/api/Dialog",
-                    {
-                        method: "POST",
-                        headers: { 
-                            "Content-Type": "application/json" ,
-                            Authorization: `Bearer ${jwtKey}`,
-                        },
-                        body:JSON.stringify({
-                            userKey1:userId,
-                            userKey2:contact.id
-                        })
-                    }
-                ).then(()=>{refreshContacts();
-                    setSearchValue(null)
-                })
+                console.log(Number(userId))
+                await connection.invoke("NewContact", Number(userId), contact.id);
+                setSearchValue(null)
             }else{
                 setActiveUser(contact)
                 if(contact.newContact){
+                    clearNewContactFlag(contact.id)
                     refreshContacts()
                 }
             }

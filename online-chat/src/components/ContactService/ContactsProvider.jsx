@@ -12,7 +12,15 @@ export default function ContactsProvider({children}){
     const refreshContacts = ()=> setRefresh(!refresh)
 
     const {jwtKey, userId} = useContext(AuthContext)
-    const {activeUser} = useContext(SignalRContext)
+    const {activeUser,connection,isConnected} = useContext(SignalRContext)
+    
+    const clearNewContactFlag = (id) => {
+        setContacts(prev =>
+            prev.map(c =>
+            c.contact.id === id ? { ...c, newContact: false } : c
+            )
+        );
+    };
 
     useEffect(()=>{
         // получаю список контактов для конкретного пользователя
@@ -44,7 +52,21 @@ export default function ContactsProvider({children}){
         }
     },[activeUser])
 
-    const value = { contacts, setContacts,refreshContacts};
+    useEffect(() => {
+
+            if (!isConnected || !connection) return;
+
+            connection.on("NewDialog", refreshContacts);
+
+            return () => {
+                connection.off("NewDialog", refreshContacts);
+            };
+
+        }, [isConnected, connection]
+    
+    );
+
+    const value = { contacts, setContacts,refreshContacts,clearNewContactFlag};
 
     return <ContactsContext.Provider value={value}>
         {children}
