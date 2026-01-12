@@ -29,8 +29,8 @@ services:
   web:
     build: ./online-chat
     container_name: onlinechat-web
-    ports:
-      - "80:80"
+    expose:
+      - "80"
     depends_on:
       - api
 

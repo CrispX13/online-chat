@@ -101,7 +101,7 @@ app.UseSwaggerUI();
 
 app.UseCors("client");
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
