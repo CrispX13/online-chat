@@ -30,7 +30,7 @@ services:
     build: ./online-chat
     container_name: onlinechat-web
     ports:
-      - "3000:80"
+      - "8080:80"
     depends_on:
       - api
 
