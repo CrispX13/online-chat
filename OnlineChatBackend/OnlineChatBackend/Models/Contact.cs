@@ -15,6 +15,8 @@ namespace OnlineChatBackend.Models
 
         public string PasswordHash { get; set; }
 
+        public string? AvatarUrl { get; set; }
+
         public List<Dialog> DialogsAsFirstUser { get; set; } = new();
 
         public List<Dialog> DialogsAsSecondUser { get; set; } = new();

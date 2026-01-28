@@ -60,34 +60,32 @@
 }
 
 .ChatInput::-webkit-scrollbar {
-  width: 6px;               /* ширина scrollbar */
+  width: 6px;
 }
 .ChatInput::-webkit-scrollbar-track {
   background: #d4d2d2;
   width: 8px;
 }
 .ChatInput::-webkit-scrollbar-thumb {
-  background-color: rgb(87, 87, 87);    /* цвет плашки */
+  background-color: rgb(87, 87, 87); 
   border-radius: 20px; 
 }
 
 .ChatBody_container{
   overflow-x: auto;
-  /* overflow-y: none; */
   flex: 1;
   max-height: 100%;
 }
 
 .ChatBody_container::-webkit-scrollbar {
-  width: 6px;               /* ширина scrollbar */
+  width: 6px;
 }
 .ChatBody_container::-webkit-scrollbar-track {
-  /* background: #d4d2d2; */
   width: 8px;
   background-color: transparent;
 }
 .ChatBody_container::-webkit-scrollbar-thumb {
-  background-color: rgb(204, 202, 202,0.3);   /* цвет плашки */
+  background-color: rgb(204, 202, 202,0.3);
   border-radius: 20px; 
 }
 
@@ -121,4 +119,57 @@
   right: 7px;
   font-size: 14px;
 }
+
+.CenterSideBar__RigthSide{
+  display: flex;
+  flex-direction: column;
+}
+
+.Profile__container{
+  flex: 1;
+  display: flex;
+  padding: 10px;
+  flex-direction: row;
+  gap: 5px;
+  justify-content:space-between;
+  align-items: center;
+  border: 1px solid rgb(173, 173, 173);
+  border-radius: 2%;
+  z-index: 2;
+}
+
+.EmojiSidebar{
+  z-index: 1;
+  width: 310px;
+  display: flex;
+  height: 90%;
+}
+
+.icon-gear {
+  fill: black;
+  height: min-content;
+}
+
+.icon-gear:hover {
+  fill: rgb(140, 140, 140);
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-window {
+  background: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  min-width: 320px;
+}
+
+
 

@@ -7,6 +7,8 @@ import SignalRProvider from './components/SignalRConf/SignalRProvider.jsx'
 import MessagesProvider from "./components/MessagesService/MessagesProvider.jsx"
 import DialogProvider from "./components/DialogService/DialogProvider.jsx"
 import ContactsProvider from "./components/ContactService/ContactsProvider.jsx"
+import { ModalProvider } from './components/ModalService/ModalProvider.jsx'
+import { ProfileProvider } from './components/Profile/ProfileProvider.jsx'
 
 createRoot(document.getElementById('root')).render(
 
@@ -15,7 +17,11 @@ createRoot(document.getElementById('root')).render(
       <ContactsProvider>
         <DialogProvider>
           <MessagesProvider>
-            <AuthGate/>
+            <ProfileProvider>
+              <ModalProvider>
+                <AuthGate/>
+              </ModalProvider>
+            </ProfileProvider>
           </MessagesProvider>
         </DialogProvider>
       </ContactsProvider>

@@ -8,6 +8,7 @@ import {MessagesContext} from "../MessagesService/MessagesContext"
 import {DialogContext} from "../DialogService/DialogContext"
 import { SignalRContext } from "../SignalRConf/SignalRContext"
 import EmojiPicker from 'emoji-picker-react';
+import MiniProfile from "../Profile/MiniProfile"
 
 export default function CenterSideBar(){
 
@@ -52,14 +53,17 @@ export default function CenterSideBar(){
                     setText={setInputText}
                 />
             </div>
-            <div className="EmojiSidebar">
-                <EmojiPicker
-                onEmojiClick={handleEmojiClick}
-                height="100%"      
-                previewConfig={{
-                    showPreview: false
-                }}
-                />
+            <div className="CenterSideBar__RigthSide">
+                <div className="EmojiSidebar">
+                    <EmojiPicker
+                    onEmojiClick={handleEmojiClick}
+                    height="100%"      
+                    previewConfig={{
+                        showPreview: false
+                    }}
+                    />
+                </div>
+                <MiniProfile/>
             </div>
         </div>
     )

@@ -26,20 +26,6 @@ namespace OnlineChatBackend.Controllers
             return ContactsRepository.GetAll();
         }
 
-        //[HttpGet("{key}", Name = "GetContact")]
-        //public IActionResult GetContactByKey(int key)
-        //{
-        //    var contact = ContactsRepository.GetContact(key);
-
-        //    if (contact == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    else
-        //    {
-        //        return new ObjectResult(contact);
-        //    }
-        //}
 
         [HttpPost("{name}", Name = "PostContactByName")]
         public IActionResult PostContactByName(string name)
@@ -96,6 +82,22 @@ namespace OnlineChatBackend.Controllers
         public IEnumerable<Contact> Search([FromBody] string PartOfName)
         {
             return ContactsRepository.Search(PartOfName);
+        }
+
+        [HttpGet("{id}", Name = "get-contact")]
+        public ContactDTO? GetContactById(int id)
+        {
+            Contact contact =  ContactsRepository.GetContact(id);
+
+            if (contact != null)
+            {
+                return new ContactDTO
+                {
+                    Id = contact.Id,
+                    Name = contact.Name
+                };
+            }
+            return null;
         }
     }
 }
