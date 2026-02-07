@@ -1,0 +1,28 @@
+# Visual Studio / Rider
+.vs/
+.idea/
+
+# Build output
+bin/
+obj/
+
+# User-specific
+*.user
+*.suo
+
+# Logs
+logs/
+*.log
+
+# NuGet
+*.nupkg
+packages/
+.nuget/
+
+# Publish output
+*/OnlineChatBackend/bin/
+*/OnlineChatBackend/obj/
+
+# OS
+.DS_Store
+Thumbs.db
