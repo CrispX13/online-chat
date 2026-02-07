@@ -35,7 +35,7 @@ services:
     depends_on:
       - api
     volumes:
-    - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
 
 
 volumes:
