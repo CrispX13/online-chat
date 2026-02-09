@@ -95,6 +95,7 @@ var app = builder.Build();
 //    app.UseSwaggerUI();
 //}
 
+app.UseStaticFiles();
 
 app.UseSwagger();
 app.UseSwaggerUI();

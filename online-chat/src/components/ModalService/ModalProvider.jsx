@@ -14,9 +14,17 @@ export function ModalProvider({ children }) {
 
       {modalContent && (
         <div className="modal-backdrop" onClick={closeModal}>
-          <div className="modal-window" onClick={e => e.stopPropagation()}>
-            {modalContent}
-            <button onClick={closeModal}>Закрыть</button>
+          <div
+            className="modal-window"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="modal-window__body">
+              {/* здесь именно содержимое модалки */}
+              {modalContent}
+            </div>
+            <div className="modal-window__footer">
+              <button onClick={closeModal}>Закрыть</button>
+            </div>
           </div>
         </div>
       )}

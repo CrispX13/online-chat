@@ -77,15 +77,21 @@
 }
 
 .ChatCard__img{
-  width: 25%;
+  width: 20%;
+  height: 100%;
+  border-radius: 10%;
+  border: 2px solid white;
 }
 
 .ChatCard{
   position: relative;
   display: flex;
   padding: 5px;
+  gap: 10px;
   background-color: #fff;
   border: none;
+  max-height: 100px;
+  max-width: 300px;
 }
 
 .contact__badge{

@@ -40,7 +40,7 @@ export default function ChatCard(
                 }
             }
         }} className={className}>
-            <img className="ChatCard__img" src={null} alt="Аватарка" />
+            <img className="ChatCard__img" src={`/api/profile/${contact.id}/avatar`} alt="Аватарка" />
             <div className="ChatCard__text-container">
                 <h3 className="ChatCard__name">{contact.name}</h3>
                 <span className="ChatCard__last-message"></span>

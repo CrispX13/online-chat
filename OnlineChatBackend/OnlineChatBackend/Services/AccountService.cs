@@ -2,7 +2,6 @@
 using OnlineChatBackend.DTOs;
 using OnlineChatBackend.Models;
 using OnlineChatBackend.Repositories;
-using System.Security.Principal;
 
 namespace OnlineChatBackend.Services
 {
@@ -24,7 +23,8 @@ namespace OnlineChatBackend.Services
         {
             var account = accountRepository.GetByUserName(UserName);
             var result = new PasswordHasher<Contact>().VerifyHashedPassword(account, account.PasswordHash, Password);
-            if (result == PasswordVerificationResult.Success) {
+            if (result == PasswordVerificationResult.Success)
+            {
                 //generate token
                 return new LoginResult { Id = account.Id.ToString(), token = jwtService.GenerateToken(account) };
             }
@@ -32,6 +32,38 @@ namespace OnlineChatBackend.Services
             {
                 throw new Exception("Unauthorized");
             }
+        }
+
+        public bool ChangePassword(int Id, string LastPassword, string NewPassword)
+        {
+            var account = accountRepository.GetById(Id);
+            if (account == null)
+            {
+                return false;
+            }
+
+            var result = new PasswordHasher<Contact>().VerifyHashedPassword(account, account.PasswordHash, LastPassword);
+
+            if (result == PasswordVerificationResult.Success)
+            {
+                var passHash = new PasswordHasher<Contact>().HashPassword(account, NewPassword);
+                return accountRepository.ChangePassword(Id, passHash);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool ChangeName(int Id, string Name)
+        {
+            var account = accountRepository.GetById(Id);
+            if (account == null)
+            {
+                return false;
+            }
+
+            return accountRepository.ChangeName(Id, Name);
         }
     }
 }
