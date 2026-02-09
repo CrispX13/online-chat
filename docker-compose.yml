@@ -5,7 +5,7 @@ services:
     environment:
       - POSTGRES_DB=online_chat
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=asus56asus56   # тот самый пароль
+      - POSTGRES_PASSWORD=asus56asus56
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
@@ -23,7 +23,7 @@ services:
       - db
     expose:
       - "80"
-  
+
   web:
     build: ./online-chat
     container_name: onlinechat-web
@@ -34,7 +34,6 @@ services:
       - api
     volumes:
       - /etc/letsencrypt:/etc/letsencrypt:ro
-
 
 volumes:
   pgdata:
