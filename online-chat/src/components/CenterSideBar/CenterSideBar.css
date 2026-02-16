@@ -6,6 +6,37 @@
   overflow: hidden;
 }
 
+/* кнопка назад */
+.ChatHeading__back-btn {
+  margin-right: 8px;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 999px;
+  background: #e5e7eb;
+  cursor: pointer;
+}
+
+/* на мобильных: чат на весь экран, правая панель скрыта */
+@media (max-width: 1050px) {
+  .CenterSideBar__container {
+    position: relative;
+    flex-direction: column;
+    height: 100vh;
+  }
+
+  .CenterSideBar__RigthSide {
+    display: none;
+  }
+
+  .Chat__container {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
 .Chat__container{
     display: flex;
     flex: 1;

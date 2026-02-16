@@ -33,8 +33,10 @@ export default function Search(){
 
     return (
         <div className="Search">
-            <input onChange={(e)=>{setSearchValue(e.target.value)}} className="Search__input" type="text" placeholder="Search"/>
-            <SearchResultBlock  setSearchValue={setSearchValue} searchResult={searchResult}></SearchResultBlock>
+            <div className="Search_container">
+                <input onChange={(e)=>{setSearchValue(e.target.value)}} className="Search__input" type="text" placeholder="Search"/>
+                <SearchResultBlock  setSearchValue={setSearchValue} searchResult={searchResult}></SearchResultBlock>
+            </div>
         </div>
     )
 }

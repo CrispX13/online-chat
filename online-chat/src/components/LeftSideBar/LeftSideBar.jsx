@@ -1,12 +1,12 @@
-import Search from "./Search" 
-import Chats from "./Chats"
-import "./LeftSideBarStyles.css"
+import Search from "./Search";
+import Chats from "./Chats";
+import "./LeftSideBarStyles.css";
 
-export default function LeftSideBar(){
-    return(
-        <div className="LeftSideBar__container">
-            <Search></Search>
-            <Chats></Chats>
-        </div>
-    )
+export default function LeftSideBar({ onOpenChat }) {
+  return (
+    <div className="LeftSideBar__container">
+      <Search />
+      <Chats onOpenChat={onOpenChat} />
+    </div>
+  );
 }

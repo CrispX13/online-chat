@@ -136,3 +136,66 @@
     transform: translateX(0);
   }
 }
+
+@media (max-width: 1050px) {
+  .LeftSideBar__container {
+    width: 100%;
+  }
+
+  /* Общий горизонтальный отступ для поиска и списка */
+  .Search,
+  .Chats__list {
+    padding: 0 8px;
+    box-sizing: border-box;
+  }
+
+  .Search {
+    width: 100%;
+    align-items: stretch;   /* не центрировать */
+    justify-content: center;
+  }
+
+  .Search_container {
+    width: 100%;
+  }
+
+  .Search__input {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    display: block;
+    margin: 8px 0;         /* только вертикальный отступ */
+  }
+
+  .Chats__container {
+    width: 100%;
+    flex: 1;
+  }
+
+  .ChatCard {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    margin: 4px 0;
+    border-radius: 6px;
+  }
+
+  .ChatCard__img {
+    width: 56px;
+    flex-shrink: 0;
+  }
+
+
+  .Search__result-container {
+    top: 100%;      /* под инпутом */
+    left: 0;        /* по левому краю */
+    right: 0;       /* тянуться до правого края */
+    width: 100%;
+  }
+
+  .Search__result-container {
+    top: calc(100% + 4px);
+  }
+}
+
+

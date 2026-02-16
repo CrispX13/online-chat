@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{B0C7976B-2460-4DB3-8C8E-93DF59663A05}|OnlineChatBackend\\OnlineChatBackend.csproj|c:\\users\\user\\desktop\\online-chat\\onlinechatbackend\\onlinechatbackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B0C7976B-2460-4DB3-8C8E-93DF59663A05}|OnlineChatBackend\\OnlineChatBackend.csproj|solutionrelative:onlinechatbackend\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B0C7976B-2460-4DB3-8C8E-93DF59663A05}|OnlineChatBackend\\OnlineChatBackend.csproj|c:\\users\\user\\desktop\\online-chat\\onlinechatbackend\\onlinechatbackend\\repositories\\accountrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B0C7976B-2460-4DB3-8C8E-93DF59663A05}|OnlineChatBackend\\OnlineChatBackend.csproj|solutionrelative:onlinechatbackend\\repositories\\accountrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -23,28 +27,39 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AccountRepository.cs",
-              "DocumentMoniker": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\Repositories\\AccountRepository.cs",
-              "RelativeDocumentMoniker": "OnlineChatBackend\\Repositories\\AccountRepository.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\Repositories\\AccountRepository.cs*",
-              "RelativeToolTip": "OnlineChatBackend\\Repositories\\AccountRepository.cs*",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAB0AAAAsAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\Program.cs",
+              "RelativeDocumentMoniker": "OnlineChatBackend\\Program.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\Program.cs",
+              "RelativeToolTip": "OnlineChatBackend\\Program.cs",
+              "ViewState": "AgIAAFEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-09T04:53:06.915Z",
+              "WhenOpened": "2026-02-09T05:03:45.194Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "AccountRepository.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\Repositories\\AccountRepository.cs",
+              "RelativeDocumentMoniker": "OnlineChatBackend\\Repositories\\AccountRepository.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\Repositories\\AccountRepository.cs",
+              "RelativeToolTip": "OnlineChatBackend\\Repositories\\AccountRepository.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAB0AAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-09T04:53:06.915Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "ProfileController.cs",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\Controllers\\ProfileController.cs",
               "RelativeDocumentMoniker": "OnlineChatBackend\\Controllers\\ProfileController.cs",
-              "ToolTip": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\Controllers\\ProfileController.cs*",
-              "RelativeToolTip": "OnlineChatBackend\\Controllers\\ProfileController.cs*",
+              "ToolTip": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\Controllers\\ProfileController.cs",
+              "RelativeToolTip": "OnlineChatBackend\\Controllers\\ProfileController.cs",
               "ViewState": "AgIAABYAAAAAAAAAAAAgwCcAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T12:23:28.971Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-08T12:23:28.971Z"
             }
           ]
         }
