@@ -483,3 +483,18 @@
     height: 64px;
   }
 }
+
+.ProfileAvatarButton {
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.ProfileAvatarButton__img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid white;
+  object-fit: cover;
+}

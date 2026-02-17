@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState,useRef } from "react"
 import { AuthContext } from "../AuthContext"
 import SearchResultBlock from "./SearchResultBlock"
+import ProfileAvatarButton from "../Profile/ProfileAvatarButton";
 
 export default function Search(){
     const [searchValue,setSearchValue] = useState()
@@ -34,6 +35,7 @@ export default function Search(){
     return (
         <div className="Search">
             <div className="Search_container">
+                <ProfileAvatarButton />
                 <input onChange={(e)=>{setSearchValue(e.target.value)}} className="Search__input" type="text" placeholder="Search"/>
                 <SearchResultBlock  setSearchValue={setSearchValue} searchResult={searchResult}></SearchResultBlock>
             </div>

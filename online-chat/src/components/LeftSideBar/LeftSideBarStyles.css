@@ -137,7 +137,16 @@
   }
 }
 
+.ProfileAvatarButton {
+  display: none;
+}
+
 @media (max-width: 1050px) {
+
+  .ProfileAvatarButton {
+    display: block;
+  }
+
   .LeftSideBar__container {
     width: 100%;
   }
@@ -156,6 +165,8 @@
   }
 
   .Search_container {
+    display: flex;
+    gap: 10px;
     width: 100%;
   }
 
