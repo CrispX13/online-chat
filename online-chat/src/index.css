@@ -55,4 +55,17 @@ ul{
   to   { transform: translateX(100%); }
 }
 
+/* только на мобилке */
+@media (max-width: 1050px) {
+  body {
+    overflow: hidden;
+  }
+
+  .app-mobile-layout {
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+}
+
 

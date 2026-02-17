@@ -19,9 +19,10 @@
 /* на мобильных: чат на весь экран, правая панель скрыта */
 @media (max-width: 1050px) {
   .CenterSideBar__container {
-    position: relative;
+    height: 100%;
+    display: flex;
     flex-direction: column;
-    height: 100vh;
+    overflow: hidden;
   }
 
   .CenterSideBar__RigthSide {
@@ -34,6 +35,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
 }
 

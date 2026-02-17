@@ -42,7 +42,9 @@ export default function CenterSideBar({ onBack = null }) {
   }, [dialogKey]);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if(!isMobile){
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
 
   return (
