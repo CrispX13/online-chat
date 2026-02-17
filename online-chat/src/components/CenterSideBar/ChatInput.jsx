@@ -7,6 +7,7 @@ export default function ChatInput({ text, setText })
     const {dialogKey} = useContext(DialogContext)
     const {activeUser,connection} = useContext(SignalRContext)
     const taRef = useRef(null)
+
     const textChange = (event) => {
         const el = event.target
         el.style.height = "40px"
@@ -20,29 +21,57 @@ export default function ChatInput({ text, setText })
 
         // Enter без шифта — отправка
         if (e.key === "Enter" && !e.shiftKey) {
-        e.preventDefault(); // чтобы не вставлялся перенос строки
-        submit();
-        taRef.current.style.height = "50px"
-        }
+            e.preventDefault(); // чтобы не вставлялся перенос строки
+            submit();
+            taRef.current.style.height = "50px"
+            }
 
-        // Альтернатива: Ctrl/Cmd+Enter — тоже отправка
+            // Альтернатива: Ctrl/Cmd+Enter — тоже отправка
         if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
-        e.preventDefault();
-        submit();
-        taRef.current.style.height = "50px"
+            e.preventDefault();
+            submit();
+            taRef.current.style.height = "50px"
         }
     }
 
     const submit = async () => {
-       
-        taRef.current.value = ""
-        await connection.invoke("SendMessage", text.trim(), String(dialogKey), String(activeUser.id));
-        setText(""); 
-    }
+        const trimmed = text.trim();
+        if (!trimmed) return; // защита от пустой отправки
 
-    return(
-        <>
-        <textarea ref={taRef} value={text} onKeyDown={onKeyDown} onChange={textChange} placeholder="Write a massage..." className="ChatInput" type="text" />
-        </>
-    )
+        await connection.invoke(
+        "SendMessage",
+        trimmed,
+        String(dialogKey),
+        String(activeUser.id)
+        );
+
+        setText("");
+        if (taRef.current) {
+            taRef.current.value = "";
+            taRef.current.style.height = "50px";
+        }
+    };
+
+    const isEmpty = text.trim().length === 0;
+
+    return (
+        <div className="ChatInput__wrapper">
+            <textarea
+                ref={taRef}
+                value={text}
+                onKeyDown={onKeyDown}
+                onChange={textChange}
+                placeholder="Write a massage..."
+                className="ChatInput"
+            />
+            <button
+                type="button"
+                className="ChatInput__send-btn"
+                onClick={submit}
+                disabled={isEmpty}
+            >
+                ➤
+            </button>
+        </div>
+    );
 }

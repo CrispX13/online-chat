@@ -71,25 +71,52 @@
 }
 
 .ChatFooter__container{
-    display: flex;
-    margin-top: auto;
-    min-height:40px;
-    max-height: 200px;
-    padding: 0;
-    outline: 1px solid grey;
+  display: flex;
+  margin-top: auto;
+  min-height:40px;
+  max-height: 200px;
+  padding: 0;
 }
 
+.ChatInput__wrapper {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.ChatInput__send-btn {
+  margin-left: 8px;
+  margin-right: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: none;
+  background: #4b5563;
+  color: #fff;
+  cursor: pointer;
+  font-size: 30px;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+.ChatInput__send-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+
 .ChatInput{
-    flex: 1;
-    padding: 0;
-    width: 100%;
-    height: 50px;
-    border:none;
-    font-size: 14px;
-    resize: none;
-    max-height: 186px;
-    outline: none;
-    padding: 5px;
+  flex: 1;
+  padding: 0;
+  width: 100%;
+  height: 50px;
+  border:none;
+  font-size: 14px;
+  resize: none;
+  max-height: 186px;
+  outline: none;
+  padding: 5px;
+  border-radius: 10px;
+  margin-left: 5px;
 }
 
 .ChatInput::-webkit-scrollbar {
