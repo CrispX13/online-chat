@@ -73,8 +73,8 @@ ul{
   }
 
   .app-mobile-layout {
-    height: 100dvh;
-    max-height: 100dvh;
+    position: relative;
+    width: 100%;
     overflow: hidden;
   }
 
