@@ -40,27 +40,27 @@
 }
 
 .Chat__container{
-    display: flex;
-    flex: 1;
-    flex-direction: column;
-    background-image:url(/background.jpg);
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-attachment: fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    outline: 1px solid grey;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  background-image:url(/background.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  outline: 1px solid grey;
 }
 
 .ChatHeading__container{
-    height: 40px;
-    display: flex;
-    background-color: white;
-    padding: 20px;
-    align-items: center;
-    outline: 1px solid grey;
+  height: 40px;
+  display: flex;
+  background-color: white;
+  padding: 20px;
+  align-items: center;
+  outline: 1px solid grey;
 }
 .ChatHeading__names{
   height: fit-content;
@@ -481,6 +481,11 @@
   .ProfileSettings__avatar-preview {
     width: 64px;
     height: 64px;
+  }
+
+  .ChatBody_container{
+    overflow-y: auto;
+    max-height: none;
   }
 }
 
