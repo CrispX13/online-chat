@@ -522,7 +522,7 @@
     overflow: hidden;
 
     /* критично: фон НЕ fixed на iOS */
-    background-attachment: scroll;
+    background-attachment: scroll !important;
   }
 
   .ChatBody_container {
