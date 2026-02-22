@@ -24,7 +24,7 @@ export function ProfileProvider({ children }) {
 
     fetch(`/api/contacts/${userId}`, {
       headers: {
-        Authorization: `Bearer ${jwtKey}`,
+        credentials: "include",
       },
     })
       .then((r) => {
@@ -42,8 +42,8 @@ export function ProfileProvider({ children }) {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${jwtKey}`,
       },
+      credentials: "include",
       body: JSON.stringify({ name }),
     });
     if (!res.ok) throw new Error("Cannot update name");
@@ -57,8 +57,8 @@ export function ProfileProvider({ children }) {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${jwtKey}`,
       },
+      credentials: "include",
       body: JSON.stringify({ oldPassword, newPassword }),
     });
     if (!res.ok) throw new Error("Cannot update password");
@@ -72,9 +72,7 @@ export function ProfileProvider({ children }) {
 
     const res = await fetch("/api/account/avatar", {
       method: "PUT",
-      headers: {
-        Authorization: `Bearer ${jwtKey}`,
-      },
+      credentials: "include",
       body: formData,
     });
     if (!res.ok) throw new Error("Cannot update avatar");

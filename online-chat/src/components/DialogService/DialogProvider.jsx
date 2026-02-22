@@ -8,7 +8,7 @@ export default function DialogProvider({children}){
     
     const [dialogKey, setDialogKey] = useState(null)
     const {activeUser} = useContext(SignalRContext)
-    const {jwtKey, userId} = useContext(AuthContext)
+    const {userId} = useContext(AuthContext)
 
       // при каждом выборе нового пользователя, подгружается id диалога с ним
     useEffect(() => {
@@ -16,7 +16,8 @@ export default function DialogProvider({children}){
         // получение id для диалога
         fetch(`/api/Dialog?UserKey1=${userId}&UserKey2=${activeUser.id}`, {
             method: "GET",
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${jwtKey}`, }
+            headers: { "Content-Type": "application/json", },
+            credentials: "include",
         }
         )
             .then(response => response.json())

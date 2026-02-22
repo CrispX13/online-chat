@@ -23,16 +23,16 @@ export default function CenterSideBar({ onBack = null }) {
   const messagesEndRef = useRef(null);
   const { dialogKey } = useContext(DialogContext);
   const { activeUser } = useContext(SignalRContext);
-  const { jwtKey, userId } = useContext(AuthContext);
+  const { userId } = useContext(AuthContext);
 
   useEffect(() => {
     if (dialogKey != null) {
       fetch(`/api/chat?DialogKey=${dialogKey}&UserId=${userId}`, {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${jwtKey}`,
+          "Content-Type": "application/json"
         },
+        credentials: "include",
       })
         .then((response) => response.json())
         .then((json) => {

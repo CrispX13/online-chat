@@ -1,14 +1,19 @@
-import React,{useContext, useState} from "react"
+import React, { useContext } from "react";
 import { AuthContext } from "./AuthContext";
 import AuthModalContainer from "./AuthModalFolder/AuthModalContainer";
-import App from '../App.jsx'
+import App from "../App.jsx";
 
-export default function AuthGate(){
-    const {jwtKey} = useContext(AuthContext);
+export default function AuthGate() {
+  const { userId, isLoadingAuth } = useContext(AuthContext);
 
-    if (jwtKey == null){
-        return <AuthModalContainer/>;
-    }
+  if (isLoadingAuth) {
+    // можно вернуть спиннер / пустой экран
+    return <div>Загрузка...</div>;
+  }
 
-    return <App/>;
-} 
+  if (userId == null) {
+    return <AuthModalContainer />;
+  }
+
+  return <App />;
+}

@@ -18,6 +18,7 @@ export default function AuthLogin(){
         fetch(`/api/Auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify( login )
         }).then(response => response.json())
             .then(json => {setJwtKey(json.result.token)

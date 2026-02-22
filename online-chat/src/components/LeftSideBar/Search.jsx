@@ -6,7 +6,6 @@ import ProfileAvatarButton from "../Profile/ProfileAvatarButton";
 export default function Search(){
     const [searchValue,setSearchValue] = useState()
     const [searchResult,setSearchResult] = useState(null)
-    const {jwtKey} = useContext(AuthContext)
     const isFirstRender = useRef(true);
 
     useEffect(()=>{
@@ -22,8 +21,8 @@ export default function Search(){
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json" ,
-                    Authorization: `Bearer ${jwtKey}`,
                 },
+                credentials: "include",
                 body: JSON.stringify(searchValue)
                 })
           .then(response => response.json())

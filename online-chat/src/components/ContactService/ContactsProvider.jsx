@@ -11,7 +11,7 @@ export default function ContactsProvider({children}){
 
     const refreshContacts = ()=> setRefresh(!refresh)
 
-    const {jwtKey, userId} = useContext(AuthContext)
+    const { userId} = useContext(AuthContext)
     const {activeUser,connection,isConnected} = useContext(SignalRContext)
     
     const clearNewContactFlag = (id) => {
@@ -31,8 +31,8 @@ export default function ContactsProvider({children}){
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${jwtKey}`,
             },
+            credentials: "include",
             body: JSON.stringify(newName),
             }
         );
@@ -62,8 +62,8 @@ export default function ContactsProvider({children}){
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${jwtKey}`,
             },
+            credentials: "include",
             body: JSON.stringify({
                 lastPassword,
                 newPassword,
@@ -86,12 +86,8 @@ export default function ContactsProvider({children}){
 
         await fetch(`/api/profile/${userId}/avatar`, {
             method: "POST",
-            headers: {
-                Authorization: `Bearer ${jwtKey}`,
-            },
+            credentials: "include",
             body: formData,
-            // если UploadAvatar будет с [Authorize], добавь заголовок:
-            // headers: { Authorization: `Bearer ${jwtKey}` }
         });
 
         // чтобы аватарка в списке обновилась (если ты хранишь путь),
@@ -103,18 +99,27 @@ export default function ContactsProvider({children}){
         }
     };
 
-    useEffect(()=>{
-        // получаю список контактов для конкретного пользователя
-        fetch(`/api/contacts/all-for-id/${userId}`,{
-                     method: "GET",
-                     headers: { 
-                         "Content-Type": "application/json" ,
-                         Authorization: `Bearer ${jwtKey}`,
-                     }})
-               .then(response => response.json())
-               .then(json => setContacts(json)
-            )
-     },[jwtKey, userId, refresh])
+    useEffect(() => {
+        if (!userId) return; 
+
+        fetch(`/api/contacts/all-for-id/${userId}`, {
+            method: "GET",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            credentials: "include",
+        })
+            .then((response) => {
+            if (!response.ok) throw new Error("Ошибка загрузки контактов");
+            return response.json();
+            })
+            .then((json) => setContacts(json))
+            .catch((e) => {
+            console.error(e);
+            setContacts([]); 
+            });
+        }, [userId, refresh]);
+
 
     useEffect(()=>{
         
