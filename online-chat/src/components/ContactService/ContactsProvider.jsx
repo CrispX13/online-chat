@@ -24,7 +24,7 @@ export default function ContactsProvider({ children }) {
   const updateName = async (newName) => {
     if (!userId) return;
     try {
-      const res = await fetch(`/api/profile/change-name`, {
+      const res = await fetch(`/api/contacts/me/name`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +52,7 @@ export default function ContactsProvider({ children }) {
   const updatePassword = async (lastPassword, newPassword) => {
     if (!userId) return;
     try {
-      const res = await fetch(`/api/profile/change-password`, {
+      const res = await fetch(`/api/contacts/me/password`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -78,7 +78,7 @@ export default function ContactsProvider({ children }) {
       // имя поля должно совпадать с AvatarUploadDto.Avatar
       formData.append("avatar", file);
 
-      await fetch(`/api/profile/avatar`, {
+      await fetch(`/api/contacts/me/avatar`, {
         method: "POST",
         credentials: "include",
         body: formData,
