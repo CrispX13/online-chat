@@ -1,74 +1,108 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineChatBackend.DTOs;
-using OnlineChatBackend.Interfaces;
 using OnlineChatBackend.Repositories;
 using OnlineChatBackend.Services;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace OnlineChatBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/profile")]
     [ApiController]
     [Authorize]
-    public class ProfileController(AccountService accountService, ContactsDBRepository _repo, IWebHostEnvironment _env) : ControllerBase
+    public class ProfileController : ControllerBase
     {
+        private readonly AccountService _accountService;
+        private readonly ContactsDBRepository _repo;
+        private readonly IWebHostEnvironment _env;
 
-        [HttpPut("change-password/{id}")]
-        public IActionResult ChangePassword(int id,[FromBody] ChangePasswordDto dto)
+        public ProfileController(AccountService accountService, ContactsDBRepository repo, IWebHostEnvironment env)
         {
-            if (accountService.ChangePassword(id, dto.LastPassword, dto.NewPassword))
+            _accountService = accountService;
+            _repo = repo;
+            _env = env;
+        }
+
+        private int GetCurrentUserId()
+        {
+            var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)
+                          ?? User.FindFirst("id")
+                          ?? User.FindFirst("userId");
+
+            if (idClaim == null)
+                throw new UnauthorizedAccessException("Не найден claim с Id пользователя.");
+
+            return int.Parse(idClaim.Value);
+        }
+
+        // Сменить пароль ТЕКУЩЕГО пользователя
+        [HttpPut("change-password")]
+        public IActionResult ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            int currentUserId = GetCurrentUserId();
+
+            if (_accountService.ChangePassword(currentUserId, dto.LastPassword, dto.NewPassword))
             {
                 return Ok(new
                 {
                     message = "Пароль успешно изменен"
                 });
             }
-            else
+
+            return BadRequest(new
             {
-                return BadRequest(new
-                {
-                    message = "Во время изенения пароля произошла ошибка"
-                });
-            }
+                message = "Во время изменения пароля произошла ошибка"
+            });
         }
 
-        [HttpPut("change-name/{id}")]
-        public IActionResult ChangeName(int id, [FromBody] string Name)
+        // Сменить имя ТЕКУЩЕГО пользователя
+        [HttpPut("change-name")]
+        public IActionResult ChangeName([FromBody] string name)
         {
-            if (accountService.ChangeName(id, Name))
+            int currentUserId = GetCurrentUserId();
+
+            if (_accountService.ChangeName(currentUserId, name))
             {
                 return Ok(new
                 {
-                    message = "Пароль успешно изменен"
+                    message = "Имя успешно изменено"
                 });
             }
-            else
+
+            return BadRequest(new
             {
-                return BadRequest(new
-                {
-                    message = "Во время изенения пароля произошла ошибка"
-                });
-            }
+                message = "Во время изменения имени произошла ошибка"
+            });
         }
 
-        [HttpPost("{id}/avatar")]
-        public async Task<IActionResult> UploadAvatar(int id, IFormFile file)
+        // Загрузить аватар ТЕКУЩЕГО пользователя
+        [HttpPost("avatar")]
+        public async Task<IActionResult> UploadAvatar(IFormFile file)
         {
-            var result = await _repo.ChangeAvatarAsync(id, file);
+            if (file == null || file.Length == 0)
+                return BadRequest("Файл не передан");
+
+            int currentUserId = GetCurrentUserId();
+
+            var result = await _repo.ChangeAvatarAsync(currentUserId, file);
             if (!result) return BadRequest();
+
             return Ok();
         }
 
-        [HttpDelete("{id}/avatar")]
-        public IActionResult DeleteAvatar(int id)
+        // Удалить аватар ТЕКУЩЕГО пользователя (сбросить на дефолтный)
+        [HttpDelete("avatar")]
+        public IActionResult DeleteAvatar()
         {
-            var result = _repo.DeleteAvatar(id);
+            int currentUserId = GetCurrentUserId();
+
+            var result = _repo.DeleteAvatar(currentUserId);
             if (!result) return NotFound();
+
             return Ok();
         }
 
+        // Получить картинку аватара по ID контакта (можно оставлять публичным)
         [AllowAnonymous]
         [HttpGet("{id}/avatar")]
         public IActionResult GetAvatar(int id)
@@ -86,7 +120,7 @@ namespace OnlineChatBackend.Controllers
             if (!System.IO.File.Exists(fullPath))
                 return NotFound();
 
-            var contentType = "image/png";
+            var contentType = "image/png"; // можно определить по расширению
             return PhysicalFile(fullPath, contentType);
         }
     }

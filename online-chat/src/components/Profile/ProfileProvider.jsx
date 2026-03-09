@@ -22,10 +22,10 @@ export function ProfileProvider({ children }) {
     setLoading(true);
     setError(null);
 
-    fetch(`/api/contacts/${userId}`, {
+    fetch(`/api/contacts/me`, {
       headers: {
-        credentials: "include",
       },
+      credentials: "include"
     })
       .then((r) => {
         if (!r.ok) throw new Error("Failed to load account");
@@ -38,7 +38,7 @@ export function ProfileProvider({ children }) {
 
   // 2) изменить имя
   const updateName = async (name) => {
-    const res = await fetch("/api/account/name", {
+    const res = await fetch("/api/contacts/me/name", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -53,7 +53,7 @@ export function ProfileProvider({ children }) {
 
   // 3) изменить пароль
   const updatePassword = async (oldPassword, newPassword) => {
-    const res = await fetch("/api/account/password", {
+    const res = await fetch("/api/contacts/me/password", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -70,7 +70,7 @@ export function ProfileProvider({ children }) {
     const formData = new FormData();
     formData.append("avatar", file);
 
-    const res = await fetch("/api/account/avatar", {
+    const res = await fetch("/api/contacts/me/avatar", {
       method: "PUT",
       credentials: "include",
       body: formData,

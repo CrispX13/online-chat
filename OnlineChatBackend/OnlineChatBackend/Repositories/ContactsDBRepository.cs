@@ -246,6 +246,39 @@ namespace OnlineChatBackend.Repositories
                 : contact.AvatarUrl;
         }
 
+        // 1) Профиль текущего пользователя
+        public Contact? GetCurrentUser(int currentUserId)
+        {
+            return _context.Contacts.Find(currentUserId);
+        }
+
+        // 2) Список контактов/диалогов для текущего пользователя
+        public IEnumerable<ContactWithStatusDto> FindAllForUser(int currentUserId)
+        {
+            var contacts = _context.Dialogs
+                .Where(d => d.FirstUserId == currentUserId || d.SecondUserId == currentUserId)
+                .Select(d => new
+                {
+                    Dialog = d,
+                    OtherUser = d.FirstUserId == currentUserId ? d.SecondUser : d.FirstUser,
+                })
+                .Select(x => new ContactWithStatusDto
+                {
+                    Contact = x.OtherUser,
+                    NewNotifications = _context.Notifications
+                        .Any(n => n.DialogId == x.Dialog.Id
+                                  && n.UserId == currentUserId
+                                  && n.NewNotifications),
+                    NewContact = _context.Notifications
+                        .Any(n => n.DialogId == x.Dialog.Id
+                                  && n.UserId == currentUserId
+                                  && n.NewContact)
+                })
+                .AsNoTracking()
+                .ToList();
+
+            return contacts;
+        }
 
 
 

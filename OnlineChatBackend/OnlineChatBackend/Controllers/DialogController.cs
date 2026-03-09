@@ -21,7 +21,12 @@ namespace OnlineChatBackend.Controllers
         [HttpPost]
         public IActionResult NewDialog([FromBody] DialogPostDTO dialog)
         {
-            var Key = _dialogsRepository.AddDialog(dialog);
+            int currentUserId = int.Parse(User.FindFirst("id")!.Value);
+            var Key = _dialogsRepository.AddDialog(dialog, currentUserId);
+
+            if (Key == null)
+                return NotFound();
+
             return Ok(Key);
         }
 
@@ -29,7 +34,8 @@ namespace OnlineChatBackend.Controllers
         public IActionResult GetDialog([FromQuery]DialogPostDTO dialog)
         {
             dialog.Normalize();
-            var dialogKey = _dialogsRepository.GetDialog(dialog);
+            int currentUserId = int.Parse(User.FindFirst("id")!.Value);
+            var dialogKey = _dialogsRepository.GetDialog(dialog, currentUserId);
 
             if (dialogKey == null)
             {

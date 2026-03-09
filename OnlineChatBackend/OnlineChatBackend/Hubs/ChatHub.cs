@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using OnlineChatBackend.DTOs;
 using OnlineChatBackend.Interfaces;
 using OnlineChatBackend.Models;
@@ -16,20 +17,17 @@ namespace OnlineChatBackend.Hubs
 
         public IDialogsRepository dialogsRepository { get; set; }
 
-        public IContactsRepository contactsRepository { get; set; }
 
         private readonly ILogger<ChatHub> _log;
 
         public ChatHub(
             IMessageRepository messageRepository, 
             ILogger<ChatHub> log,
-            IDialogsRepository dialogsRepository,
-            IContactsRepository contactsRepository)
+            IDialogsRepository dialogsRepository)
         {
             this.messageRepository = messageRepository;
             this.dialogsRepository = dialogsRepository;
             _log = log;
-            this.contactsRepository = contactsRepository;
         }
 
         public async Task SendMessage(string Message,string DialogId, string UserId)
@@ -55,13 +53,47 @@ namespace OnlineChatBackend.Hubs
 
         public async Task NewContact(int UserId, int NewContactId)
         {
+            var userId = int.Parse(Context.UserIdentifier!);
 
-            Dialog NewDialog = dialogsRepository.AddDialog(new DialogPostDTO(UserId, NewContactId));
+            Dialog NewDialog = dialogsRepository.AddDialog(new DialogPostDTO(UserId, NewContactId), userId);
 
             await Clients.Caller.SendAsync("NewDialog", true);
             await Clients.User(NewContactId.ToString()).SendAsync("NewDialog", true);
 
         }
+
+        public async Task EditMessage(int messageId, string newText)
+        {
+            var callerUserIdentifier = Context.UserIdentifier!;
+            int currentUserId = int.Parse(callerUserIdentifier);
+
+            var updated = messageRepository.Update(messageId, newText, currentUserId);
+            if (updated == null)
+                throw new HubException("Сообщение не найдено или нет прав на редактирование.");
+
+            await Clients.User(updated.FromUserId.ToString())
+                .SendAsync("MessageEdited", updated);
+
+            await Clients.User(updated.ToUserId.ToString())
+                .SendAsync("MessageEdited", updated);
+        }
+
+        public async Task DeleteMessage(int messageId)
+        {
+            var callerUserIdentifier = Context.UserIdentifier!;
+            int currentUserId = int.Parse(callerUserIdentifier);
+
+            var deleted = messageRepository.Delete(messageId, currentUserId);
+            if (deleted == null)
+                throw new HubException("Сообщение не найдено или нет прав на удаление.");
+
+            await Clients.User(deleted.FromUserId.ToString())
+                .SendAsync("MessageDeleted", deleted.Id);
+
+            await Clients.User(deleted.ToUserId.ToString())
+                .SendAsync("MessageDeleted", deleted.Id);
+        }
+
 
     }
 }

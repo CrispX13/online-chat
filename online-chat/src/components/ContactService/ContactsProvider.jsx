@@ -1,169 +1,159 @@
-import React, { useCallback, useEffect } from 'react'
-import { useState, useContext } from "react";
-import { AuthContext } from '../AuthContext';
+import React, { useEffect, useState, useContext } from "react";
+import { AuthContext } from "../AuthContext";
 import { ContactsContext } from "./ContactsContext";
-import { SignalRContext } from '../SignalRConf/SignalRContext';
+import { SignalRContext } from "../SignalRConf/SignalRContext";
 
-export default function ContactsProvider({children}){
-    
-    const [contacts, setContacts] = useState([])
-    const [refresh, setRefresh] = useState(true)
+export default function ContactsProvider({ children }) {
+  const [contacts, setContacts] = useState([]);
+  const [refresh, setRefresh] = useState(true);
 
-    const refreshContacts = ()=> setRefresh(!refresh)
+  const refreshContacts = () => setRefresh((prev) => !prev);
 
-    const { userId} = useContext(AuthContext)
-    const {activeUser,connection,isConnected} = useContext(SignalRContext)
-    
-    const clearNewContactFlag = (id) => {
-        setContacts(prev =>
-            prev.map(c =>
-            c.contact.id === id ? { ...c, newContact: false } : c
-            )
-        );
-    };
+  const { userId } = useContext(AuthContext);
+  const { activeUser, connection, isConnected } = useContext(SignalRContext);
 
-    const updateName = async (newName) => {
-        if (!userId) return;
-        try {
-        const res = await fetch(
-            `/api/profile/change-name/${userId}`,
-            {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify(newName),
-            }
-        );
-        if (!res.ok) throw new Error("Ошибка при смене имени");
-
-        // обновляем локальный список контактов (там, где текущий userId)
-        setContacts((prev) =>
-            prev.map((c) =>
-            c.contact.id === userId
-                ? { ...c, contact: { ...c.contact, name: newName } }
-                : c
-            )
-        );
-        } catch (e) {
-        console.error(e);
-        throw e;
-        }
-    };
-
-    // смена пароля
-    const updatePassword = async (lastPassword, newPassword) => {
-        if (!userId) return;
-        try {
-        const res = await fetch(
-            `/api/profile/change-password/${userId}`,
-            {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: "include",
-            body: JSON.stringify({
-                lastPassword,
-                newPassword,
-            }),
-            }
-        );
-        if (!res.ok) throw new Error("Ошибка при смене пароля");
-        } catch (e) {
-        console.error(e);
-        throw e;
-        }
-    };
-
-    // смена аватарки
-    const updateAvatar = async (file) => {
-        if (!userId || !file) return;
-        try {
-        const formData = new FormData();
-        formData.append("file", file);
-
-        await fetch(`/api/profile/${userId}/avatar`, {
-            method: "POST",
-            credentials: "include",
-            body: formData,
-        });
-
-        // чтобы аватарка в списке обновилась (если ты хранишь путь),
-        // можно либо перезагрузить контакты, либо менять поле avatarUrl локально.
-        refreshContacts();
-        } catch (e) {
-        console.error(e);
-        throw e;
-        }
-    };
-
-    useEffect(() => {
-        if (!userId) return; 
-
-        fetch(`/api/contacts/all-for-id/${userId}`, {
-            method: "GET",
-            headers: {
-            "Content-Type": "application/json",
-            },
-            credentials: "include",
-        })
-            .then((response) => {
-            if (!response.ok) throw new Error("Ошибка загрузки контактов");
-            return response.json();
-            })
-            .then((json) => setContacts(json))
-            .catch((e) => {
-            console.error(e);
-            setContacts([]); 
-            });
-        }, [userId, refresh]);
-
-
-    useEffect(()=>{
-        
-        console.log(contacts)
-        let notifFlag = false
-        contacts.forEach((element)=>{
-            if(element.contact.id === activeUser.id){
-                notifFlag = true
-            }                                                                                                                                  
-        })
-
-        if (notifFlag){
-            setContacts(prev=>
-                prev.map(contact=>contact.contact.id === activeUser.id?{ ...contact, newNotifications: false }:contact)
-            )
-        }
-    },[activeUser])
-
-    useEffect(() => {
-
-            if (!isConnected || !connection) return;
-
-            connection.on("NewDialog", refreshContacts);
-
-            return () => {
-                connection.off("NewDialog", refreshContacts);
-            };
-
-        }, [isConnected, connection]
-    
+  const clearNewContactFlag = (id) => {
+    setContacts((prev) =>
+      prev.map((c) =>
+        c.contact.id === id ? { ...c, newContact: false } : c
+      )
     );
+  };
 
-    
+  // смена имени текущего пользователя
+  const updateName = async (newName) => {
+    if (!userId) return;
+    try {
+      const res = await fetch(`/api/profile/change-name`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(newName), // string в теле
+      });
+      if (!res.ok) throw new Error("Ошибка при смене имени");
 
-    const value = {
-        contacts,
-        setContacts,
-        refreshContacts,
-        clearNewContactFlag,
-        updateName,
-        updatePassword,
-        updateAvatar,
+      // обновляем локальный список контактов (там, где текущий userId)
+      setContacts((prev) =>
+        prev.map((c) =>
+          c.contact.id === userId
+            ? { ...c, contact: { ...c.contact, name: newName } }
+            : c
+        )
+      );
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  };
+
+  // смена пароля текущего пользователя
+  const updatePassword = async (lastPassword, newPassword) => {
+    if (!userId) return;
+    try {
+      const res = await fetch(`/api/profile/change-password`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          lastPassword,
+          newPassword,
+        }),
+      });
+      if (!res.ok) throw new Error("Ошибка при смене пароля");
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  };
+
+  // смена аватарки текущего пользователя
+  const updateAvatar = async (file) => {
+    if (!userId || !file) return;
+    try {
+      const formData = new FormData();
+      // имя поля должно совпадать с AvatarUploadDto.Avatar
+      formData.append("avatar", file);
+
+      await fetch(`/api/profile/avatar`, {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
+
+      // самый простой вариант — перезагрузить контакты
+      refreshContacts();
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
+  };
+
+  // загрузка списка контактов текущего пользователя
+  useEffect(() => {
+    if (!userId) return;
+
+    fetch(`/api/contacts/me/list`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Ошибка загрузки контактов");
+        return response.json();
+      })
+      .then((json) => setContacts(json))
+      .catch((e) => {
+        console.error(e);
+        setContacts([]);
+      });
+  }, [userId, refresh]);
+
+  // сброс флага newNotifications при открытии диалога
+  useEffect(() => {
+        if (!activeUser || !contacts?.length) return;
+
+        const hasWithNotif = contacts.some(
+            (c) => c.contact.id === activeUser.id && c.newNotifications
+        );
+        if (!hasWithNotif) return;
+
+        setContacts((prev) =>
+            prev.map((contact) =>
+            contact.contact.id === activeUser.id
+                ? { ...contact, newNotifications: false }
+                : contact
+            )
+        );
+    }, [activeUser, contacts]);
+
+
+  // обновление списка контактов по сигналу из SignalR
+  useEffect(() => {
+    if (!isConnected || !connection) return;
+
+    connection.on("NewDialog", refreshContacts);
+
+    return () => {
+      connection.off("NewDialog", refreshContacts);
     };
-    return <ContactsContext.Provider value={value}>
-        {children}
-    </ContactsContext.Provider> 
+  }, [isConnected, connection]);
+
+  const value = {
+    contacts,
+    setContacts,
+    refreshContacts,
+    clearNewContactFlag,
+    updateName,
+    updatePassword,
+    updateAvatar,
+  };
+
+  return (
+    <ContactsContext.Provider value={value}>
+      {children}
+    </ContactsContext.Provider>
+  );
 }

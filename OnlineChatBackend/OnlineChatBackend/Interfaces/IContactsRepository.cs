@@ -5,16 +5,18 @@ namespace OnlineChatBackend.Interfaces
 {
     public interface IContactsRepository
     {
-        //void Add(Contact contact);
-        IEnumerable<Contact> GetAll();
-        Contact? GetContact(int Id);
-        Contact? RemoveContact(int Id);
-        Contact? UpdateContact(Contact contact);
+        Contact? GetCurrentUser(int currentUserId);
+        IEnumerable<ContactWithStatusDto> FindAllForUser(int currentUserId);
 
-        Contact AddByName(string Name);
+        bool ChangeUserName(int currentUserId, string newName);
+        bool ChangePassword(int currentUserId, string passwordHash);
 
-        IEnumerable<ContactWithStatusDto> FindAllForId(int Id);
+        string? GetAvatarPath(int currentUserId);
+        Task<bool> ChangeAvatarAsync(int currentUserId, IFormFile avatarFile);
+        bool SetDefaultAvatar(int currentUserId);
 
-        IEnumerable<Contact>? Search(string PartOfName);
+        // Поиск по имени (контактов/юзеров) – если нужно:
+        IEnumerable<Contact>? Search(string partOfName);
     }
+
 }

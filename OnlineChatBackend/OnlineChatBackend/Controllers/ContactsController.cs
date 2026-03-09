@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineChatBackend.DTOs;
 using OnlineChatBackend.Interfaces;
@@ -8,96 +8,149 @@ using OnlineChatBackend.Models;
 namespace OnlineChatBackend.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/contacts")]
     [Authorize]
-    public class ContactsController : Controller
+    public class ContactsController : ControllerBase
     {
-
-        public IContactsRepository ContactsRepository { get; set; }
+        private readonly IContactsRepository _contactsRepository;
 
         public ContactsController(IContactsRepository contactsRepository)
         {
-            ContactsRepository = contactsRepository;
+            _contactsRepository = contactsRepository;
         }
 
-        [HttpGet]
-        public IEnumerable<Contact> GetAlContacts()
+        private int GetCurrentUserId()
         {
-            return ContactsRepository.GetAll();
+            // Подставь сюда тот claim, который реально используешь для Id
+            var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)
+                          ?? User.FindFirst("id")
+                          ?? User.FindFirst("userId");
+
+            if (idClaim == null)
+                throw new UnauthorizedAccessException("Не найден claim с Id пользователя.");
+
+            return int.Parse(idClaim.Value);
         }
 
-
-        [HttpPost("{name}", Name = "PostContactByName")]
-        public IActionResult PostContactByName(string name)
+        // Профиль текущего пользователя
+        [HttpGet("me")]
+        public ActionResult<ContactDTO> GetMe()
         {
-            var NewContact = ContactsRepository.AddByName(name);
+            int currentUserId = GetCurrentUserId();
 
-            return CreatedAtRoute("PostContactByName", new { name = NewContact.Name }, NewContact);
-        }
-
-
-        [HttpPut]
-        public IActionResult UpdateContact([FromBody] Contact UpdatedContact)
-        {
-
-            var contact = ContactsRepository.GetContact(UpdatedContact.Id);
+            var contact = _contactsRepository.GetCurrentUser(currentUserId);
             if (contact == null)
-            {
-                return NotFound(new { message = "Объект не найден", key = UpdatedContact.Id });
-            }
-            
-            ContactsRepository.UpdateContact(UpdatedContact);
+                return NotFound();
 
-            return Ok(new
+            var dto = new ContactDTO
             {
-                message = "Объект успешно обновлён",
-                contact = UpdatedContact
-            });
+                Id = contact.Id,
+                Name = contact.Name
+            };
+
+            return Ok(dto);
         }
 
-        [HttpDelete("{key}")]
-        public IActionResult DeleteContact(int key)
+        // Список контактов/диалогов текущего пользователя
+        [HttpGet("me/list")]
+        public ActionResult<IEnumerable<ContactWithStatusDto>> GetMyContacts()
         {
-            if (ContactsRepository.GetContact(key) == null)
-            {
-                return NotFound("Контакт не найден");
-            }
+            int currentUserId = GetCurrentUserId();
 
-            var contact = ContactsRepository.RemoveContact(key);
-
-            return Ok(new
-            {
-                message = "Контакт успешно удален",
-                contact = contact
-            });
+            var contacts = _contactsRepository.FindAllForUser(currentUserId);
+            return Ok(contacts);
         }
 
-        [HttpGet("all-for-id/{id}")]
-        public IEnumerable<ContactWithStatusDto> GetAllForId(int id)
+        // Изменить имя текущего пользователя
+        [HttpPut("me/name")]
+        public IActionResult ChangeMyName([FromBody] ChangeNameDto dto)
         {
-            return ContactsRepository.FindAllForId(id);
+            if (dto == null || string.IsNullOrWhiteSpace(dto.NewName))
+                return BadRequest("Имя не может быть пустым.");
+
+            int currentUserId = GetCurrentUserId();
+
+            var result = _contactsRepository.ChangeUserName(currentUserId, dto.NewName);
+            if (!result)
+                return NotFound();
+
+            return NoContent();
         }
 
+        // Изменить пароль текущего пользователя
+        [HttpPut("me/password")]
+        public IActionResult ChangeMyPassword([FromBody] ChangePasswordDto dto)
+        {
+            if (dto == null || string.IsNullOrWhiteSpace(dto.NewPassword))
+                return BadRequest("Пароль не может быть пустым.");
+
+            int currentUserId = GetCurrentUserId();
+
+            var result = _contactsRepository.ChangePassword(currentUserId, dto.NewPassword);
+            if (!result)
+                return NotFound();
+
+            return NoContent();
+        }
+
+        // Получить путь к аватару текущего пользователя
+        [HttpGet("me/avatar")]
+        public ActionResult<string> GetMyAvatar()
+        {
+            int currentUserId = GetCurrentUserId();
+
+            var path = _contactsRepository.GetAvatarPath(currentUserId);
+            if (path == null)
+                return NotFound();
+
+            return Ok(path);
+        }
+
+        // Загрузить/сменить аватар текущего пользователя
+        [HttpPost("me/avatar")]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> ChangeMyAvatar([FromForm] AvatarUploadDto dto)
+        {
+            if (dto.Avatar == null || dto.Avatar.Length == 0)
+                return BadRequest("Файл аватара не передан.");
+
+            int currentUserId = GetCurrentUserId();
+
+            var result = await _contactsRepository.ChangeAvatarAsync(currentUserId, dto.Avatar);
+            if (!result)
+                return NotFound();
+
+            return NoContent();
+        }
+
+
+        // Сбросить аватар на дефолтный
+        [HttpDelete("me/avatar")]
+        public IActionResult ResetMyAvatar()
+        {
+            int currentUserId = GetCurrentUserId();
+
+            var result = _contactsRepository.SetDefaultAvatar(currentUserId);
+            if (!result)
+                return NotFound();
+
+            return NoContent();
+        }
+
+        // Поиск контактов по части имени (опционально – зависит от того, кому это нужно)
         [HttpPost("search")]
-        public IEnumerable<Contact> Search([FromBody] string PartOfName)
+        public ActionResult<IEnumerable<Contact>> Search([FromBody] string partOfName)
         {
-            return ContactsRepository.Search(PartOfName);
-        }
+            if (string.IsNullOrWhiteSpace(partOfName))
+                return BadRequest("Строка поиска не может быть пустой.");
 
-        [HttpGet("{id}", Name = "get-contact")]
-        public ContactDTO? GetContactById(int id)
-        {
-            Contact contact =  ContactsRepository.GetContact(id);
-
-            if (contact != null)
-            {
-                return new ContactDTO
-                {
-                    Id = contact.Id,
-                    Name = contact.Name
-                };
-            }
-            return null;
+            var result = _contactsRepository.Search(partOfName) ?? Enumerable.Empty<Contact>();
+            return Ok(result);
         }
+    }
+
+    public class ChangeNameDto
+    {
+        public string NewName { get; set; } = string.Empty;
     }
 }
