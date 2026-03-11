@@ -14,6 +14,7 @@ export default function MessagesProvider({children}){
     const [messages, setMessages] = useState([]);
     const {contacts,setContacts} = useContext(ContactsContext)
     const {dialogKey} = useContext(DialogContext)
+    const [editingMessage, setEditingMessage] = useState(null);
 
     const AddMessage = (message) => {
         setMessages(prev => {
@@ -34,22 +35,35 @@ export default function MessagesProvider({children}){
     setMessages(arr);
     }, []);
 
-    useEffect(() => {
+    const DeleteMessageLocal = (id) => {
+        setMessages(prev => prev.filter(m => m.id !== id));
+    };
 
+    const EditMessageLocal = (updatedMessage) => {
+        setMessages(prev =>
+            prev.map(m => (m.id === updatedMessage.id ? updatedMessage : m))
+        );
+    };
+
+
+    useEffect(() => {
         if (!isConnected || !connection) return;
 
         connection.on("MessageCreated", AddMessage);
+        connection.on("MessageDeleted", DeleteMessageLocal);
+        connection.on("MessageEdited", EditMessageLocal);
 
         return () => {
             connection.off("MessageCreated", AddMessage);
+            connection.off("MessageDeleted", DeleteMessageLocal);
+            connection.off("MessageEdited", EditMessageLocal);
         };
-        }, [AddMessage, isConnected, connection]
+    }, [AddMessage, isConnected, connection]);
 
-    );
 
     
 
-    const value = { messages, AddMessage, SetAllMessages };
+    const value = { messages, AddMessage, SetAllMessages, DeleteMessageLocal, EditMessageLocal, setEditingMessage, editingMessage};
 
     return <MessagesContext.Provider value={value}>
         {children}

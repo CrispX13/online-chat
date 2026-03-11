@@ -1,11 +1,13 @@
-import { useState, useRef, useContext } from "react"
+import { useEffect, useRef, useContext } from "react"
 import { SignalRContext } from "../SignalRConf/SignalRContext"
 import { DialogContext } from "../DialogService/DialogContext"
+import { MessagesContext } from "../MessagesService/MessagesContext";
 
 export default function ChatInput({ text, setText })
 {
     const {dialogKey} = useContext(DialogContext)
     const {activeUser,connection} = useContext(SignalRContext)
+    const { editingMessage, setEditingMessage } = useContext(MessagesContext);
     const taRef = useRef(null)
 
     const textChange = (event) => {
@@ -14,6 +16,16 @@ export default function ChatInput({ text, setText })
         el.style.height = el.scrollHeight + "px"
         setText(el.value)
     }
+
+    useEffect(() => {
+        if (editingMessage) {
+        setText(editingMessage.messageText ?? "");
+        if (taRef.current) {
+            taRef.current.style.height = "40px";
+            taRef.current.style.height = taRef.current.scrollHeight + "px";
+        }
+        }
+    }, [editingMessage, setText]);
     
     const onKeyDown = (e) => {
         // не мешаем IME-композиции (китайский/японский и т.п.)
@@ -36,42 +48,81 @@ export default function ChatInput({ text, setText })
 
     const submit = async () => {
         const trimmed = text.trim();
-        if (!trimmed) return; // защита от пустой отправки
+        if (!trimmed) return;
 
-        await connection.invoke(
-        "SendMessage",
-        trimmed,
-        String(dialogKey),
-        String(activeUser.id)
-        );
-
+        try {
+        if (editingMessage) {
+            // режим редактирования
+            await connection.invoke(
+            "EditMessage",
+            editingMessage.id,
+            trimmed
+            );
+            // после успешного редактирования выходим из режима редактирования
+            setEditingMessage(null);
+        } else {
+            // обычная отправка нового сообщения
+            await connection.invoke(
+            "SendMessage",
+            trimmed,
+            String(dialogKey),
+            String(activeUser.id)
+            );
+        }
+        } finally {
         setText("");
         if (taRef.current) {
             taRef.current.value = "";
             taRef.current.style.height = "50px";
         }
+        }
     };
+
 
     const isEmpty = text.trim().length === 0;
 
+    const isEditing = Boolean(editingMessage);
+
     return (
-        <div className="ChatInput__wrapper">
-            <textarea
-                ref={taRef}
-                value={text}
-                onKeyDown={onKeyDown}
-                onChange={textChange}
-                placeholder="Write a massage..."
-                className="ChatInput"
-            />
+        <div style={{ width: "100%" }}>
+        {isEditing && (
+            <div className="ChatInput__edit-banner">
+            Редактирование сообщения
             <button
                 type="button"
-                className="ChatInput__send-btn"
-                onClick={submit}
-                disabled={isEmpty}
+                className="ChatInput__edit-cancel"
+                onClick={() => {
+                setEditingMessage(null);
+                setText("");
+                if (taRef.current) {
+                    taRef.current.value = "";
+                    taRef.current.style.height = "50px";
+                }
+                }}
             >
-                ➤
+                ✕
             </button>
+            </div>
+        )}
+
+        <div className="ChatInput__wrapper">
+            <textarea
+            ref={taRef}
+            value={text}
+            onKeyDown={onKeyDown}
+            onChange={textChange}
+            placeholder={isEditing ? "Измените сообщение..." : "Write a massage..."}
+            className="ChatInput"
+            />
+            <button
+            type="button"
+            className="ChatInput__send-btn"
+            onClick={submit}
+            disabled={isEmpty}
+            >
+            {isEditing ? "✔" : "➤"}
+            </button>
+        </div>
         </div>
     );
 }

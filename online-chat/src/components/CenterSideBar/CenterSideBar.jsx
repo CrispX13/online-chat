@@ -42,10 +42,14 @@ export default function CenterSideBar({ onBack = null }) {
   }, [dialogKey]);
 
   useEffect(() => {
-    if(!isMobile){
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (!isMobile && messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
     }
-  }, [messages]);
+  }, [messages, isMobile]);
+
 
   return (
     <div className="CenterSideBar__container">
