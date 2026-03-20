@@ -2,8 +2,8 @@
 {
     public class ChangePasswordDto
     {
-        public string LastPassword { get; set; }
-        public string NewPassword { get; set; }
+        public required string LastPassword { get; set; } 
+        public required string NewPassword { get; set; }
     }
 
 }

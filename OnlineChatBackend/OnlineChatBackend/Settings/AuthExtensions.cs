@@ -14,6 +14,7 @@ namespace OnlineChatBackend.Settings
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(o =>
                 {
+#pragma warning disable CS8602 // Разыменование вероятной пустой ссылки.
                     o.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuer = false,
@@ -23,6 +24,7 @@ namespace OnlineChatBackend.Settings
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(authSettings.SecretKey))
                     };
+#pragma warning restore CS8602 // Разыменование вероятной пустой ссылки.
 
                     o.Events = new JwtBearerEvents
                     {

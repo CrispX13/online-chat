@@ -19,9 +19,15 @@ namespace OnlineChatBackend.Services
             accountRepository.Add(account);
         }
 
-        public LoginResult Login(string UserName, string Password)
+        public LoginResult? Login(string UserName, string Password)
         {
             var account = accountRepository.GetByUserName(UserName);
+
+            if (account == null)
+            {
+                return null;
+            }
+
             var result = new PasswordHasher<Contact>().VerifyHashedPassword(account, account.PasswordHash, Password);
             if (result == PasswordVerificationResult.Success)
             {

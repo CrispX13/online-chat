@@ -15,7 +15,7 @@ namespace OnlineChatBackend.Hubs
     {
         public IMessageRepository messageRepository { get; set; }
 
-        public IDialogsRepository dialogsRepository { get; set; }
+        public IChatsRepository chatsRepository { get; set; }
 
 
         private readonly ILogger<ChatHub> _log;
@@ -23,26 +23,28 @@ namespace OnlineChatBackend.Hubs
         public ChatHub(
             IMessageRepository messageRepository, 
             ILogger<ChatHub> log,
-            IDialogsRepository dialogsRepository)
+            IChatsRepository ChatsRepository)
         {
             this.messageRepository = messageRepository;
-            this.dialogsRepository = dialogsRepository;
+            this.chatsRepository = ChatsRepository;
             _log = log;
         }
 
-        public async Task SendMessage(string Message,string DialogId, string UserId)
+        public async Task SendMessage(string Message,string ChatId, string UserId)
         {
 
             var callerUserIdentifier = Context.UserIdentifier;
 
+#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
             Message newMessage = new Message
             {
                 MessageText = Message,
-                DialogId = Int32.Parse(DialogId),
+                ChatId = Int32.Parse(ChatId),
                 ToUserId = Int32.Parse(UserId),
                 FromUserId = Int32.Parse(callerUserIdentifier),
                 MessageDateTime = DateTime.UtcNow
             };
+#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
 
             await Clients.Caller.SendAsync("MessageCreated", newMessage);
             await Clients.User(UserId).SendAsync("MessageCreated", newMessage);
@@ -55,10 +57,10 @@ namespace OnlineChatBackend.Hubs
         {
             var userId = int.Parse(Context.UserIdentifier!);
 
-            Dialog NewDialog = dialogsRepository.AddDialog(new DialogPostDTO(UserId, NewContactId), userId);
+            Chat NewChat = chatsRepository.AddDirectChat(new ChatPostDTO(UserId, NewContactId), userId);
 
-            await Clients.Caller.SendAsync("NewDialog", true);
-            await Clients.User(NewContactId.ToString()).SendAsync("NewDialog", true);
+            await Clients.Caller.SendAsync("NewChat", true);
+            await Clients.User(NewContactId.ToString()).SendAsync("NewChat", true);
 
         }
 

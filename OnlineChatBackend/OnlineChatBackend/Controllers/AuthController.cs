@@ -30,7 +30,9 @@ namespace OnlineChatBackend.Controllers
             var result = _accountService.Login(loginRequest.UserName, loginRequest.Password);
 
             // result.token — это JWT из JwtService.GenerateToken(account)
+#pragma warning disable CS8602 // Разыменование вероятной пустой ссылки.
             var jwt = result.token;
+#pragma warning restore CS8602 // Разыменование вероятной пустой ссылки.
 
             var expires = DateTime.UtcNow.AddDays(7);
 

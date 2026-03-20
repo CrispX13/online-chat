@@ -6,7 +6,7 @@ namespace OnlineChatBackend.DTOs
     public class MessageDTO
     {
         [Required]
-        public int DialogId { get; set; }
+        public int ChatId { get; set; }
         [Required]
         [NotNull]
         [MinLength(1)]

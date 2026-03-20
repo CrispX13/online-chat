@@ -2,8 +2,8 @@
 {
     public class LoginResult
     {
-        public string token { get; set; }
+        public required string token { get; set; }
 
-        public string Id { get; set; }
+        public required string Id { get; set; }
     }
 }

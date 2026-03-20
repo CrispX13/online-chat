@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using OnlineChatBackend.DbContexts;
 using OnlineChatBackend.Hubs;
 using OnlineChatBackend.Interfaces;
+using OnlineChatBackend.Models;
 using OnlineChatBackend.Repositories;
 using OnlineChatBackend.Services;
 using OnlineChatBackend.Settings;
@@ -58,7 +59,7 @@ builder.Services.AddSwaggerGen(c => {
 builder.Services.AddScoped<IContactsRepository, ContactsDBRepository>();
 builder.Services.AddScoped<ContactsDBRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageDBRepository>();
-builder.Services.AddScoped<IDialogsRepository, DialogDBRepository>();
+builder.Services.AddScoped<IChatsRepository, ChatDBRepository>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<AccountRepository>();
 builder.Services.AddScoped<JwtService>();
@@ -118,6 +119,7 @@ app.MapControllers();
 using(var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    //db.Database.EnsureDeleted();
     db.Database.Migrate();
 }
 

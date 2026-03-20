@@ -83,28 +83,31 @@ namespace OnlineChatBackend.Repositories
             return _context.Contacts.FirstOrDefault(x => x.Name == Name);
         }
 
-        public IEnumerable<ContactWithStatusDto> FindAllForId(int id)
+        public IEnumerable<ContactWithStatusDto> FindAllForId(int userId)
         {
-            var contacts = _context.Dialogs
-                .Where(d => d.FirstUserId == id || d.SecondUserId == id)
-                .Select(d => new
+            var contacts = _context.Chats
+                .Where(c => c.Type == ChatType.Direct &&
+                            (c.FirstUserId == userId || c.SecondUserId == userId))
+                .Select(c => new
                 {
-                    Dialog = d,
-                    OtherUser = d.FirstUserId == id ? d.SecondUser : d.FirstUser,
-                    OtherUserId = d.FirstUserId == id ? d.SecondUserId : d.FirstUserId
+                    Chat = c,
+                    OtherUser = c.FirstUserId == userId
+                        ? _context.Contacts.FirstOrDefault(u => u.Id == c.SecondUserId)
+                        : _context.Contacts.FirstOrDefault(u => u.Id == c.FirstUserId)
                 })
+                .Where(x => x.OtherUser != null)
                 .Select(x => new ContactWithStatusDto
                 {
-                    Contact = x.OtherUser,
+                    Contact = x.OtherUser!,
                     NewNotifications = _context.Notifications
-                        .Any(n => n.DialogId == x.Dialog.Id
-                                  && n.UserId == id
+                        .Any(n => n.ChatId == x.Chat.Id
+                                  && n.UserId == userId
                                   && n.NewNotifications),
                     NewContact = _context.Notifications
-                        .Any(n => n.DialogId == x.Dialog.Id
-                                  && n.UserId == id
+                        .Any(n => n.ChatId == x.Chat.Id
+                                  && n.UserId == userId
                                   && n.NewContact)
-                            })
+                })
                 .AsNoTracking()
                 .ToList();
 
@@ -255,22 +258,26 @@ namespace OnlineChatBackend.Repositories
         // 2) Список контактов/диалогов для текущего пользователя
         public IEnumerable<ContactWithStatusDto> FindAllForUser(int currentUserId)
         {
-            var contacts = _context.Dialogs
-                .Where(d => d.FirstUserId == currentUserId || d.SecondUserId == currentUserId)
-                .Select(d => new
+            var contacts = _context.Chats
+                .Where(c => c.Type == ChatType.Direct &&
+                            (c.FirstUserId == currentUserId || c.SecondUserId == currentUserId))
+                .Select(c => new
                 {
-                    Dialog = d,
-                    OtherUser = d.FirstUserId == currentUserId ? d.SecondUser : d.FirstUser,
+                    Chat = c,
+                    OtherUser = c.FirstUserId == currentUserId
+                        ? _context.Contacts.FirstOrDefault(u => u.Id == c.SecondUserId)
+                        : _context.Contacts.FirstOrDefault(u => u.Id == c.FirstUserId)
                 })
+                .Where(x => x.OtherUser != null)
                 .Select(x => new ContactWithStatusDto
                 {
-                    Contact = x.OtherUser,
+                    Contact = x.OtherUser!,
                     NewNotifications = _context.Notifications
-                        .Any(n => n.DialogId == x.Dialog.Id
+                        .Any(n => n.ChatId == x.Chat.Id
                                   && n.UserId == currentUserId
                                   && n.NewNotifications),
                     NewContact = _context.Notifications
-                        .Any(n => n.DialogId == x.Dialog.Id
+                        .Any(n => n.ChatId == x.Chat.Id
                                   && n.UserId == currentUserId
                                   && n.NewContact)
                 })

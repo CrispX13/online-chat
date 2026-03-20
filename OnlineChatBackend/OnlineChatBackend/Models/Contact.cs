@@ -1,29 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using OnlineChatBackend.Models;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace OnlineChatBackend.Models
+public class Contact
 {
-    public class Contact
-    {
-        [Key]
-        [Required]
-        public int Id { get; set; }
-        [Required]
-        [MinLength(10)]
-        public string? Name { get; set; }
+    [Key]
+    [Required]
+    public int Id { get; set; }
 
-        public string PasswordHash { get; set; }
+    [Required]
+    [MinLength(10)]
+    public string Name { get; set; } = string.Empty;
 
-        public string? AvatarUrl { get; set; }  = "avatars/default.png";
+    public string PasswordHash { get; set; } = string.Empty;
 
-        public List<Dialog> DialogsAsFirstUser { get; set; } = new();
+    public string? AvatarUrl { get; set; } = "avatars/default.png";
 
-        public List<Dialog> DialogsAsSecondUser { get; set; } = new();
-
-        public List<Notification> Notifications { get; set; } = new();
-
-        //[Required]
-        //public string TagName { get; set; }
-    }
+    public List<Notification> Notifications { get; set; } = new();
+    public List<ChatParticipant> ChatParticipants { get; set; } = new();
 }
