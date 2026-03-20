@@ -14,14 +14,28 @@ export default function DialogProvider({children}){
     useEffect(() => {
         if (activeUser != null) {
         // получение id для диалога
-        fetch(`/api/Dialog?UserKey1=${userId}&UserKey2=${activeUser.id}`, {
+        fetch(`/api/Chat/direct?UserKey1=${userId}&UserKey2=${activeUser.id}`, {
             method: "GET",
-            headers: { "Content-Type": "application/json", },
+            headers: { "Content-Type": "application/json" },
             credentials: "include",
-        }
-        )
-            .then(response => response.json())
-            .then(json => setDialogKey(json.dialogKey.id));
+            })
+            .then((response) => {
+                if (!response.ok) {
+                // если чата ещё нет или ошибка
+                setDialogKey(null);
+                return null;
+                }
+                return response.json();
+            })
+            .then((json) => {
+                if (!json) return;
+                // бэкенд: return Ok(new { dialogKey });
+                setDialogKey(json.chatKey.id);
+            })
+            .catch((e) => {
+                console.error(e);
+                setDialogKey(null);
+            });
         }
 
         // setContacts(prev=>

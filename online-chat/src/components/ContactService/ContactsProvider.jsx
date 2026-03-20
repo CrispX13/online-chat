@@ -13,7 +13,7 @@ export default function ContactsProvider({ children }) {
   const { activeUser, connection, isConnected } = useContext(SignalRContext);
 
   const clearNewContactFlag = (id) => {
-    setContacts((prev) =>
+    setContacts((pv) =>
       prev.map((c) =>
         c.contact.id === id ? { ...c, newContact: false } : c
       )
@@ -134,10 +134,10 @@ export default function ContactsProvider({ children }) {
   useEffect(() => {
     if (!isConnected || !connection) return;
 
-    connection.on("NewDialog", refreshContacts);
+    connection.on("NewChat", refreshContacts);
 
     return () => {
-      connection.off("NewDialog", refreshContacts);
+      connection.off("NewChat", refreshContacts);
     };
   }, [isConnected, connection]);
 

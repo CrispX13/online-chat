@@ -26,19 +26,26 @@ export default function CenterSideBar({ onBack = null }) {
   const { userId } = useContext(AuthContext);
 
   useEffect(() => {
-    if (dialogKey != null) {
-      fetch(`/api/chat?DialogKey=${dialogKey}&UserId=${userId}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        credentials: "include",
+    if (dialogKey == null) return;
+
+    fetch(`/api/Chat/${dialogKey}/messages`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          console.error("Failed to load messages", response.status);
+          return [];
+        }
+        return await response.json();
       })
-        .then((response) => response.json())
-        .then((json) => {
-          SetAllMessages(json);
-        });
-    }
+      .then((json) => {
+        SetAllMessages(json);
+      })
+      .catch((e) => {
+        console.error(e);
+        SetAllMessages([]);
+      });
   }, [dialogKey]);
 
   useEffect(() => {

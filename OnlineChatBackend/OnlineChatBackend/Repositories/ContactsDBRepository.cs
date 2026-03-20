@@ -258,33 +258,59 @@ namespace OnlineChatBackend.Repositories
         // 2) Список контактов/диалогов для текущего пользователя
         public IEnumerable<ContactWithStatusDto> FindAllForUser(int currentUserId)
         {
-            var contacts = _context.Chats
+            // 1. Берём direct-чаты пользователя из БД
+            var chats = _context.Chats
                 .Where(c => c.Type == ChatType.Direct &&
                             (c.FirstUserId == currentUserId || c.SecondUserId == currentUserId))
-                .Select(c => new
-                {
-                    Chat = c,
-                    OtherUser = c.FirstUserId == currentUserId
-                        ? _context.Contacts.FirstOrDefault(u => u.Id == c.SecondUserId)
-                        : _context.Contacts.FirstOrDefault(u => u.Id == c.FirstUserId)
-                })
-                .Where(x => x.OtherUser != null)
-                .Select(x => new ContactWithStatusDto
-                {
-                    Contact = x.OtherUser!,
-                    NewNotifications = _context.Notifications
-                        .Any(n => n.ChatId == x.Chat.Id
-                                  && n.UserId == currentUserId
-                                  && n.NewNotifications),
-                    NewContact = _context.Notifications
-                        .Any(n => n.ChatId == x.Chat.Id
-                                  && n.UserId == currentUserId
-                                  && n.NewContact)
-                })
-                .AsNoTracking()
+                .ToList(); // <-- здесь граница: дальше работаем в памяти
+
+            if (!chats.Any())
+                return Enumerable.Empty<ContactWithStatusDto>();
+
+            // 2. Находим id собеседников
+            var otherUserIds = chats
+                .Select(c => c.FirstUserId == currentUserId ? c.SecondUserId : c.FirstUserId)
+                .Where(id => id.HasValue)
+                .Select(id => id!.Value)
+                .Distinct()
                 .ToList();
 
-            return contacts;
+            // 3. Грузим контакты собеседников
+            var contactsDict = _context.Contacts
+                .Where(c => otherUserIds.Contains(c.Id))
+                .ToDictionary(c => c.Id, c => c);
+
+            // 4. Собираем DTO, считая уведомления уже по ChatId
+            var result = new List<ContactWithStatusDto>();
+
+            foreach (var chat in chats)
+            {
+                var otherUserId = chat.FirstUserId == currentUserId
+                    ? chat.SecondUserId
+                    : chat.FirstUserId;
+
+                if (otherUserId == null || !contactsDict.TryGetValue(otherUserId.Value, out var otherUser))
+                    continue;
+
+                var newNotifications = _context.Notifications
+                    .Any(n => n.ChatId == chat.Id &&
+                              n.UserId == currentUserId &&
+                              n.NewNotifications);
+
+                var newContact = _context.Notifications
+                    .Any(n => n.ChatId == chat.Id &&
+                              n.UserId == currentUserId &&
+                              n.NewContact);
+
+                result.Add(new ContactWithStatusDto
+                {
+                    Contact = otherUser,
+                    NewNotifications = newNotifications,
+                    NewContact = newContact
+                });
+            }
+
+            return result;
         }
 
 

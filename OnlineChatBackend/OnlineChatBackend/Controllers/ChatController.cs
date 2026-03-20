@@ -40,14 +40,14 @@ namespace OnlineChatBackend.Controllers
         {
             chat.Normalize();
             int currentUserId = int.Parse(User.FindFirst("id")!.Value);
-            var dialogKey = _chatsRepository.GetDirectChat(chat, currentUserId);
+            var chatKey = _chatsRepository.GetDirectChat(chat, currentUserId);
 
-            if (dialogKey == null)
+            if (chatKey == null)
             {
                 return BadRequest();
             }
             else
-                return Ok(new { dialogKey });
+                return Ok(new { chatKey });
         }
 
         [HttpPost("{chatId}/messages")]
@@ -64,9 +64,10 @@ namespace OnlineChatBackend.Controllers
         }
 
         [HttpGet("{chatId:int}/messages")]
-        public IActionResult ReadAll(int DialogKey, int UserId)
+        public IActionResult ReadAll(int chatId)
         {
-            List<Message> messages = _messageRepository.GetAll(DialogKey, UserId);
+            int currentUserId = int.Parse(User.FindFirst("id")!.Value);
+            var messages = _messageRepository.GetAll(chatId, currentUserId);
             return Ok(messages);
         }
     }
