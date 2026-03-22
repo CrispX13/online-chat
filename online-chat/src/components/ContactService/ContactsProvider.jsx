@@ -13,7 +13,7 @@ export default function ContactsProvider({ children }) {
   const { activeUser, connection, isConnected } = useContext(SignalRContext);
 
   const clearNewContactFlag = (id) => {
-    setContacts((pv) =>
+    setContacts((prev) =>
       prev.map((c) =>
         c.contact.id === id ? { ...c, newContact: false } : c
       )
@@ -30,7 +30,7 @@ export default function ContactsProvider({ children }) {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify(newName), // string в теле
+        body: JSON.stringify({newName}), // string в теле
       });
       if (!res.ok) throw new Error("Ошибка при смене имени");
 

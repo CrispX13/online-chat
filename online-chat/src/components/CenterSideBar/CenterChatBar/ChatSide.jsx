@@ -11,7 +11,7 @@ const ChatBody =  forwardRef(function ChatBody(props,messagesEndRef){
     let messageCards = []
 
     if(messages.length > 0){
-        if(messages[0].dialogId === dialogKey){
+        if(messages[0].chatId === dialogKey){
             messages.forEach((element,index) => {
                 messageCards.push(<Message key={index} info = {element}></Message>)
             });

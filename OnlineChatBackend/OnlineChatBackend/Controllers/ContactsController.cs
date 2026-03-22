@@ -65,16 +65,14 @@ namespace OnlineChatBackend.Controllers
         [HttpPut("me/name")]
         public IActionResult ChangeMyName([FromBody] ChangeNameDto dto)
         {
-            if (dto == null || string.IsNullOrWhiteSpace(dto.NewName))
-                return BadRequest("Имя не может быть пустым.");
+            if (string.IsNullOrWhiteSpace(dto.NewName))
+                return BadRequest("Имя не может быть пустым");
 
-            int currentUserId = GetCurrentUserId();
+            int currentUserId = int.Parse(User.FindFirst("id")!.Value);
+            var ok = _contactsRepository.ChangeUserName(currentUserId, dto.NewName);
+            if (!ok) return BadRequest();
 
-            var result = _contactsRepository.ChangeUserName(currentUserId, dto.NewName);
-            if (!result)
-                return NotFound();
-
-            return NoContent();
+            return Ok();
         }
 
         // Изменить пароль текущего пользователя

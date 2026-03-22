@@ -59,8 +59,8 @@ export default function ChatCard({
         <div className="contact__badge">
           <svg xmlns="http://www.w3.org/2000/svg" width="40" height="18" viewBox="0 0 40 18">
                         <rect x="0" y="0" width="40" height="18" rx="9" ry="9" fill="#16a34a"/>
-                        <text x="20" y="12" text-anchor="middle" font-family="system-ui, sans-serif"
-                                font-size="10" fill="#ffffff" font-weight="600">
+                        <text x="20" y="12" textAnchor="middle" fontFamily="system-ui, sans-serif"
+                                fontSize="10" fill="#ffffff" fontWeight="600">
                             New
                         </text>
         </svg>

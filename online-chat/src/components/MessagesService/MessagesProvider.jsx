@@ -17,18 +17,20 @@ export default function MessagesProvider({children}){
     const [editingMessage, setEditingMessage] = useState(null);
 
     const AddMessage = (message) => {
-        setMessages(prev => {
-            return [...prev, message];
-        });
-        // отправка уведомления при новом сообщении 
-        if (dialogKey !== message.dialogId ){
-            if(userId === String(message.toUserId)){
-                setContacts(prev=>
-                    prev.map(contact=>contact.contact.id === message.fromUserId?{ ...contact, newNotifications: true }:contact)
+    setMessages((prev) => [...prev, message]);
+
+    // уведомление, если сообщение пришло НЕ в текущий чат
+    if (dialogKey !== message.chatId) {
+        if (String(userId) === String(message.toUserId)) {
+            setContacts((prev) =>
+                prev.map((c) =>
+                c.contact.id === message.fromUserId
+                    ? { ...c, newNotifications: true }
+                    : c
                 )
-                console.log(contacts)
-            }
+            );
         }
+    }
     };
             
     const SetAllMessages = useCallback((arr) => {

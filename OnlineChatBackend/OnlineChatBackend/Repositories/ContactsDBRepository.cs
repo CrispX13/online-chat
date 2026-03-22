@@ -297,7 +297,7 @@ namespace OnlineChatBackend.Repositories
                               n.UserId == currentUserId &&
                               n.NewNotifications);
 
-                var newContact = _context.Notifications
+                var newContactFlag = _context.Notifications
                     .Any(n => n.ChatId == chat.Id &&
                               n.UserId == currentUserId &&
                               n.NewContact);
@@ -306,7 +306,7 @@ namespace OnlineChatBackend.Repositories
                 {
                     Contact = otherUser,
                     NewNotifications = newNotifications,
-                    NewContact = newContact
+                    NewContact = newContactFlag
                 });
             }
 
