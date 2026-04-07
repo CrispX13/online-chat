@@ -5,6 +5,7 @@ import { SignalRContext } from "../SignalRConf/SignalRContext";
 
 export default function ContactsProvider({ children }) {
   const [contacts, setContacts] = useState([]);
+  const [groupChats, setGroupChats] = useState([]);
   const [refresh, setRefresh] = useState(true);
 
   const refreshContacts = () => setRefresh((prev) => !prev);
@@ -108,6 +109,20 @@ export default function ContactsProvider({ children }) {
         console.error(e);
         setContacts([]);
       });
+
+    fetch(`/api/contacts/me/groups`, {
+    method: "GET",
+    credentials: "include",
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Ошибка загрузки групп");
+        return response.json();
+      })
+      .then((json) => setGroupChats(json))
+      .catch((e) => {
+        console.error(e);
+        setGroupChats([]);
+      });
   }, [userId, refresh]);
 
   // сброс флага newNotifications при открытии диалога
@@ -148,6 +163,8 @@ export default function ContactsProvider({ children }) {
     updateName,
     updatePassword,
     updateAvatar,
+    groupChats,
+    setGroupChats,
   };
 
   return (

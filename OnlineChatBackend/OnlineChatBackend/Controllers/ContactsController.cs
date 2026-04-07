@@ -1,9 +1,11 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using OnlineChatBackend.DbContexts;
 using OnlineChatBackend.DTOs;
 using OnlineChatBackend.Interfaces;
 using OnlineChatBackend.Models;
+using System.Security.Claims;
 
 namespace OnlineChatBackend.Controllers
 {
@@ -14,9 +16,12 @@ namespace OnlineChatBackend.Controllers
     {
         private readonly IContactsRepository _contactsRepository;
 
-        public ContactsController(IContactsRepository contactsRepository)
+        private readonly AppDbContext _context;
+
+        public ContactsController(IContactsRepository contactsRepository, AppDbContext context)
         {
             _contactsRepository = contactsRepository;
+            _context = context;
         }
 
         private int GetCurrentUserId()
@@ -152,6 +157,29 @@ namespace OnlineChatBackend.Controllers
             int currentUserId = int.Parse(User.FindFirst("id")!.Value);
             var chats = _contactsRepository.GetChatsForUser(currentUserId);
             return Ok(chats);
+        }
+
+        [HttpGet("me/groups")]
+        public ActionResult<IEnumerable<GroupChatDto>> GetMyGroupChats()
+        {
+            int currentUserId = GetCurrentUserId();
+
+            var groups = _context.Chats
+                .Where(c => c.Type == ChatType.Group &&
+                            c.Participants.Any(p => p.UserId == currentUserId))
+                .Select(c => new GroupChatDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    MembersCount = c.Participants.Count,
+                    NewNotifications = _context.Notifications
+                        .Any(n => n.ChatId == c.Id &&
+                                  n.UserId == currentUserId &&
+                                  n.NewNotifications)
+                })
+                .ToList();
+
+            return Ok(groups);
         }
     }
 
