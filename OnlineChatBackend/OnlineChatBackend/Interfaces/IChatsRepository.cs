@@ -7,6 +7,7 @@ namespace OnlineChatBackend.Interfaces
     {
         public Chat AddDirectChat(ChatPostDTO chat, int currentUserId);
         public Chat? DeleteDirectChat(int chatId, int currentUserId);
-        public Chat? GetDirectChat(ChatPostDTO chat, int currentUserId);
+        Chat CreateGroupChat(string name, int ownerUserId, IEnumerable<int> participantIds);
+        Chat? GetChatById(int chatId, int currentUserId);
     }
 }

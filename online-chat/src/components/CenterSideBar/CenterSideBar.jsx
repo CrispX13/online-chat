@@ -3,9 +3,7 @@ import ChatHeading from "./ChatHeading";
 import ChatBody from "./CenterChatBar/ChatSide";
 import ChatFooter from "./ChatFooter";
 import "./CenterSideBar.css";
-import { AuthContext } from "../AuthContext";
 import { MessagesContext } from "../MessagesService/MessagesContext";
-import { DialogContext } from "../DialogService/DialogContext";
 import { SignalRContext } from "../SignalRConf/SignalRContext";
 import EmojiPicker from "emoji-picker-react";
 import MiniProfile from "../Profile/MiniProfile";
@@ -21,14 +19,12 @@ export default function CenterSideBar({ onBack = null }) {
 
   const { messages, SetAllMessages } = useContext(MessagesContext);
   const messagesEndRef = useRef(null);
-  const { dialogKey } = useContext(DialogContext);
   const { activeUser } = useContext(SignalRContext);
-  const { userId } = useContext(AuthContext);
 
   useEffect(() => {
-    if (dialogKey == null) return;
+    if (activeUser == null) return;
 
-    fetch(`/api/Chat/${dialogKey}/messages`, {
+    fetch(`/api/Chat/${activeUser.chatId}/messages`, {
       method: "GET",
       credentials: "include",
     })
@@ -46,7 +42,7 @@ export default function CenterSideBar({ onBack = null }) {
         console.error(e);
         SetAllMessages([]);
       });
-  }, [dialogKey]);
+  }, [activeUser]);
 
   useEffect(() => {
     if (!isMobile && messagesEndRef.current) {

@@ -35,21 +35,6 @@ namespace OnlineChatBackend.Controllers
         }
 
 
-        [HttpGet("direct")]
-        public IActionResult GetChat([FromQuery] ChatPostDTO chat)
-        {
-            chat.Normalize();
-            int currentUserId = int.Parse(User.FindFirst("id")!.Value);
-            var chatKey = _chatsRepository.GetDirectChat(chat, currentUserId);
-
-            if (chatKey == null)
-            {
-                return BadRequest();
-            }
-            else
-                return Ok(new { chatKey });
-        }
-
         [HttpPost("{chatId}/messages")]
         public IActionResult AddMessage([FromBody] MessageDTO message)
         {
@@ -69,6 +54,34 @@ namespace OnlineChatBackend.Controllers
             int currentUserId = int.Parse(User.FindFirst("id")!.Value);
             var messages = _messageRepository.GetAll(chatId, currentUserId);
             return Ok(messages);
+        }
+
+        // POST api/Chat/group
+        [HttpPost("group")]
+        public IActionResult CreateGroup([FromBody] GroupChatCreateDto dto)
+        {
+            int currentUserId = int.Parse(User.FindFirst("id")!.Value);
+
+            if (string.IsNullOrWhiteSpace(dto.Name))
+                return BadRequest("Имя группы не может быть пустым.");
+
+            // владелец всегда внутри ParticipantIds не обязателен – мы добавляем сами
+            var chat = _chatsRepository.CreateGroupChat(dto.Name, currentUserId, dto.ParticipantIds);
+
+            return Ok(chat); // можно вернуть DTO, если не хочешь светить Participants целиком
+        }
+
+        // GET api/Chat/{chatId}
+        [HttpGet("{chatId:int}")]
+        public IActionResult GetChatById(int chatId)
+        {
+            int currentUserId = int.Parse(User.FindFirst("id")!.Value);
+
+            var chat = _chatsRepository.GetChatById(chatId, currentUserId);
+            if (chat == null)
+                return NotFound();
+
+            return Ok(chat);
         }
     }
 }

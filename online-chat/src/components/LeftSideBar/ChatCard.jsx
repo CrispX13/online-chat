@@ -31,6 +31,7 @@ export default function ChatCard({
       await connection.invoke("NewContact", Number(userId), contact.id);
       setSearchValue && setSearchValue(null);
     } else {
+      console.log(contact)
       setActiveUser(contact);
       if (contact.newContact) {
         clearNewContactFlag(contact.id);

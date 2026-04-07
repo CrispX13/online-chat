@@ -26,6 +26,7 @@ export default function SignalRProvider({ children }) {
         withCredentials: true,
       })
       .withAutomaticReconnect()
+      .configureLogging(signalR.LogLevel.None)
       .build();
 
     setConnection(conn);
@@ -34,7 +35,6 @@ export default function SignalRProvider({ children }) {
       .start()
       .then(() => {
         setConnected(true);
-        console.log("SignalR connected");
       })
       .catch((err) => {
         console.error("SignalR connect error", err);

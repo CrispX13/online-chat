@@ -30,9 +30,8 @@ export default function ContactsProvider({ children }) {
           "Content-Type": "application/json",
         },
         credentials: "include",
-        body: JSON.stringify({newName}), // string в теле
-      });
-      if (!res.ok) throw new Error("Ошибка при смене имени");
+        body: JSON.stringify(newName), // string в теле
+      });if (!res.ok) throw new Error("Ошибка при смене имени");
 
       // обновляем локальный список контактов (там, где текущий userId)
       setContacts((prev) =>

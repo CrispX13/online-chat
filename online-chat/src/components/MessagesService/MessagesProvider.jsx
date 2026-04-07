@@ -5,22 +5,21 @@ import * as signalR from "@microsoft/signalr";
 import { AuthContext } from '../AuthContext';
 import { SignalRContext } from "../SignalRConf/SignalRContext"
 import { ContactsContext } from '../ContactService/ContactsContext';
-import { DialogContext } from '../DialogService/DialogContext';
 
 export default function MessagesProvider({children}){
 
     const {userId} = useContext(AuthContext)
     const {connection,isConnected} = useContext(SignalRContext)
     const [messages, setMessages] = useState([]);
-    const {contacts,setContacts} = useContext(ContactsContext)
-    const {dialogKey} = useContext(DialogContext)
+    const {setContacts} = useContext(ContactsContext)
     const [editingMessage, setEditingMessage] = useState(null);
+    const { activeUser } = useContext(SignalRContext);
 
     const AddMessage = (message) => {
     setMessages((prev) => [...prev, message]);
 
     // уведомление, если сообщение пришло НЕ в текущий чат
-    if (dialogKey !== message.chatId) {
+    if (activeUser.id !== message.chatId) {
         if (String(userId) === String(message.toUserId)) {
             setContacts((prev) =>
                 prev.map((c) =>

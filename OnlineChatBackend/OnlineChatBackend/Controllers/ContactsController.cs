@@ -145,6 +145,14 @@ namespace OnlineChatBackend.Controllers
             var result = _contactsRepository.Search(partOfName) ?? Enumerable.Empty<Contact>();
             return Ok(result);
         }
+
+        [HttpGet("me/chats")]
+        public IActionResult GetMyChats()
+        {
+            int currentUserId = int.Parse(User.FindFirst("id")!.Value);
+            var chats = _contactsRepository.GetChatsForUser(currentUserId);
+            return Ok(chats);
+        }
     }
 
     public class ChangeNameDto

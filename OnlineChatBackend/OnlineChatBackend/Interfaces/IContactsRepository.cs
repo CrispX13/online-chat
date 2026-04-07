@@ -17,6 +17,8 @@ namespace OnlineChatBackend.Interfaces
 
         // Поиск по имени (контактов/юзеров) – если нужно:
         IEnumerable<Contact>? Search(string partOfName);
+
+        public IEnumerable<ChatListItemDto> GetChatsForUser(int currentUserId);
     }
 
 }

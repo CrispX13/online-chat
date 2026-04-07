@@ -305,6 +305,7 @@ namespace OnlineChatBackend.Repositories
                 result.Add(new ContactWithStatusDto
                 {
                     Contact = otherUser,
+                    ChatId = chat.Id,
                     NewNotifications = newNotifications,
                     NewContact = newContactFlag
                 });
@@ -313,6 +314,59 @@ namespace OnlineChatBackend.Repositories
             return result;
         }
 
+        public IEnumerable<ChatListItemDto> GetChatsForUser(int currentUserId)
+        {
+            var chats = _context.Chats
+                .Where(c =>
+                    (c.Type == ChatType.Direct &&
+                     (c.FirstUserId == currentUserId || c.SecondUserId == currentUserId)) ||
+                    (c.Type == ChatType.Group &&
+                     c.Participants.Any(p => p.UserId == currentUserId)))
+                .ToList();
+
+            var result = new List<ChatListItemDto>();
+
+            foreach (var chat in chats)
+            {
+                string title;
+                if (chat.Type == ChatType.Direct)
+                {
+                    var otherId = chat.FirstUserId == currentUserId
+                        ? chat.SecondUserId
+                        : chat.FirstUserId;
+
+                    var other = _context.Contacts.FirstOrDefault(c => c.Id == otherId);
+                    if (other == null) continue;
+
+                    title = other.Name;
+                }
+                else
+                {
+                    title = chat.Name ?? "Групповой чат";
+                }
+
+                var newNotifications = _context.Notifications
+                    .Any(n => n.ChatId == chat.Id &&
+                              n.UserId == currentUserId &&
+                              n.NewNotifications);
+
+                var newContact = _context.Notifications
+                    .Any(n => n.ChatId == chat.Id &&
+                              n.UserId == currentUserId &&
+                              n.NewContact);
+
+                result.Add(new ChatListItemDto
+                {
+                    ChatId = chat.Id,
+                    Type = chat.Type,
+                    Title = title,
+                    NewNotifications = newNotifications,
+                    NewContact = newContact
+                });
+            }
+
+            return result;
+        }
 
 
     }

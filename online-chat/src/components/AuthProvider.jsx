@@ -18,7 +18,6 @@ export default function AuthProvider({children}){
             if (data) {
             setUserId(data.id);
             setJwtKey(data.token);
-            console.log(data.token)
             // при желании: setUserName(data.userName);
             } else {
             setUserId(null);

@@ -13,8 +13,9 @@ public class Contact
 
     public string PasswordHash { get; set; } = string.Empty;
 
-    public string? AvatarUrl { get; set; } = "avatars/default.png";
+    public string AvatarUrl { get; set; } = "avatars/default.png";
 
     public List<Notification> Notifications { get; set; } = new();
     public List<ChatParticipant> ChatParticipants { get; set; } = new();
+    public List<SearchQuery> SearchQueries { get; set; } = new();
 }

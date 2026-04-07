@@ -5,7 +5,6 @@ import { MessagesContext } from "../MessagesService/MessagesContext";
 
 export default function ChatInput({ text, setText })
 {
-    const {dialogKey} = useContext(DialogContext)
     const {activeUser,connection} = useContext(SignalRContext)
     const { editingMessage, setEditingMessage } = useContext(MessagesContext);
     const taRef = useRef(null)
@@ -62,11 +61,11 @@ export default function ChatInput({ text, setText })
             setEditingMessage(null);
         } else {
             // обычная отправка нового сообщения
+            console.log(activeUser)
             await connection.invoke(
             "SendMessage",
             trimmed,
-            String(dialogKey),
-            String(activeUser.id)
+            String(activeUser.chatId)
             );
         }
         } finally {
