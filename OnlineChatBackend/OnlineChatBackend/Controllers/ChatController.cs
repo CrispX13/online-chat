@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OnlineChatBackend.DbContexts;
 using OnlineChatBackend.DTOs;
 using OnlineChatBackend.Interfaces;
 using OnlineChatBackend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace OnlineChatBackend.Controllers
 {
@@ -13,12 +15,15 @@ namespace OnlineChatBackend.Controllers
     {
         private IChatsRepository _chatsRepository;
 
-        public IMessageRepository _messageRepository { get; set; }
+        private IMessageRepository _messageRepository { get; set; }
 
-        public ChatController(IChatsRepository chatsRepository, IMessageRepository messageRepository)
+        private AppDbContext _context { get; set; }
+
+        public ChatController(IChatsRepository chatsRepository, IMessageRepository messageRepository, AppDbContext context)
         {
             _chatsRepository = chatsRepository;
             _messageRepository = messageRepository;
+            _context = context;
         }
 
 
@@ -83,5 +88,33 @@ namespace OnlineChatBackend.Controllers
 
             return Ok(chat);
         }
+
+        [HttpGet("{chatId}/participants")]
+        public async Task<ActionResult<IEnumerable<ChatParticipantDto>>> GetChatParticipants(int chatId)
+        {
+            int currentUserId = int.Parse(User.FindFirst("id")!.Value);
+
+            var chat = await _context.Chats
+                .Include(c => c.Participants)
+                .ThenInclude(p => p.User) // или Contact — как у тебя называется
+                .FirstOrDefaultAsync(c => c.Id == chatId);
+
+            if (chat == null)
+                return NotFound();
+
+            // проверка, что текущий пользователь — участник
+            if (!chat.Participants.Any(p => p.UserId == currentUserId))
+                return Forbid();
+
+            var result = chat.Participants.Select(p => new ChatParticipantDto
+            {
+                UserId = p.UserId,
+                Name = p.User.Name,
+                AvatarUrl = p.User.AvatarUrl
+            });
+
+            return Ok(result);
+        }
+
     }
 }

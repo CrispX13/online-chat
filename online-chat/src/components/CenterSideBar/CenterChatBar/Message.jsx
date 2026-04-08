@@ -5,7 +5,7 @@ import { MessagesContext } from "../../MessagesService/MessagesContext";
 
 export default function Message({ info, index }) {
   const { userId } = useContext(AuthContext);
-  const {connection} = useContext(SignalRContext)
+  const {connection, participants} = useContext(SignalRContext)
   const { setEditingMessage } = useContext(MessagesContext);
 
 
@@ -109,13 +109,15 @@ export default function Message({ info, index }) {
     };
   }, [menuVisible]);
 
+  const isMy = String(info.fromUserId) === String(userId);
+  const sender = participants?.[info.fromUserId] || null;
+  const API_BASE = import.meta.env.VITE_API_URL ?? "";
+  const avatarSrc = `/api/profile/${info.fromUserId}/avatar`;
   return (
     <>
       <div
         key={index}
-        className={`message ${
-          userId !== String(info.toUserId) ? " message_right" : ""
-        }`}
+        className={`message ${isMy ? " message_right" : " message_left"}`}
         onContextMenu={handleContextMenu}
         onMouseDown={handleMouseDown}
         onTouchStart={handleMouseDown}
@@ -123,10 +125,25 @@ export default function Message({ info, index }) {
         onMouseLeave={handleMouseUpLeave}
         onTouchEnd={handleMouseUpLeave}
       >
-        <p className="message__text">{info.messageText}</p>
-        <span className="message__time">
-          {`${hours}:${minutes.toString().padStart(2, "0")}`}
-        </span>
+
+        {!isMy && (
+          <img
+            className="message__avatar"
+            src={avatarSrc}
+            alt={sender?.name || "avatar"}
+          />
+        )}
+
+        <div className="message__content">
+          {!isMy && sender && (
+            <div className="message__author">{sender.name}</div>
+          )}
+
+          <p className="message__text">{info.messageText}</p>
+          <span className="message__time">
+            {`${hours}:${minutes.toString().padStart(2, "0")}`}
+          </span>
+      </div>
       </div>
 
       {menuVisible && (

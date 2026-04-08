@@ -11,7 +11,6 @@ const ChatBody =  forwardRef(function ChatBody(props,messagesEndRef){
 
     let messageCards = []
 
-    console.log(messages)
 
     if(messages.length > 0){
         if(messages[0].chatId === activeUser.chatId){
@@ -21,7 +20,6 @@ const ChatBody =  forwardRef(function ChatBody(props,messagesEndRef){
         }
     }
 
-    console.log(messageCards)
 
 
     return(

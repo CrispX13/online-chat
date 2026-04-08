@@ -18,17 +18,15 @@ namespace OnlineChatBackend.Repositories
         // Добавить сообщение
         public void Add(Message message)
         {
-            // проверяем, что отправитель участник чата
+            // 1. Проверяем, что отправитель участник чата
             var chat = _context.Chats
                 .Include(c => c.Participants)
                 .FirstOrDefault(c =>
                     c.Id == message.ChatId &&
                     (
-                        // Direct: через First/SecondUserId
                         (c.Type == ChatType.Direct &&
                          (c.FirstUserId == message.FromUserId || c.SecondUserId == message.FromUserId))
                         ||
-                        // Group: через участников
                         (c.Type == ChatType.Group &&
                          c.Participants.Any(p => p.UserId == message.FromUserId))
                     ));
@@ -38,25 +36,64 @@ namespace OnlineChatBackend.Repositories
 
             _context.Messages.Add(message);
 
-            // уведомление только для ToUserId
-            var notification = _context.Notifications
-                .FirstOrDefault(n => n.ChatId == message.ChatId &&
-                                     n.UserId == message.ToUserId);
+            // 2. Обновляем уведомления
+            if (chat.Type == ChatType.Direct)
+            {
+                // уведомление только получателю
+                if (!message.ToUserId.HasValue)
+                    throw new InvalidOperationException("Для Direct-чата ToUserId должен быть задан.");
 
-            if (notification == null)
-            {
-                notification = new Notification
+                var notification = _context.Notifications
+                    .FirstOrDefault(n => n.ChatId == message.ChatId &&
+                                         n.UserId == message.ToUserId.Value);
+
+                if (notification == null)
                 {
-                    ChatId = message.ChatId,
-                    UserId = message.ToUserId,
-                    NewNotifications = true,
-                    NewContact = false
-                };
-                _context.Notifications.Add(notification);
+                    notification = new Notification
+                    {
+                        ChatId = message.ChatId,
+                        UserId = message.ToUserId.Value,
+                        NewNotifications = true,
+                        NewContact = false
+                    };
+                    _context.Notifications.Add(notification);
+                }
+                else
+                {
+                    notification.NewNotifications = true;
+                }
             }
-            else
+            else if (chat.Type == ChatType.Group)
             {
-                notification.NewNotifications = true;
+                // уведомления всем участникам, кроме отправителя
+                var targetUserIds = chat.Participants
+                    .Select(p => p.UserId)
+                    .Where(uid => uid != message.FromUserId)
+                    .Distinct()
+                    .ToList();
+
+                foreach (var uid in targetUserIds)
+                {
+                    var notification = _context.Notifications
+                        .FirstOrDefault(n => n.ChatId == message.ChatId &&
+                                             n.UserId == uid);
+
+                    if (notification == null)
+                    {
+                        notification = new Notification
+                        {
+                            ChatId = message.ChatId,
+                            UserId = uid,
+                            NewNotifications = true,
+                            NewContact = false
+                        };
+                        _context.Notifications.Add(notification);
+                    }
+                    else
+                    {
+                        notification.NewNotifications = true;
+                    }
+                }
             }
 
             _context.SaveChanges();

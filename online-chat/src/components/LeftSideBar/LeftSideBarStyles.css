@@ -1,25 +1,104 @@
-.LeftSideBar__container{
+/* Общий контейнер левой панели */
+.LeftSideBar__container {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  outline: 1px solid  black;
+  background: linear-gradient(145deg, #f4f4f2, #e7e5e1);
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  width: 300px; 
+  min-width: 260px;
+  padding-top: 10px;
 }
 
-.Chats__container{
+/* Контейнер чатов */
+.Chats__container {
   display: flex;
+  flex-direction: column;
   flex: 1;
-  background-color: #e9e8eb;
-  outline: 1px solid #d4d2d2;
+  padding: 10px 8px 10px 8px;
+  background: transparent;
 }
 
-.EmojiSidebar{
-  width: 280px;
-  height: 100%;
-  background-color: #e9e8eb; /* твой цвет */
+/* Хедер чатов */
+.Chats__header {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
 }
 
-.Chats__list{
+.Chats__header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #565148;
+}
+
+/* Кнопка создания группы */
+.Chats__create-group-btn {
+  padding: 5px 10px;
+  font-size: 13px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.95);
+  color: #48443c;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.Chats__create-group-btn:hover {
+  background: #f1efea;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.Chats__create-group-btn:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+/* Переключатель Директ / Групповые */
+.Chats__toggle {
+  display: flex;
+  gap: 6px;
+  padding: 3px;
+  margin-bottom: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.03);
+}
+
+.Chats__toggle-item {
+  flex: 1;
+  position: relative;
+  text-align: center;
+  padding: 5px 6px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+  color: #7b756b;
+  user-select: none;
+  transition: background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.Chats__toggle-item input {
+  display: none;
+}
+
+.Chats__toggle-item.active {
+  background: #e6e3dd;
+  color: #3f3a33;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* Список чатов */
+.Chats__list {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -27,122 +106,172 @@
   height: calc(100vh - 50px);
   border: none;
   width: 100%;
+  padding-right: 4px;
 }
 
+/* Скроллбар под loft */
 .Chats__list::-webkit-scrollbar {
-  width: 6px;               /* ширина scrollbar */
+  width: 6px;
 }
 .Chats__list::-webkit-scrollbar-track {
-  background: #d4d2d2;
-  width: 8px;
+  background: #d6d3cf;
 }
 .Chats__list::-webkit-scrollbar-thumb {
-  background-color: rgb(87, 87, 87);    /* цвет плашки */
-  border-radius: 20px; 
+  background-color: #7a7771;
+  border-radius: 20px;
 }
 
-
-
-.Search{
+/* Поиск */
+.Search {
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
   height: 50px;
-  padding: 0 5px;
+  padding: 0 10px;
   position: relative;
 }
 
-.Search__input{ 
-  height: 25px;
-  width: 250px;
-  font-size: large;
-  border-radius: 20px;
-  padding: 5px 10px;
+.Search__input {
+  height: 30px;
+  width: 100%;
+  max-width: 100%;
+  font-size: 14px;
+  border-radius: 999px;
+  padding: 5px 12px;
   border: none;
-  background-color: #d4d2d2;
+  background-color: #d5d3cf;
+  color: #423d35;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
 }
 
-.Search__input:focus{
-  outline: solid 1px #d4d2d2;
-  background-color: white;
+.Search__input::placeholder {
+  color: #8b8780;
+}
+
+.Search__input:focus {
+  outline: none;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
 }
 
 .Search__input:focus::placeholder {
   color: transparent;
 }
 
-.ChatCard__text-container{
-  flex: 1;
-}
-
-.ChatCard__img{
-  width: 20%;
-  height: 100%;
-  border-radius: 10%;
-  border: 2px solid white;
-}
-
-.ChatCard{
-  position: relative;
-  display: flex;
-  padding: 5px;
-  gap: 10px;
-  background-color: #fff;
-  border: none;
-  max-height: 100px;
-  max-width: 300px;
-}
-
-.contact__badge{
-  position: absolute;
-  right: 10px;
-}
-
-.active-chat{
-  background-color: #ffffff5a;
-}
-
-.notification{
-  background-color: rgb(183, 177, 8);
-}
-
-
-.Search__result-container{
+/* Результаты поиска */
+.Search__result-container {
   position: absolute;
   list-style: none;
   width: 100%;
-  background-color: white;
-  top: 2px;
-  left:100%;
-  outline: 1px solid grey;
+  background-color: #ffffff;
+  top: calc(100% + 4px);
+  left: 0;
   max-height: 300px;
   overflow-y: auto;
   margin: 0;
-  padding: 0;
-  /* если что удалить */
-  border-radius: 6px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  padding: 4px 0;
+  border-radius: 8px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.16);
   z-index: 10;
-  /* __________ */
   opacity: 0;
-  transform: translateX(-5px);
-  animation: fadeIn 0.2s forwards ease-out;
+  transform: translateY(-5px);
+  animation: fadeIn 0.18s forwards ease-out;
 }
 
 @keyframes fadeIn {
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
   }
 }
 
+/* ChatCard блок (лофт-карточка) */
+.ChatCard {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 6px 8px;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.92);
+  border-radius: 10px;
+  border: none;
+  max-height: 88px;
+  max-width: 300px;
+  margin: 3px 4px;
+  cursor: pointer;
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.ChatCard:hover {
+  background-color: #f3f1ec;
+  box-shadow: 0 2px 9px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.ChatCard__img {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 2px solid #ffffff;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #c6c3bd;
+}
+
+.ChatCard__text-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Активный чат */
+.active-chat {
+  background-color: #e3e0d9;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* Бейджи */
+.contact__badge {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  min-width: 18px;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-size: 11px;
+  text-align: center;
+  color: #fff;
+  background-color: #b86a1c;
+}
+
+.notification {
+  background-color: #c6a212;
+}
+
+/* Emoji sidebar, общий фон */
+.EmojiSidebar {
+  width: 280px;
+  height: 100%;
+  background-color: #e9e8eb;
+  display: flex;
+}
+
+/* MOBILE */
 .ProfileAvatarButton {
   display: none;
 }
 
-@media (max-width: 1050px) {
+.Search_container {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+  }
 
+@media (max-width: 1050px) {
   .ProfileAvatarButton {
     display: block;
   }
@@ -152,21 +281,20 @@
     height: 100%;
   }
 
-  /* Общий горизонтальный отступ для поиска и списка */
   .Search,
   .Chats__list {
     padding: 0 8px;
     box-sizing: border-box;
   }
 
-  .Chats__list{
+  .Chats__list {
     height: auto;
     flex: 1;
   }
 
   .Search {
     width: 100%;
-    align-items: stretch;   /* не центрировать */
+    align-items: stretch;
     justify-content: center;
   }
 
@@ -181,12 +309,13 @@
     max-width: 100% !important;
     box-sizing: border-box;
     display: block;
-    margin: 8px 0;         /* только вертикальный отступ */
+    margin: 8px 0;
   }
 
   .Chats__container {
-    width: 100%;
+    width: 99%;
     flex: 1;
+    padding: 8px 6px;
   }
 
   .ChatCard {
@@ -194,25 +323,25 @@
     max-width: 100%;
     box-sizing: border-box;
     margin: 4px 0;
-    border-radius: 6px;
+    border-radius: 8px;
   }
 
   .ChatCard__img {
-    width: 56px;
-    flex-shrink: 0;
-  }
-
-
-  .Search__result-container {
-    top: 100%;      /* под инпутом */
-    left: 0;        /* по левому краю */
-    right: 0;       /* тянуться до правого края */
-    width: 100%;
+    width: 52px;
+    height: 52px;
   }
 
   .Search__result-container {
     top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    width: 100%;
   }
+  .Chats__create-group-btn {
+    margin-right: 15px;
+  }
+
+  .Chats__header h3 {
+    margin-left: 15px;
+  } 
 }
-
-

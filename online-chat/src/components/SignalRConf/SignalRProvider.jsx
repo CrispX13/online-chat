@@ -8,6 +8,7 @@ export default function SignalRProvider({ children }) {
   const [activeUser, setActiveUser] = useState(null);
   const [connection, setConnection] = useState(null);
   const [isConnected, setConnected] = useState(false);
+  const [participants, setParticipants] = useState({}); 
 
   useEffect(() => {
     if (!jwtKey) {
@@ -47,7 +48,29 @@ export default function SignalRProvider({ children }) {
     };
   }, [jwtKey]);
 
-  const value = { activeUser, setActiveUser, connection, isConnected };
+  useEffect(() => {
+    if (!activeUser?.chatId) return;
+
+    fetch(`/api/chat/${activeUser.chatId}/participants`, {
+      method: "GET",
+      credentials: "include",
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Ошибка загрузки участников");
+        return res.json();
+      })
+      .then((list) => {
+        // list: [{ userId, name, avatarUrl }, ...]
+        const map = {};
+        for (const u of list) {
+          map[u.userId] = { name: u.name, avatarUrl: u.avatarUrl };
+        }
+        setParticipants(map);
+      })
+      .catch(console.error);
+  }, [activeUser?.chatId]);
+
+  const value = { activeUser, setActiveUser, connection, isConnected, participants, setParticipants };
 
   return (
     <SignalRContext.Provider value={value}>

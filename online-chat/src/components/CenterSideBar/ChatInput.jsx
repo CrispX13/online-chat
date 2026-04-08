@@ -61,7 +61,6 @@ export default function ChatInput({ text, setText })
             setEditingMessage(null);
         } else {
             // обычная отправка нового сообщения
-            console.log(activeUser)
             await connection.invoke(
             "SendMessage",
             trimmed,
