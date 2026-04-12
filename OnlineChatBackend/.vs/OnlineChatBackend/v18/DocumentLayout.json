@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{B0C7976B-2460-4DB3-8C8E-93DF59663A05}|OnlineChatBackend\\OnlineChatBackend.csproj|c:\\users\\user\\desktop\\online-chat\\onlinechatbackend\\onlinechatbackend\\repositories\\messagedbrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B0C7976B-2460-4DB3-8C8E-93DF59663A05}|OnlineChatBackend\\OnlineChatBackend.csproj|solutionrelative:onlinechatbackend\\repositories\\messagedbrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{B0C7976B-2460-4DB3-8C8E-93DF59663A05}|OnlineChatBackend\\OnlineChatBackend.csproj|c:\\users\\user\\desktop\\online-chat\\onlinechatbackend\\onlinechatbackend\\controllers\\chatcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B0C7976B-2460-4DB3-8C8E-93DF59663A05}|OnlineChatBackend\\OnlineChatBackend.csproj|solutionrelative:onlinechatbackend\\controllers\\chatcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -17,10 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{B0C7976B-2460-4DB3-8C8E-93DF59663A05}|OnlineChatBackend\\OnlineChatBackend.csproj|c:\\users\\user\\desktop\\online-chat\\onlinechatbackend\\onlinechatbackend\\dtos\\chatparticipantdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B0C7976B-2460-4DB3-8C8E-93DF59663A05}|OnlineChatBackend\\OnlineChatBackend.csproj|solutionrelative:onlinechatbackend\\dtos\\chatparticipantdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B0C7976B-2460-4DB3-8C8E-93DF59663A05}|OnlineChatBackend\\OnlineChatBackend.csproj|c:\\users\\user\\desktop\\online-chat\\onlinechatbackend\\onlinechatbackend\\repositories\\messagedbrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B0C7976B-2460-4DB3-8C8E-93DF59663A05}|OnlineChatBackend\\OnlineChatBackend.csproj|solutionrelative:onlinechatbackend\\repositories\\messagedbrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,11 +30,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "ChatParticipantDto.cs",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\DTOs\\ChatParticipantDto.cs",
               "RelativeDocumentMoniker": "OnlineChatBackend\\DTOs\\ChatParticipantDto.cs",
@@ -42,25 +42,24 @@
               "RelativeToolTip": "OnlineChatBackend\\DTOs\\ChatParticipantDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-08T16:56:45.347Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-08T16:56:45.347Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "MessageDBRepository.cs",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\Repositories\\MessageDBRepository.cs",
               "RelativeDocumentMoniker": "OnlineChatBackend\\Repositories\\MessageDBRepository.cs",
               "ToolTip": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\Repositories\\MessageDBRepository.cs",
               "RelativeToolTip": "OnlineChatBackend\\Repositories\\MessageDBRepository.cs",
-              "ViewState": "AgIAADYAAAAAAAAAAAAowBQAAAA2AAAAAAAAAA==",
+              "ViewState": "AgIAACcAAAAAAAAAAAAowBQAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-08T16:35:42.769Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "ChatHub.cs",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\Hubs\\ChatHub.cs",
               "RelativeDocumentMoniker": "OnlineChatBackend\\Hubs\\ChatHub.cs",
@@ -68,25 +67,24 @@
               "RelativeToolTip": "OnlineChatBackend\\Hubs\\ChatHub.cs",
               "ViewState": "AgIAAD0AAAAAAAAAAAAAAEkAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-08T16:31:11.554Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-08T16:31:11.554Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "ChatController.cs",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\Controllers\\ChatController.cs",
               "RelativeDocumentMoniker": "OnlineChatBackend\\Controllers\\ChatController.cs",
               "ToolTip": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\Controllers\\ChatController.cs",
               "RelativeToolTip": "OnlineChatBackend\\Controllers\\ChatController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAA2AAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABUAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-08T16:24:10.098Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "ContactsController.cs",
               "DocumentMoniker": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\Controllers\\ContactsController.cs",
               "RelativeDocumentMoniker": "OnlineChatBackend\\Controllers\\ContactsController.cs",
@@ -94,8 +92,7 @@
               "RelativeToolTip": "OnlineChatBackend\\Controllers\\ContactsController.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAhwBoAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-07T17:19:27.898Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-07T17:19:27.898Z"
             }
           ]
         }

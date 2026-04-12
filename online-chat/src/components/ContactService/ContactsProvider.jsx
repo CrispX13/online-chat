@@ -125,24 +125,47 @@ export default function ContactsProvider({ children }) {
       });
   }, [userId, refresh]);
 
-  // сброс флага newNotifications при открытии диалога
+  // сброс флага newNotifications для DIRECT-чата
   useEffect(() => {
-        if (!activeUser || !contacts?.length) return;
+    if (!activeUser || !contacts?.length) return;
+    if (activeUser.type !== "direct") return;
 
-        const hasWithNotif = contacts.some(
-            (c) => c.contact.id === activeUser.id && c.newNotifications
-        );
-        if (!hasWithNotif) return;
+    const hasWithNotif = contacts.some(
+      (c) => c.chatId === activeUser.chatId && c.newNotifications
+    );
+    if (!hasWithNotif) return;
 
-        setContacts((prev) =>
-            prev.map((contact) =>
-            contact.contact.id === activeUser.id
-                ? { ...contact, newNotifications: false }
-                : contact
-            )
-        );
-    }, [activeUser, contacts]);
+    setContacts((prev) =>
+      prev.map((c) =>
+        c.chatId === activeUser.chatId
+          ? { ...c, newNotifications: false }
+          : c
+      )
+    );
 
+      // по-хорошему ещё дернуть API, чтобы очистить NewNotifications в БД
+  }, [activeUser, contacts]);
+
+    // сброс флага newNotifications для GROUP-чата
+  useEffect(() => {
+    if (!activeUser || !groupChats?.length) return;
+    if (activeUser.type !== "group") return;
+
+    const hasWithNotif = groupChats.some(
+      (g) => g.id === activeUser.chatId && g.newNotifications
+    );
+    if (!hasWithNotif) return;
+
+    setGroupChats((prev) =>
+      prev.map((g) =>
+        g.id === activeUser.chatId
+          ? { ...g, newNotifications: false }
+          : g
+      )
+    );
+
+    // здесь тоже можно вызвать API для сброса в БД
+  }, [activeUser, groupChats]);
 
   // обновление списка контактов по сигналу из SignalR
   useEffect(() => {

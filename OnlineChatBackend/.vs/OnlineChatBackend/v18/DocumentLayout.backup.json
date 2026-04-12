@@ -42,8 +42,7 @@
               "RelativeToolTip": "OnlineChatBackend\\DTOs\\ChatParticipantDto.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-08T16:56:45.347Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-08T16:56:45.347Z"
             },
             {
               "$type": "Document",
@@ -55,8 +54,7 @@
               "RelativeToolTip": "OnlineChatBackend\\Repositories\\MessageDBRepository.cs",
               "ViewState": "AgIAADYAAAAAAAAAAAAowBQAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-08T16:35:42.769Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-08T16:35:42.769Z"
             },
             {
               "$type": "Document",
@@ -68,8 +66,7 @@
               "RelativeToolTip": "OnlineChatBackend\\Hubs\\ChatHub.cs",
               "ViewState": "AgIAAD0AAAAAAAAAAAAAAEkAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-08T16:31:11.554Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-08T16:31:11.554Z"
             },
             {
               "$type": "Document",
@@ -79,7 +76,7 @@
               "RelativeDocumentMoniker": "OnlineChatBackend\\Controllers\\ChatController.cs",
               "ToolTip": "C:\\Users\\User\\Desktop\\online-chat\\OnlineChatBackend\\OnlineChatBackend\\Controllers\\ChatController.cs",
               "RelativeToolTip": "OnlineChatBackend\\Controllers\\ChatController.cs",
-              "ViewState": "AgIAAE0AAAAAAAAAAAAuwFwAAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABUAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-08T16:24:10.098Z",
               "EditorCaption": ""
@@ -94,8 +91,7 @@
               "RelativeToolTip": "OnlineChatBackend\\Controllers\\ContactsController.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAhwBoAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-07T17:19:27.898Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-07T17:19:27.898Z"
             }
           ]
         }
