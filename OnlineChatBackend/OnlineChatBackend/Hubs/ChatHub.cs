@@ -257,7 +257,7 @@ namespace OnlineChatBackend.Hubs
                 return $"По запросу \"{query}\" ничего не выбрано.";
 
             var sb = new StringBuilder();
-            sb.AppendLine($"**Результаты поиска по запросу:** {query}");
+            sb.AppendLine($"Результаты поиска по запросу: {query}");
             sb.AppendLine();
 
             for (int i = 0; i < results.Count; i++)
