@@ -257,19 +257,21 @@ namespace OnlineChatBackend.Hubs
                 return $"По запросу \"{query}\" ничего не выбрано.";
 
             var sb = new StringBuilder();
-            sb.AppendLine($"Результаты поиска по запросу: {query}");
+            sb.AppendLine($"**Результаты поиска по запросу:** {query}");
             sb.AppendLine();
 
             for (int i = 0; i < results.Count; i++)
             {
                 var item = results[i];
-                sb.AppendLine($"{i + 1}. {item.Title}");
-                sb.AppendLine(item.Url);
 
+                sb.AppendLine($"**{i + 1}. {item.Title}**");
+                sb.AppendLine(item.Url); // ссылку специально отдельной строкой
                 var snippet = TrimText(item.Snippet);
                 if (!string.IsNullOrWhiteSpace(snippet))
+                {
+                    sb.AppendLine();
                     sb.AppendLine(snippet);
-
+                }
                 sb.AppendLine();
             }
 

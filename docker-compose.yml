@@ -19,6 +19,7 @@ services:
       - ConnectionStrings__Pg=Host=db;Port=5432;Database=online_chat;Username=postgres;Password=asus56asus56;Pooling=true;Maximum Pool Size=50
       - AuthSettings__SecretKey=regvguiarhfupahfPJAWEPVMRJBNVAEYFGywgfywavhrhvourvjsremvk[r
       - AuthSettings__Expires=00:30:00
+      - Search__ApiKey=${SEARCH_API_KEY}
     depends_on:
       - db
     ports:
