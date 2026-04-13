@@ -10,6 +10,7 @@ using OnlineChatBackend.Repositories;
 using OnlineChatBackend.Services;
 using OnlineChatBackend.Settings;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +69,17 @@ builder.Services.AddScoped<JwtService>();
 builder.Services.AddHttpClient<IWebSearchService, TavilySearchService>();
 
 builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("AuthSettings"));
+
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders =
+        ForwardedHeaders.XForwardedFor |
+        ForwardedHeaders.XForwardedProto;
+
+    options.KnownNetworks.Clear();
+    options.KnownProxies.Clear();
+});
+
 builder.Services.AddAuth(builder.Configuration);
 
 
@@ -105,6 +117,8 @@ var app = builder.Build();
 //    app.UseSwaggerUI();
 //}
 
+app.UseForwardedHeaders();
+
 app.UseStaticFiles();
 
 app.UseSwagger();
@@ -113,6 +127,7 @@ app.UseSwaggerUI();
 app.UseCors("client");
 
 //app.UseHttpsRedirection();
+
 
 app.UseAuthentication();
 app.UseAuthorization();
