@@ -345,3 +345,277 @@
     margin-left: 15px;
   } 
 }
+
+.CreateGroupModal {
+  background: radial-gradient(circle at top left, #262626 0, #171717 55%, #111 100%);
+  border-radius: 16px;
+  padding: 24px 28px;
+  color: #f3f3f3;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 24px 60px rgba(0, 0, 0, 0.65);
+  max-width: 520px;
+  width: 100%;
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  box-sizing: border-box;
+}
+
+.CreateGroupModal__title {
+  font-size: 20px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  font-weight: 600;
+  color: #fafafa;
+}
+
+.CreateGroupModal__form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.CreateGroupModal__field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.CreateGroupModal__label {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #a6a6a6;
+}
+
+.CreateGroupModal__input {
+  background: rgba(15, 15, 15, 0.85);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 10px 14px;
+  color: #f5f5f5;
+  font-size: 14px;
+  outline: none;
+  transition:
+    border-color 180ms ease-out,
+    box-shadow 180ms ease-out,
+    background 180ms ease-out;
+}
+
+.CreateGroupModal__input::placeholder {
+  color: #666;
+}
+
+.CreateGroupModal__input:focus {
+  border-color: #e67e22;
+  box-shadow: 0 0 0 1px rgba(230, 126, 34, 0.7);
+  background: rgba(18, 18, 18, 0.96);
+}
+
+.CreateGroupModal__loading {
+  margin-top: 6px;
+  font-size: 13px;
+  color: #b3b3b3;
+}
+
+/* chips выбранных пользователей */
+
+.CreateGroupModal__selected {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.CreateGroupModal__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #2b2b2b, #1f1f1f);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
+}
+
+.CreateGroupModal__chip-name {
+  font-size: 12px;
+  color: #f1f1f1;
+}
+
+.CreateGroupModal__chip-remove {
+  border: none;
+  background: none;
+  color: #e67e22;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  transition:
+    background 160ms ease-out,
+    color 160ms ease-out,
+    transform 100ms ease-out;
+}
+
+.CreateGroupModal__chip-remove:hover {
+  background: rgba(230, 126, 34, 0.14);
+  color: #ffd3a3;
+}
+
+.CreateGroupModal__chip-remove:active {
+  transform: scale(0.9);
+}
+
+/* список контактов */
+
+.CreateGroupModal__contacts-list {
+  margin-top: 8px;
+  max-height: 220px;
+  overflow: auto;
+  padding-right: 4px;
+  border-radius: 12px;
+  background: radial-gradient(circle at top, rgba(255, 255, 255, 0.03), transparent 55%);
+  overflow-x: hidden; 
+}
+
+.CreateGroupModal__contacts-list::-webkit-scrollbar {
+  width: 6px;
+}
+.CreateGroupModal__contacts-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.CreateGroupModal__contacts-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+}
+
+.CreateGroupModal__contact {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  cursor: pointer;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  transition:
+    background 140ms ease-out,
+    border-color 140ms ease-out,
+    transform 100ms ease-out;
+  color: #ddd;
+}
+
+.CreateGroupModal__contact + .CreateGroupModal__contact {
+  margin-top: 4px;
+}
+
+.CreateGroupModal__contact input[type="checkbox"] {
+  accent-color: #e67e22;
+  width: 16px;
+  height: 16px;
+}
+
+.CreateGroupModal__contact-main {
+  display: flex;
+  flex-direction: column;
+}
+
+.CreateGroupModal__contact-name {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.CreateGroupModal__contact-email {
+  font-size: 12px;
+  color: #8d8d8d;
+}
+
+.CreateGroupModal__contact:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.CreateGroupModal__contact.selected {
+  background: linear-gradient(135deg, rgba(230, 126, 34, 0.12), rgba(255, 255, 255, 0.02));
+  border-color: rgba(230, 126, 34, 0.6);
+}
+
+/* кнопки */
+
+.CreateGroupModal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.CreateGroupModal__button {
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 13px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    background 160ms ease-out,
+    color 160ms ease-out,
+    border-color 160ms ease-out,
+    transform 100ms ease-out;
+}
+
+.CreateGroupModal__button--ghost {
+  background: transparent;
+  color: #c9c9c9;
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+.CreateGroupModal__button--ghost:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.CreateGroupModal__button--primary {
+  background: linear-gradient(135deg, #e67e22, #ff9f43);
+  color: #111;
+  font-weight: 600;
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(0, 0, 0, 0.9);
+}
+
+.CreateGroupModal__button--primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(0, 0, 0, 0.9);
+}
+
+.CreateGroupModal__button--primary:disabled {
+  opacity: 0.4;
+  cursor: default;
+  box-shadow: none;
+}
+
+/* адаптив */
+
+@media (max-width: 600px) {
+  .CreateGroupModal {
+    padding: 18px 16px;
+    border-radius: 12px;
+  }
+
+  .CreateGroupModal__actions {
+    flex-direction: row-reverse;
+    justify-content: space-between;
+  }
+}
+
+.ModalContent,
+.Modal__content {
+  max-width: 100%;
+  overflow-x: hidden; 
+}

@@ -628,3 +628,218 @@
     max-height: none;
   }
 }
+
+.ChatSearchPanel {
+  margin: 10px 12px 12px;
+  padding: 14px;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 159, 67, 0.08), transparent 32%),
+    linear-gradient(145deg, #1e1d1b, #151412);
+  color: #f3f1ec;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.ChatSearchPanel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ChatSearchPanel__header-text {
+  min-width: 0;
+}
+
+.ChatSearchPanel__label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #a69b8f;
+  margin-bottom: 4px;
+}
+
+.ChatSearchPanel__query {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff8ef;
+  word-break: break-word;
+}
+
+.ChatSearchPanel__stop {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  color: #d7cec4;
+  border-radius: 999px;
+  padding: 7px 12px;
+  cursor: pointer;
+  transition: 0.18s ease;
+}
+
+.ChatSearchPanel__stop:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.ChatSearchPanel__error {
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(161, 53, 68, 0.18);
+  color: #ffd5db;
+  font-size: 13px;
+}
+
+.ChatSearchPanel__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 320px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.ChatSearchPanel__list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ChatSearchPanel__list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 999px;
+}
+
+.ChatSearchPanel__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: 0.16s ease;
+}
+
+.ChatSearchPanel__item:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ChatSearchPanel__item.selected {
+  border-color: rgba(230, 126, 34, 0.55);
+  background: linear-gradient(145deg, rgba(230, 126, 34, 0.12), rgba(255, 255, 255, 0.03));
+}
+
+.ChatSearchPanel__item input[type="checkbox"] {
+  margin-top: 3px;
+  accent-color: #e67e22;
+  flex-shrink: 0;
+}
+
+.ChatSearchPanel__content {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ChatSearchPanel__title {
+  color: #fff8ef;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.ChatSearchPanel__title:hover {
+  color: #ffb56c;
+}
+
+.ChatSearchPanel__url {
+  font-size: 12px;
+  color: #c98039;
+  word-break: break-all;
+}
+
+.ChatSearchPanel__snippet {
+  font-size: 13px;
+  color: #c9c1b8;
+  line-height: 1.45;
+}
+
+.ChatSearchPanel__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.ChatSearchPanel__button {
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.16s ease;
+}
+
+.ChatSearchPanel__button--ghost {
+  background: transparent;
+  color: #d3cbc2;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.ChatSearchPanel__button--ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ChatSearchPanel__button--primary {
+  border: none;
+  background: linear-gradient(135deg, #e67e22, #ff9f43);
+  color: #191511;
+  font-weight: 700;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35);
+}
+
+.ChatSearchPanel__button--primary:disabled {
+  opacity: 0.45;
+  cursor: default;
+  box-shadow: none;
+}
+
+.SearchMessage {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.SearchMessageBlock {
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  margin-bottom: 4px;
+}
+
+.SearchMessage__title {
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.SearchMessage__link {
+  display: inline-block;
+  font-size: 16px;
+  color: #2f80ed;
+  text-decoration: none;
+  word-break: break-all;
+  margin-bottom: 2px;
+}
+
+.SearchMessage__link:hover {
+  text-decoration: underline;
+}
+
+.SearchMessage__text {
+  font-size: 16px;
+  color: inherit;
+}

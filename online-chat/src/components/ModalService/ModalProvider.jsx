@@ -4,12 +4,22 @@ const ModalContext = createContext(null);
 
 export function ModalProvider({ children }) {
   const [modalContent, setModalContent] = useState(null);
+  const [showCloseBottom, setShowCloseBottom] = useState(true);
 
-  const openModal = (content) => setModalContent(content);
-  const closeModal = () => setModalContent(null);
+  const openModal = (content) => {
+    setShowCloseBottom(true);
+    setModalContent(content);
+  };
+
+  const closeModal = () => {
+    setModalContent(null);
+    setShowCloseBottom(true);
+  };
 
   return (
-    <ModalContext.Provider value={{ openModal, closeModal }}>
+    <ModalContext.Provider
+      value={{ openModal, closeModal, setShowCloseBottom }}
+    >
       {children}
 
       {modalContent && (
@@ -19,11 +29,13 @@ export function ModalProvider({ children }) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="modal-window__body">
-              {/* здесь именно содержимое модалки */}
               {modalContent}
             </div>
+
             <div className="modal-window__footer">
-              <button onClick={closeModal}>Закрыть</button>
+              {showCloseBottom && (
+                <button onClick={closeModal}>Закрыть</button>
+              )}
             </div>
           </div>
         </div>

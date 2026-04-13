@@ -60,9 +60,12 @@ builder.Services.AddScoped<IContactsRepository, ContactsDBRepository>();
 builder.Services.AddScoped<ContactsDBRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageDBRepository>();
 builder.Services.AddScoped<IChatsRepository, ChatDBRepository>();
+builder.Services.AddSingleton<ISearchSessionStore, InMemorySearchSessionStore>();
 builder.Services.AddScoped<AccountService>();
 builder.Services.AddScoped<AccountRepository>();
 builder.Services.AddScoped<JwtService>();
+
+builder.Services.AddHttpClient<IWebSearchService, TavilySearchService>();
 
 builder.Services.Configure<AuthSettings>(builder.Configuration.GetSection("AuthSettings"));
 builder.Services.AddAuth(builder.Configuration);

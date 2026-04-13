@@ -8,6 +8,9 @@ import { SignalRContext } from "../SignalRConf/SignalRContext";
 import EmojiPicker from "emoji-picker-react";
 import MiniProfile from "../Profile/MiniProfile";
 
+import ChatSearchPanel from "./ChatSearchPanel";
+import { useChatSearchSignalR } from "../hooks/useChatSearchSignalR";
+
 export default function CenterSideBar({ onBack = null }) {
   const [inputText, setInputText] = useState("");
 
@@ -19,7 +22,18 @@ export default function CenterSideBar({ onBack = null }) {
 
   const { messages, SetAllMessages } = useContext(MessagesContext);
   const messagesEndRef = useRef(null);
-  const { activeUser } = useContext(SignalRContext);
+  const { activeUser, connection } = useContext(SignalRContext);
+
+  const activeChatId = activeUser?.chatId ?? null;
+
+  const {
+    searchState,
+    isVisibleForActiveChat,
+    toggleResult,
+    startSearch,
+    stopSearch,
+    sendSelected
+  } = useChatSearchSignalR(connection, activeChatId);
 
   useEffect(() => {
     if (activeUser == null) return;
@@ -42,7 +56,7 @@ export default function CenterSideBar({ onBack = null }) {
         console.error(e);
         SetAllMessages([]);
       });
-  }, [activeUser]);
+  }, [activeUser, SetAllMessages]);
 
   useEffect(() => {
     if (!isMobile && messagesEndRef.current) {
@@ -52,7 +66,6 @@ export default function CenterSideBar({ onBack = null }) {
       });
     }
   }, [messages, isMobile]);
-
 
   return (
     <div className="CenterSideBar__container">
@@ -73,7 +86,24 @@ export default function CenterSideBar({ onBack = null }) {
         )}
 
         <ChatBody ref={messagesEndRef} />
-        <ChatFooter text={inputText} setText={setInputText} />
+
+        <ChatSearchPanel
+          visible={isVisibleForActiveChat}
+          query={searchState.query}
+          results={searchState.results}
+          selectedIndexes={searchState.selectedIndexes}
+          error={searchState.error}
+          onToggle={toggleResult}
+          onStop={() => activeChatId && stopSearch(activeChatId)}
+          onSendSelected={() => activeChatId && sendSelected(activeChatId)}
+        />
+
+        <ChatFooter
+          text={inputText}
+          setText={setInputText}
+          startSearch={startSearch}
+          stopSearch={stopSearch}
+        />
       </div>
 
       {!isMobile && (
@@ -88,7 +118,6 @@ export default function CenterSideBar({ onBack = null }) {
           <MiniProfile />
         </div>
       )}
-
     </div>
   );
 }

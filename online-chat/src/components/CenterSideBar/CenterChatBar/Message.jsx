@@ -2,6 +2,7 @@ import { useContext, useState, useRef, useEffect } from "react";
 import { AuthContext } from "../../AuthContext";
 import { SignalRContext } from "../../SignalRConf/SignalRContext";
 import { MessagesContext } from "../../MessagesService/MessagesContext";
+import { renderSearchMessage } from "../../hooks/renderSearchMessage";
 
 export default function Message({ info, index }) {
   const { userId } = useContext(AuthContext);
@@ -113,6 +114,11 @@ export default function Message({ info, index }) {
   const sender = participants?.[info.fromUserId] || null;
   const API_BASE = import.meta.env.VITE_API_URL ?? "";
   const avatarSrc = `/api/profile/${info.fromUserId}/avatar`;
+
+  const isSearchResult = info.messageText?.startsWith("Результаты поиска по запросу:");
+
+  console.log("msg:", info.messageText, "isSearchResult:", isSearchResult);
+  
   return (
     <>
       <div
@@ -135,15 +141,22 @@ export default function Message({ info, index }) {
         )}
 
         <div className="message__content">
-          {!isMy && sender && (
-            <div className="message__author">{sender.name}</div>
-          )}
+        {!isMy && sender && (
+          <div className="message__author">{sender.name}</div>
+        )}
 
+        {isSearchResult ? (
+          <div className="message__text SearchMessage">
+            {renderSearchMessage(info.messageText)}
+          </div>
+        ) : (
           <p className="message__text">{info.messageText}</p>
+        )}
+
           <span className="message__time">
             {`${hours}:${minutes.toString().padStart(2, "0")}`}
           </span>
-      </div>
+        </div>
       </div>
 
       {menuVisible && (

@@ -6,8 +6,10 @@ using OnlineChatBackend.DbContexts;
 using OnlineChatBackend.DTOs;
 using OnlineChatBackend.Interfaces;
 using OnlineChatBackend.Models;
+using OnlineChatBackend.Repositories;
 using SignalRSwaggerGen.Attributes;
 using System.Collections.Concurrent;
+using System.Text;
 
 namespace OnlineChatBackend.Hubs
 {
@@ -15,6 +17,10 @@ namespace OnlineChatBackend.Hubs
     [SignalRHub]
     public class ChatHub:Hub
     {
+
+
+        private readonly IWebSearchService _webSearchService;
+        private readonly ISearchSessionStore _searchSessionStore;
         public IMessageRepository messageRepository { get; set; }
 
         public IChatsRepository chatsRepository { get; set; }
@@ -28,26 +34,37 @@ namespace OnlineChatBackend.Hubs
             IMessageRepository messageRepository, 
             ILogger<ChatHub> log,
             IChatsRepository ChatsRepository,
-            AppDbContext db)
+            AppDbContext db,
+            IWebSearchService webSearchService,
+            ISearchSessionStore searchSessionStore)
         {
             this.messageRepository = messageRepository;
             this.chatsRepository = ChatsRepository;
             _log = log;
             _db = db;
+            _webSearchService = webSearchService;
+            _searchSessionStore = searchSessionStore;
         }
 
         public async Task SendMessage(string message, string chatId)
         {
             _log.LogInformation("SendMessage: raw chatId = {ChatId}, userId = {UserId}", chatId, Context.UserIdentifier);
-            _log.LogInformation("UserIdentifier = {UserIdentifier}", Context.UserIdentifier);
 
-            foreach (var claim in Context.User?.Claims ?? [])
+            foreach (var claim in Context.User?.Claims ?? Enumerable.Empty<System.Security.Claims.Claim>())
             {
                 _log.LogInformation("Claim: {Type} = {Value}", claim.Type, claim.Value);
             }
 
-            int fromUserId = int.Parse(Context.UserIdentifier!);
-            int chatIdInt = int.Parse(chatId);
+            if (!int.TryParse(Context.UserIdentifier, out var fromUserId))
+                throw new HubException("Пользователь не авторизован.");
+
+            if (!int.TryParse(chatId, out var chatIdInt))
+                throw new HubException("Некорректный chatId.");
+
+            if (string.IsNullOrWhiteSpace(message))
+                throw new HubException("Пустое сообщение отправить нельзя.");
+
+            message = message.Trim();
 
             var chat = await _db.Chats
                 .Include(c => c.Participants)
@@ -56,30 +73,159 @@ namespace OnlineChatBackend.Hubs
             if (chat == null)
                 throw new HubException("Чат не найден.");
 
-            _log.LogInformation("Chat participants: {Participants}",
-                string.Join(", ", chat.Participants.Select(p => p.UserId)));
+            var participantIds = chat.Participants
+                .Select(p => p.UserId)
+                .Distinct()
+                .ToList();
 
-            var isMember = chat.Participants.Any(p => p.UserId == fromUserId);
-            if (!isMember)
+            if (!participantIds.Contains(fromUserId))
                 throw new HubException("Вы не являетесь участником этого чата.");
 
-            // toUserId только для Direct-чата
+            if (string.Equals(message, "/stop", StringComparison.OrdinalIgnoreCase))
+            {
+                _searchSessionStore.Clear(fromUserId, chatIdInt);
+
+                await Clients.Caller.SendAsync("SearchCleared", new SearchClearedDTO
+                {
+                    ChatId = chatIdInt
+                });
+
+                return;
+            }
+
+            if (message.StartsWith("/googling", StringComparison.OrdinalIgnoreCase))
+            {
+                var query = message["/googling".Length..].Trim();
+
+                if (string.IsNullOrWhiteSpace(query))
+                    throw new HubException("Использование: /googling ваш запрос");
+
+                try
+                {
+                    var results = await _webSearchService.SearchAsync(query);
+
+                    var session = new SearchSession
+                    {
+                        Query = query,
+                        Results = results.ToList()
+                    };
+
+                    _searchSessionStore.Set(fromUserId, chatIdInt, session);
+
+                    var dto = new SearchResultsDTO
+                    {
+                        ChatId = chatIdInt,
+                        Query = query,
+                        Results = session.Results.Select((x, index) => new SearchResultItemDTO
+                        {
+                            Index = index,
+                            Title = x.Title,
+                            Url = x.Url,
+                            Snippet = TrimText(x.Snippet)
+                        }).ToList()
+                    };
+
+                    await Clients.Caller.SendAsync("SearchResultsReceived", dto);
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    _log.LogError(ex, "Ошибка при /googling для chatId={ChatId}, userId={UserId}", chatIdInt, fromUserId);
+
+                    await Clients.Caller.SendAsync("SearchError", new SearchErrorDTO
+                    {
+                        ChatId = chatIdInt,
+                        Message = "Ошибка при выполнении веб-поиска."
+                    });
+
+                    return;
+                }
+            }
+
+            await SaveAndBroadcastMessage(chat, participantIds, fromUserId, message);
+        }
+
+        public async Task SendSearchSelection(SendSearchSelectionDTO request)
+        {
+            _log.LogInformation("SendSearchSelection: raw chatId = {ChatId}, userId = {UserId}", request.ChatId, Context.UserIdentifier);
+
+            if (request == null)
+                throw new HubException("Пустой запрос.");
+
+            if (!int.TryParse(Context.UserIdentifier, out var fromUserId))
+                throw new HubException("Пользователь не авторизован.");
+
+            if (!int.TryParse(request.ChatId, out var chatIdInt))
+                throw new HubException("Некорректный chatId.");
+
+            if (request.SelectedIndexes == null || request.SelectedIndexes.Count == 0)
+                throw new HubException("Не выбраны результаты для отправки.");
+
+            var chat = await _db.Chats
+                .Include(c => c.Participants)
+                .FirstOrDefaultAsync(c => c.Id == chatIdInt);
+
+            if (chat == null)
+                throw new HubException("Чат не найден.");
+
+            var participantIds = chat.Participants
+                .Select(p => p.UserId)
+                .Distinct()
+                .ToList();
+
+            if (!participantIds.Contains(fromUserId))
+                throw new HubException("Вы не являетесь участником этого чата.");
+
+            var session = _searchSessionStore.Get(fromUserId, chatIdInt);
+            if (session == null)
+                throw new HubException("Нет активного поиска для этого чата.");
+
+            var normalizedIndexes = request.SelectedIndexes
+                .Distinct()
+                .Where(i => i >= 0 && i < session.Results.Count)
+                .OrderBy(i => i)
+                .ToList();
+
+            if (normalizedIndexes.Count == 0)
+                throw new HubException("Выбранные результаты некорректны.");
+
+            var selectedResults = normalizedIndexes
+                .Select(i => session.Results[i])
+                .ToList();
+
+            var text = BuildSelectedSearchResultsMessage(session.Query, selectedResults);
+
+            await SaveAndBroadcastMessage(chat, participantIds, fromUserId, text);
+
+            _searchSessionStore.Clear(fromUserId, chatIdInt);
+
+            await Clients.Caller.SendAsync("SearchCleared", new SearchClearedDTO
+            {
+                ChatId = chatIdInt
+            });
+        }
+
+        private async Task SaveAndBroadcastMessage(
+            Chat chat,
+            List<int> participantIds,
+            int fromUserId,
+            string messageText)
+        {
             int? toUserId = null;
+
             if (chat.Type == ChatType.Direct)
             {
-                toUserId = chat.Participants
-                    .Select(p => p.UserId)
-                    .FirstOrDefault(id => id != fromUserId);
+                toUserId = participantIds.FirstOrDefault(id => id != fromUserId);
 
-                if (toUserId == 0) // FirstOrDefault вернул дефолт
+                if (toUserId == 0)
                     throw new HubException("Второй участник Direct-чата не найден.");
             }
 
             var newMessage = new Message
             {
-                MessageText = message,
-                ChatId = chatIdInt,
-                ToUserId = toUserId,       // null для группового — OK
+                MessageText = messageText.Trim(),
+                ChatId = chat.Id,
+                ToUserId = toUserId,
                 FromUserId = fromUserId,
                 MessageDateTime = DateTimeOffset.UtcNow
             };
@@ -97,12 +243,182 @@ namespace OnlineChatBackend.Hubs
                 Changed = newMessage.Changed
             };
 
-            // Рассылаем всем участникам (работает и для Direct, и для Group)
-            var userIds = chat.Participants.Select(p => p.UserId).Distinct();
-            foreach (var uid in userIds)
+            foreach (var uid in participantIds)
             {
                 await Clients.User(uid.ToString()).SendAsync("MessageCreated", dto);
             }
+        }
+
+        private static string BuildSelectedSearchResultsMessage(
+            string query,
+            IReadOnlyList<SearchResultDto> results)
+        {
+            if (results == null || results.Count == 0)
+                return $"По запросу \"{query}\" ничего не выбрано.";
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"Результаты поиска по запросу: {query}");
+            sb.AppendLine();
+
+            for (int i = 0; i < results.Count; i++)
+            {
+                var item = results[i];
+                sb.AppendLine($"{i + 1}. {item.Title}");
+                sb.AppendLine(item.Url);
+
+                var snippet = TrimText(item.Snippet);
+                if (!string.IsNullOrWhiteSpace(snippet))
+                    sb.AppendLine(snippet);
+
+                sb.AppendLine();
+            }
+
+            return sb.ToString().Trim();
+        }
+
+        private async Task HandleGooglingCommand(
+            string message,
+            Chat chat,
+            int chatIdInt,
+            int fromUserId,
+            List<int> participantIds)
+        {
+            var query = message["/googling".Length..].Trim();
+
+            if (string.IsNullOrWhiteSpace(query))
+                throw new HubException("Использование: /googling ваш запрос");
+
+            int? toUserId = null;
+            if (chat.Type == ChatType.Direct)
+            {
+                toUserId = participantIds.FirstOrDefault(id => id != fromUserId);
+                if (toUserId == 0)
+                    throw new HubException("Второй участник Direct-чата не найден.");
+            }
+
+            var userCommandMessage = new Message
+            {
+                MessageText = message.Trim(),
+                ChatId = chatIdInt,
+                ToUserId = toUserId,
+                FromUserId = fromUserId,
+                MessageDateTime = DateTimeOffset.UtcNow
+            };
+
+            messageRepository.Add(userCommandMessage);
+
+            var userDto = new MessageHubDTO
+            {
+                Id = userCommandMessage.Id,
+                ChatId = userCommandMessage.ChatId,
+                FromUserId = userCommandMessage.FromUserId,
+                ToUserId = userCommandMessage.ToUserId,
+                MessageText = userCommandMessage.MessageText,
+                MessageDateTime = userCommandMessage.MessageDateTime,
+                Changed = userCommandMessage.Changed
+            };
+
+            foreach (var uid in participantIds)
+            {
+                await Clients.User(uid.ToString()).SendAsync("MessageCreated", userDto);
+            }
+
+            try
+            {
+                var results = await _webSearchService.SearchAsync(query);
+                var botText = FormatSearchResults(results, query);
+
+                var botMessage = new Message
+                {
+                    MessageText = botText,
+                    ChatId = chatIdInt,
+                    ToUserId = toUserId,
+                    FromUserId = fromUserId, // лучше потом заменить на BotUserId
+                    MessageDateTime = DateTimeOffset.UtcNow
+                };
+
+                messageRepository.Add(botMessage);
+
+                var botDto = new MessageHubDTO
+                {
+                    Id = botMessage.Id,
+                    ChatId = botMessage.ChatId,
+                    FromUserId = botMessage.FromUserId,
+                    ToUserId = botMessage.ToUserId,
+                    MessageText = botMessage.MessageText,
+                    MessageDateTime = botMessage.MessageDateTime,
+                    Changed = botMessage.Changed
+                };
+
+                foreach (var uid in participantIds)
+                {
+                    await Clients.User(uid.ToString()).SendAsync("MessageCreated", botDto);
+                }
+            }
+            catch (Exception ex)
+            {
+                _log.LogError(ex, "Ошибка при /googling для chatId={ChatId}, userId={UserId}", chatIdInt, fromUserId);
+
+                var errorMessage = new Message
+                {
+                    MessageText = "Ошибка при выполнении веб-поиска.",
+                    ChatId = chatIdInt,
+                    ToUserId = toUserId,
+                    FromUserId = fromUserId, // лучше потом заменить на BotUserId
+                    MessageDateTime = DateTimeOffset.UtcNow
+                };
+
+                messageRepository.Add(errorMessage);
+
+                var errorDto = new MessageHubDTO
+                {
+                    Id = errorMessage.Id,
+                    ChatId = errorMessage.ChatId,
+                    FromUserId = errorMessage.FromUserId,
+                    ToUserId = errorMessage.ToUserId,
+                    MessageText = errorMessage.MessageText,
+                    MessageDateTime = errorMessage.MessageDateTime,
+                    Changed = errorMessage.Changed
+                };
+
+                foreach (var uid in participantIds)
+                {
+                    await Clients.User(uid.ToString()).SendAsync("MessageCreated", errorDto);
+                }
+            }
+        }
+
+        private static string FormatSearchResults(IReadOnlyList<SearchResultDto> results, string query)
+        {
+            if (results == null || results.Count == 0)
+                return $"По запросу \"{query}\" ничего не найдено.";
+
+            var sb = new StringBuilder();
+            sb.AppendLine($"Результаты поиска по запросу: {query}");
+            sb.AppendLine();
+
+            for (int i = 0; i < Math.Min(results.Count, 3); i++)
+            {
+                var item = results[i];
+                sb.AppendLine($"{i + 1}. {item.Title}");
+                sb.AppendLine(item.Url);
+                sb.AppendLine(TrimText(item.Snippet));
+                sb.AppendLine();
+            }
+
+            return sb.ToString().Trim();
+        }
+
+        private static string TrimText(string? text, int maxLength = 220)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return "";
+
+            text = text.Replace("\r", " ").Replace("\n", " ").Trim();
+
+            return text.Length <= maxLength
+                ? text
+                : text[..maxLength] + "...";
         }
 
         public async Task NewContact(int userId, int newContactId)
