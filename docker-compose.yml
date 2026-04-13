@@ -21,19 +21,16 @@ services:
       - AuthSettings__Expires=00:30:00
     depends_on:
       - db
-    expose:
-      - "80"
+    ports:
+      - "5000:80"
 
   web:
     build: ./online-chat
     container_name: onlinechat-web
-    ports:
-      - "80:80"
-      - "443:443"
     depends_on:
       - api
-    volumes:
-      - /etc/letsencrypt:/etc/letsencrypt:ro
+    ports:
+      - "8080:80"
 
 volumes:
   pgdata:
