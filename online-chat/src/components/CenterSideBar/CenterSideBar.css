@@ -1,3 +1,5 @@
+/* ===== Центр: общий контейнер ===== */
+
 .CenterSideBar__container {
   display: flex;
   flex-direction: row;
@@ -15,20 +17,18 @@
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
   background-size: cover;
   outline: 1px solid grey;
 }
 
-/* хедер чата */
+/* ===== Хедер чата ===== */
+
 .ChatHeading__container {
   height: 40px;
   display: flex;
-  background-color: white;
-  padding: 20px;
   align-items: center;
+  padding: 20px;
+  background-color: #ffffff;
   outline: 1px solid grey;
 }
 
@@ -51,12 +51,13 @@
   cursor: pointer;
 }
 
-/* тело чата */
+/* ===== Тело чата ===== */
+
 .ChatBody_container {
-  overflow-y: auto;
   flex: 1;
   max-height: 100%;
   padding: 10px;
+  overflow-y: auto;
 }
 
 .ChatBody_container::-webkit-scrollbar {
@@ -71,7 +72,8 @@
   border-radius: 20px;
 }
 
-/* футер/инпут */
+/* ===== Футер / инпут ===== */
+
 .ChatFooter__container {
   display: flex;
   margin-top: auto;
@@ -80,18 +82,35 @@
   padding: 0;
 }
 
+/* обёртка инпута и кнопки отправки */
+.ChatInput__wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  width: 100%;
+}
+
+/* обёртка над textarea для позиционирования эмодзи-кнопки */
+.ChatInput__field {
+  position: relative;
+  flex: 1;
+}
+
+/* textarea */
 .ChatInput {
   flex: 1;
-  padding: 5px;
   width: 100%;
-  height: 50px;
+  padding: 5px;
+  padding-right: 40px; /* место под кнопку эмодзи справа */
+  height: 60px;
+  max-height: 186px;
   border: none;
   font-size: 14px;
   resize: none;
-  max-height: 186px;
   outline: none;
   border-radius: 10px;
   margin-left: 5px;
+  box-sizing: border-box;
 }
 
 .ChatInput::-webkit-scrollbar {
@@ -106,6 +125,35 @@
   border-radius: 20px;
 }
 
+/* кнопка эмодзи внутри поля, в правом нижнем углу */
+.ChatInput__emoji-toggle {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 50px;
+  height: 50px;
+  border-radius: 999px;
+  border: none;
+  background: #e6e3dd;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.ChatInput__emoji-toggle:hover {
+  background: #d8d4cd;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+.ChatInput__emoji-toggle--active {
+  background: #c9c4ba;
+}
+
+/* кнопка отправки */
 .ChatInput__send-btn {
   margin-left: 8px;
   margin-right: 8px;
@@ -146,7 +194,8 @@
   font-size: 14px;
 }
 
-/* сообщения + аватарки */
+/* ===== Сообщения ===== */
+
 .message {
   display: flex;
   align-items: flex-end;
@@ -202,7 +251,8 @@
   color: #555;
 }
 
-/* правая боковая панель */
+/* ===== Правая боковая панель (эмодзи) ===== */
+
 .CenterSideBar__RigthSide {
   display: flex;
   flex-direction: column;
@@ -215,6 +265,7 @@
   height: 100%;
 }
 
+/* шестерёнка (иконка настроек профиля, если используется тут) */
 .icon-gear {
   fill: black;
   height: min-content;
@@ -224,14 +275,15 @@
   fill: rgb(140, 140, 140);
 }
 
-/* модальные окна, настройки профиля — оставил как есть, только без изменений */
+/* ===== Модальные окна ===== */
 
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.35), transparent 55%),
-              radial-gradient(circle at bottom right, rgba(14, 116, 144, 0.35), transparent 55%),
-              rgba(0, 0, 0, 0.75);
+  background:
+    radial-gradient(circle at top left, rgba(79, 70, 229, 0.35), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(14, 116, 144, 0.35), transparent 55%),
+    rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -456,7 +508,7 @@
   margin-top: 4px;
 }
 
-/* кнопка аватарки в шапке */
+/* кнопка аватарки в шапке (если используется в центре) */
 .ProfileAvatarButton {
   border: none;
   padding: 0;
@@ -472,7 +524,8 @@
   object-fit: cover;
 }
 
-/* контекстное меню сообщений */
+/* ===== Контекстное меню сообщений ===== */
+
 .message-menu {
   position: fixed;
   min-width: 180px;
@@ -552,7 +605,8 @@
   }
 }
 
-/* адаптив */
+/* ===== Адаптив ===== */
+
 @media (max-width: 480px) {
   .ProfileSettings {
     padding: 20px 16px;
@@ -601,6 +655,667 @@
     overflow-y: auto;
     max-height: none;
   }
+}/* ===== Центр: общий контейнер ===== */
+
+.CenterSideBar__container {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* чат по центру */
+.Chat__container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  background-image: url(/background.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+  outline: 1px solid grey;
+}
+
+/* ===== Хедер чата ===== */
+
+.ChatHeading__container {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background-color: #ffffff;
+  outline: 1px solid grey;
+}
+
+.ChatHeading__names {
+  height: fit-content;
+  text-align: center;
+}
+
+.ChatHeading__name {
+  margin: 0;
+}
+
+/* кнопка назад */
+.ChatHeading__back-btn {
+  margin-right: 8px;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 999px;
+  background: #e5e7eb;
+  cursor: pointer;
+}
+
+/* ===== Тело чата ===== */
+
+.ChatBody_container {
+  flex: 1;
+  max-height: 100%;
+  padding: 10px;
+  overflow-y: auto;
+}
+
+.ChatBody_container::-webkit-scrollbar {
+  width: 6px;
+}
+.ChatBody_container::-webkit-scrollbar-track {
+  width: 8px;
+  background-color: transparent;
+}
+.ChatBody_container::-webkit-scrollbar-thumb {
+  background-color: rgba(204, 202, 202, 0.3);
+  border-radius: 20px;
+}
+
+/* ===== Футер / инпут ===== */
+
+.ChatFooter__container {
+  display: flex;
+  margin-top: auto;
+  min-height: 40px;
+  max-height: 200px;
+  padding: 0;
+}
+
+/* обёртка инпута и кнопки отправки */
+.ChatInput__wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  width: 100%;
+}
+
+/* обёртка над textarea для позиционирования эмодзи-кнопки */
+.ChatInput__field {
+  position: relative;
+  flex: 1;
+}
+
+/* textarea */
+.ChatInput {
+  flex: 1;
+  width: 100%;
+  padding: 5px;
+  padding-right: 40px; /* место под кнопку эмодзи справа */
+  height: 60px;
+  max-height: 186px;
+  border: none;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+  border-radius: 10px;
+  margin-left: 5px;
+  box-sizing: border-box;
+}
+
+.ChatInput::-webkit-scrollbar {
+  width: 6px;
+}
+.ChatInput::-webkit-scrollbar-track {
+  background: #d4d2d2;
+  width: 8px;
+}
+.ChatInput::-webkit-scrollbar-thumb {
+  background-color: rgb(87, 87, 87);
+  border-radius: 20px;
+}
+
+/* кнопка эмодзи внутри поля, в правом нижнем углу */
+.ChatInput__emoji-toggle {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  width: 50px;
+  height: 50px;
+  border-radius: 999px;
+  border: none;
+  background: #e6e3dd;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+}
+
+.ChatInput__emoji-toggle:hover {
+  background: #d8d4cd;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+.ChatInput__emoji-toggle--active {
+  background: #c9c4ba;
+}
+
+/* кнопка отправки */
+.ChatInput__send-btn {
+  margin-left: 8px;
+  margin-right: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: none;
+  background: #4b5563;
+  color: #fff;
+  cursor: pointer;
+  font-size: 30px;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+.ChatInput__send-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* баннер редактирования */
+.ChatInput__edit-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  padding: 4px 10px;
+  margin: 0 0 4px;
+  border-radius: 8px;
+  background: rgba(55, 65, 81, 0.9);
+  color: #e5e7eb;
+}
+
+.ChatInput__edit-cancel {
+  border: none;
+  background: transparent;
+  color: #e5e7eb;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* ===== Сообщения ===== */
+
+.message {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  margin: 4px 0;
+}
+
+.message_left {
+  align-self: flex-start;
+}
+
+.message_right {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.message__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #d0cdc8;
+}
+
+.message__content {
+  max-width: 70%;
+  background: #f3f1ec;
+  border-radius: 12px;
+  padding: 6px 10px;
+}
+
+.message_right .message__content {
+  background: #d7f1ff;
+}
+
+.message__author {
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 2px;
+  color: #666;
+}
+
+.message__text {
+  word-break: break-all;
+  margin: 0;
+}
+
+.message__time {
+  display: inline-block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: #555;
+}
+
+/* ===== Правая боковая панель (эмодзи) ===== */
+
+.CenterSideBar__RigthSide {
+  display: flex;
+  flex-direction: column;
+}
+
+.EmojiSidebar {
+  z-index: 1;
+  width: 310px;
+  display: flex;
+  height: 100%;
+}
+
+/* шестерёнка (иконка настроек профиля, если используется тут) */
+.icon-gear {
+  fill: black;
+  height: min-content;
+}
+
+.icon-gear:hover {
+  fill: rgb(140, 140, 140);
+}
+
+/* ===== Модальные окна ===== */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at top left, rgba(79, 70, 229, 0.35), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(14, 116, 144, 0.35), transparent 55%),
+    rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.modal-window {
+  background: #050609;
+  border-radius: 18px;
+  padding: 18px 20px;
+  min-width: 340px;
+  max-width: 520px;
+  width: 100%;
+  box-shadow:
+    0 18px 45px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(148, 163, 184, 0.15);
+  box-sizing: border-box;
+  color: #f9fafb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  position: relative;
+}
+
+.modal-window__body {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-window__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.modal-window__title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modal-window__close {
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 999px;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.modal-window__close:hover {
+  background: rgba(31, 41, 55, 0.9);
+  color: #e5e7eb;
+  transform: translateY(-1px);
+}
+
+.modal-window__footer {
+  margin-top: 12px;
+  text-align: right;
+}
+
+.modal-window__footer button {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: none;
+  background: #4b5563;
+  color: #f9fafb;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.modal-window__footer button:hover {
+  background: #6b7280;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.7);
+  transform: translateY(-1px);
+}
+
+.modal-window__footer button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* профиль в модалке */
+.ProfileSettings {
+  width: 100%;
+  max-width: 480px;
+  padding: 24px 28px;
+  box-sizing: border-box;
+  background: #14161d;
+  color: #f5f5f5;
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.ProfileSettings > h2 {
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.ProfileSettings__block {
+  padding: 16px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ProfileSettings__block:first-of-type {
+  border-top: none;
+}
+
+.ProfileSettings__block > h3 {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9ca3af;
+}
+
+.ProfileSettings__avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ProfileSettings__avatar-preview {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+}
+
+.ProfileSettings__file-input {
+  display: none;
+}
+
+.ProfileSettings__file-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  margin-bottom: 6px;
+  margin-right: 10px;
+  border-radius: 999px;
+  background: #1f2937;
+  color: #e5e7eb;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.ProfileSettings__file-label:hover {
+  background: #374151;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.7);
+  transform: translateY(-1px);
+}
+
+.ProfileSettings__file-label:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.ProfileSettings__input {
+  width: 100%;
+  padding: 9px 11px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  background: #0b0c10;
+  color: #f9fafb;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.ProfileSettings__input::placeholder {
+  color: #6b7280;
+}
+
+.ProfileSettings__input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.6);
+  background: #050608;
+}
+
+.ProfileSettings button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  color: #f9fafb;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease;
+}
+
+.ProfileSettings button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+}
+
+.ProfileSettings button:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.ProfileSettings button:disabled {
+  opacity: 0.5;
+  cursor: default;
+  box-shadow: none;
+}
+
+.ProfileSettings__block:last-of-type button {
+  margin-top: 4px;
+}
+
+/* кнопка аватарки в шапке (если используется в центре) */
+.ProfileAvatarButton {
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.ProfileAvatarButton__img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid white;
+  object-fit: cover;
+}
+
+/* ===== Контекстное меню сообщений ===== */
+
+.message-menu {
+  position: fixed;
+  min-width: 180px;
+  padding: 8px 0;
+  background: rgba(22, 22, 24, 0.96);
+  border-radius: 10px;
+  border: 1px solid rgba(120, 120, 125, 0.45);
+  box-shadow:
+    0 18px 35px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.message-menu__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.message-menu__item {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #e5e5e5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition:
+    background 0.15s ease-out,
+    color 0.15s ease-out,
+    transform 0.06s ease-out;
+}
+
+.message-menu__item + .message-menu__item {
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.message-menu__item:hover {
+  background: radial-gradient(circle at left top, rgba(120, 120, 125, 0.4), rgba(22, 22, 24, 0.98));
+  color: #ffffff;
+  transform: translateX(1px);
+}
+
+.message-menu__item--danger {
+  color: #f28b82;
+}
+
+.message-menu__item--danger:hover {
+  background: radial-gradient(circle at left top, rgba(179, 70, 55, 0.55), rgba(22, 22, 24, 0.98));
+  color: #fff;
+}
+
+.message-menu__icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.8;
+}
+
+.message-menu--enter {
+  animation: message-menu-fade-in 90ms ease-out;
+}
+
+@keyframes message-menu-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== Адаптив ===== */
+
+@media (max-width: 480px) {
+  .ProfileSettings {
+    padding: 20px 16px;
+    max-width: 100%;
+  }
+
+  .ProfileSettings__avatar-row {
+    align-items: flex-start;
+  }
+
+  .ProfileSettings__avatar-preview {
+    width: 64px;
+    height: 64px;
+  }
+
+  .ChatBody_container {
+    overflow-y: auto;
+    max-height: none;
+  }
+}
+
+@media (max-width: 1050px) {
+  .CenterSideBar__container {
+    height: 100%;
+    max-height: 100%;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .CenterSideBar__RigthSide {
+    display: none;
+  }
+
+  .Chat__container {
+    height: 100%;
+    max-height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-attachment: scroll !important;
+  }
+
+  .ChatBody_container {
+    flex: 1;
+    overflow-y: auto;
+    max-height: none;
+  }
+
+  .ChatInput__emoji-toggle{
+    display: none;
+  }
 }
 
 .ChatSearchPanel {
@@ -615,8 +1330,10 @@
   box-shadow:
     0 10px 24px rgba(0, 0, 0, 0.32),
     inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+/* шапка: запрос + кнопка Stop */
 .ChatSearchPanel__header {
   display: flex;
   align-items: flex-start;
@@ -651,13 +1368,18 @@
   border-radius: 999px;
   padding: 7px 12px;
   cursor: pointer;
-  transition: 0.18s ease;
+  font-size: 13px;
+  white-space: nowrap;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.1s ease;
 }
 
 .ChatSearchPanel__stop:hover {
   background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
 }
 
+/* ошибка */
 .ChatSearchPanel__error {
   margin-bottom: 10px;
   padding: 10px 12px;
@@ -667,6 +1389,7 @@
   font-size: 13px;
 }
 
+/* список результатов */
 .ChatSearchPanel__list {
   display: flex;
   flex-direction: column;
@@ -685,6 +1408,7 @@
   border-radius: 999px;
 }
 
+/* один результат */
 .ChatSearchPanel__item {
   display: flex;
   align-items: flex-start;
@@ -694,11 +1418,12 @@
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid transparent;
   cursor: pointer;
-  transition: 0.16s ease;
+  transition: background 0.16s ease, border-color 0.16s ease, transform 0.08s ease;
 }
 
 .ChatSearchPanel__item:hover {
   background: rgba(255, 255, 255, 0.05);
+  transform: translateY(-1px);
 }
 
 .ChatSearchPanel__item.selected {
@@ -706,12 +1431,14 @@
   background: linear-gradient(145deg, rgba(230, 126, 34, 0.12), rgba(255, 255, 255, 0.03));
 }
 
+/* чекбокс */
 .ChatSearchPanel__item input[type="checkbox"] {
   margin-top: 3px;
   accent-color: #e67e22;
   flex-shrink: 0;
 }
 
+/* контент результата */
 .ChatSearchPanel__content {
   min-width: 0;
   display: flex;
@@ -743,6 +1470,7 @@
   line-height: 1.45;
 }
 
+/* нижние кнопки */
 .ChatSearchPanel__actions {
   display: flex;
   justify-content: flex-end;
@@ -780,318 +1508,4 @@
   opacity: 0.45;
   cursor: default;
   box-shadow: none;
-}
-
-.SearchMessage {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.SearchMessageBlock {
-  padding: 6px 8px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.02);
-  margin-bottom: 4px;
-}
-
-.SearchMessage__title {
-  font-weight: 700;
-  margin-bottom: 2px;
-}
-
-.SearchMessage__link {
-  display: inline-block;
-  font-size: 16px;
-  color: #2f80ed;
-  text-decoration: none;
-  word-break: break-all;
-  margin-bottom: 2px;
-}
-
-.SearchMessage__link:hover {
-  text-decoration: underline;
-}
-
-.SearchMessage__text {
-  font-size: 16px;
-  color: inherit;
-}
-
-/* Базовый контейнер уже есть, добавим состояние collapsed */
-.LeftSideBar__container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: linear-gradient(145deg, #f4f4f2, #e7e5e1);
-  border-right: 1px solid rgba(0, 0, 0, 0.06);
-  width: 300px;
-  min-width: 260px;
-  padding-top: 10px;
-  position: relative;
-}
-
-/* Узкое состояние: как на скрине */
-.LeftSideBar__container.collapsed {
-  width: 70px;
-  min-width: 70px;
-  padding-top: 6px;
-}
-
-/* Хедер в свернутом режиме: иконка поиска сверху по центру */
-.LeftSideBar__collapsed-header {
-  display: flex;
-  justify-content: center;
-  padding: 6px 0 8px 0;
-}
-
-.LeftSideBar__collapsed-search {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: none;
-  background: #ffffff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Кнопка сворачивания / разворачивания внизу слева */
-.LeftSideBar__collapse-toggle {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: none;
-  background: #f0f0f0;
-  cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 10px;
-}
-
-/* ===== Профиль в развёрнутом виде (остаётся как делали) ===== */
-
-.Profile__container {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 10px;
-  margin: 0 10px 8px 10px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.04);
-}
-
-.Profile__img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%; /* можно сделать круглой, будет ближе к скрину */
-  border: 2px solid #ffffff;
-  object-fit: cover;
-  background: #c6c3bd;
-}
-
-/* ===== Чаты в обычном состоянии уже стилизованы у тебя ===== */
-
-/* В свернутом состоянии превращаем ChatCard в просто кружок-аватар */
-.Chats__container.collapsed {
-  padding: 8px 0;
-}
-
-.LeftSideBar__container.collapsed .Chats__header,
-.LeftSideBar__container.collapsed .Chats__toggle,
-.LeftSideBar__container.collapsed .Chats__create-group-btn {
-  display: none;
-}
-
-/* Список чатов при коллапсе — узкая колонка, центрируется */
-.LeftSideBar__container.collapsed .Chats__list {
-  padding-right: 0;
-  align-items: center;
-}
-
-/* Каждая карточка — круглый блок только с картинкой */
-.LeftSideBar__container.collapsed .ChatCard {
-  width: 44px;
-  height: 44px;
-  margin: 6px 0;
-  padding: 0;
-  border-radius: 50%;
-  background-color: transparent;
-  box-shadow: none;
-  justify-content: center;
-}
-
-/* Аватар внутри — круг, занимает всю карточку */
-.LeftSideBar__container.collapsed .ChatCard__img {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-}
-
-/* Текстовые части чата скрываем */
-.LeftSideBar__container.collapsed .ChatCard__text-container,
-.LeftSideBar__container.collapsed .contact__badge {
-  display: none;
-}
-
-.ChatInput__wrapper {
-  display: flex;
-  align-items: flex-end;
-  gap: 6px;
-}
-
-
-.ChatInput__emoji-toggle:hover {
-  background: #d8d4cd;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
-  transform: translateY(-1px);
-}
-
-.ChatInput__emoji-toggle--active {
-  background: #c9c4ba;
-}
-
-.ChatInput__wrapper {
-  display: flex;
-  align-items: flex-end;
-  gap: 6px;
-  width: 100%;
-}
-
-
-/* Кнопка эмодзи внутри поля, в правом нижнем углу */
-.ChatInput__emoji-toggle {
-  position: absolute;
-  right: 8px;
-  bottom: 6px;
-  width: 26px;
-  height: 26px;
-  border-radius: 999px;
-  border: none;
-  background: #e6e3dd;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
-}
-
-.ChatInput__emoji-toggle:hover {
-  background: #d8d4cd;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
-  transform: translateY(-1px);
-}
-
-.ChatInput__emoji-toggle--active {
-  background: #c9c4ba;
-}
-
-/* футер/инпут */
-.ChatFooter__container {
-  display: flex;
-  margin-top: auto;
-  min-height: 40px;
-  max-height: 200px;
-  padding: 0;
-}
-
-.ChatInput__wrapper {
-  display: flex;
-  align-items: flex-end;
-  gap: 6px;
-  width: 100%;
-}
-
-/* Обёртка над textarea, чтобы позиционировать кнопку эмодзи внутри */
-.ChatInput__field {
-  position: relative;
-  flex: 1;
-}
-
-/* Твой textarea */
-.ChatInput {
-  flex: 1;
-  width: 100%;
-  padding: 5px;
-  padding-right: 40px; /* место под кнопку эмодзи справа */
-  height: 60px;
-  max-height: 186px;
-  border: none;
-  font-size: 14px;
-  resize: none;
-  outline: none;
-  border-radius: 10px;
-  margin-left: 5px;
-  box-sizing: border-box;
-}
-
-.ChatInput::-webkit-scrollbar {
-  width: 6px;
-}
-.ChatInput::-webkit-scrollbar-track {
-  background: #d4d2d2;
-  width: 8px;
-}
-.ChatInput::-webkit-scrollbar-thumb {
-  background-color: rgb(87, 87, 87);
-  border-radius: 20px;
-}
-
-/* Кнопка эмодзи внутри поля, в правом нижнем углу */
-.ChatInput__emoji-toggle {
-  position: absolute;
-  right: 8px;
-  bottom: 8px;
-  width: 50px;
-  height: 50px;
-  border-radius: 999px;
-  border: none;
-  background: #e6e3dd;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 30px;
-  transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
-}
-
-.ChatInput__emoji-toggle:hover {
-  background: #d8d4cd;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
-  transform: translateY(-1px);
-}
-
-.ChatInput__emoji-toggle--active {
-  background: #c9c4ba;
-}
-
-/* Кнопка отправки */
-.ChatInput__send-btn {
-  margin-left: 8px;
-  margin-right: 8px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  border: none;
-  background: #4b5563;
-  color: #fff;
-  cursor: pointer;
-  font-size: 30px;
-  align-self: flex-start;
-  margin-top: 2px;
-}
-
-.ChatInput__send-btn:disabled {
-  opacity: 0.4;
-  cursor: default;
 }

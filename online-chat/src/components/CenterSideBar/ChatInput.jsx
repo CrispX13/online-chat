@@ -17,7 +17,7 @@ export default function ChatInput({
 
   const textChange = (event) => {
     const el = event.target;
-    el.style.height = "40px";
+    el.style.height = "60px";
     el.style.height = el.scrollHeight + "px";
     setText(el.value);
   };
@@ -26,7 +26,7 @@ export default function ChatInput({
     if (editingMessage) {
       setText(editingMessage.messageText ?? "");
       if (taRef.current) {
-        taRef.current.style.height = "40px";
+        taRef.current.style.height = "60px";
         taRef.current.style.height = taRef.current.scrollHeight + "px";
       }
     }
@@ -38,13 +38,13 @@ export default function ChatInput({
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       submit();
-      if (taRef.current) taRef.current.style.height = "50px";
+      if (taRef.current) taRef.current.style.height = "60px";
     }
 
     if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
       submit();
-      if (taRef.current) taRef.current.style.height = "50px";
+      if (taRef.current) taRef.current.style.height = "60px";
     }
   };
 
@@ -73,7 +73,7 @@ export default function ChatInput({
       setText("");
       if (taRef.current) {
         taRef.current.value = "";
-        taRef.current.style.height = "50px";
+        taRef.current.style.height = "60px";
       }
     }
   };
@@ -94,7 +94,7 @@ export default function ChatInput({
               setText("");
               if (taRef.current) {
                 taRef.current.value = "";
-                taRef.current.style.height = "50px";
+                taRef.current.style.height = "60px";
               }
             }}
           >

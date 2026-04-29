@@ -116,8 +116,6 @@ export default function Message({ info, index }) {
   const avatarSrc = `/api/profile/${info.fromUserId}/avatar`;
 
   const isSearchResult = info.messageText?.startsWith("Результаты поиска по запросу:");
-
-  console.log("msg:", info.messageText, "isSearchResult:", isSearchResult);
   
   return (
     <>
