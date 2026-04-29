@@ -119,6 +119,7 @@ export default function Message({ info, index }) {
   const isSearchFailed =
   info.messageText === "SEARCH_FAILED" ||
   info.messageText?.startsWith("Поиск не удался");
+  console.log(info)
   
   return (
     <>
