@@ -1,6 +1,6 @@
 import ChatInput from "./ChatInput";
 
-export default function ChatFooter({ text, setText, startSearch, stopSearch }) {
+export default function ChatFooter({ text, setText, startSearch, stopSearch, isEmojiOpen, setIsEmojiOpen }) {
   return (
     <div className="ChatFooter__container">
       <ChatInput
@@ -8,6 +8,8 @@ export default function ChatFooter({ text, setText, startSearch, stopSearch }) {
         setText={setText}
         startSearch={startSearch}
         stopSearch={stopSearch}
+        isEmojiOpen={isEmojiOpen}
+        setIsEmojiOpen={setIsEmojiOpen}
       />
     </div>
   );

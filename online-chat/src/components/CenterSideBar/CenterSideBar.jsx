@@ -6,13 +6,13 @@ import "./CenterSideBar.css";
 import { MessagesContext } from "../MessagesService/MessagesContext";
 import { SignalRContext } from "../SignalRConf/SignalRContext";
 import EmojiPicker from "emoji-picker-react";
-import MiniProfile from "../Profile/MiniProfile";
 
 import ChatSearchPanel from "./ChatSearchPanel";
 import { useChatSearchSignalR } from "../hooks/useChatSearchSignalR";
 
 export default function CenterSideBar({ onBack = null }) {
   const [inputText, setInputText] = useState("");
+  const [isEmojiOpen, setIsEmojiOpen] = useState(false);
 
   const isMobile = window.innerWidth < 1050;
 
@@ -103,19 +103,22 @@ export default function CenterSideBar({ onBack = null }) {
           setText={setInputText}
           startSearch={startSearch}
           stopSearch={stopSearch}
+          isEmojiOpen={isEmojiOpen}
+          setIsEmojiOpen={setIsEmojiOpen}
         />
       </div>
 
       {!isMobile && (
         <div className="CenterSideBar__RigthSide">
-          <div className="EmojiSidebar">
-            <EmojiPicker
-              onEmojiClick={handleEmojiClick}
-              height="100%"
-              previewConfig={{ showPreview: false }}
-            />
-          </div>
-          <MiniProfile />
+          {isEmojiOpen && (
+            <div className="EmojiSidebar">
+              <EmojiPicker
+                onEmojiClick={handleEmojiClick}
+                height="100%"
+                previewConfig={{ showPreview: false }}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>

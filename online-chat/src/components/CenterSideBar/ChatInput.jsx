@@ -2,7 +2,15 @@ import { useEffect, useRef, useContext } from "react";
 import { SignalRContext } from "../SignalRConf/SignalRContext";
 import { MessagesContext } from "../MessagesService/MessagesContext";
 
-export default function ChatInput({ text, setText, startSearch, stopSearch }) {
+
+export default function ChatInput({
+  text,
+  setText,
+  startSearch,
+  stopSearch,
+  isEmojiOpen,
+  setIsEmojiOpen,
+}) {
   const { activeUser, connection } = useContext(SignalRContext);
   const { editingMessage, setEditingMessage } = useContext(MessagesContext);
   const taRef = useRef(null);
@@ -58,11 +66,7 @@ export default function ChatInput({ text, setText, startSearch, stopSearch }) {
         } else if (trimmed === "/stop") {
           await stopSearch?.(chatId);
         } else {
-          await connection.invoke(
-            "SendMessage",
-            trimmed,
-            String(chatId)
-          );
+          await connection.invoke("SendMessage", trimmed, String(chatId));
         }
       }
     } finally {
@@ -100,18 +104,33 @@ export default function ChatInput({ text, setText, startSearch, stopSearch }) {
       )}
 
       <div className="ChatInput__wrapper">
-        <textarea
-          ref={taRef}
-          value={text}
-          onKeyDown={onKeyDown}
-          onChange={textChange}
-          placeholder={
-            isEditing
-              ? "Измените сообщение..."
-              : "Write a message or /googling something..."
-          }
-          className="ChatInput"
-        />
+        {/* Контейнер поля с textarea и кнопкой эмодзи внутри */}
+        <div className="ChatInput__field">
+          <textarea
+            ref={taRef}
+            value={text}
+            onKeyDown={onKeyDown}
+            onChange={textChange}
+            placeholder={
+              isEditing
+                ? "Измените сообщение..."
+                : "Write a message or /googling something..."
+            }
+            className="ChatInput"
+          />
+
+          <button
+            type="button"
+            className={`ChatInput__emoji-toggle ${
+              isEmojiOpen ? "ChatInput__emoji-toggle--active" : ""
+            }`}
+            onClick={() => setIsEmojiOpen((prev) => !prev)}
+            aria-label={isEmojiOpen ? "Спрятать эмодзи" : "Показать эмодзи"}
+          >
+            😊
+          </button>
+        </div>
+
         <button
           type="button"
           className="ChatInput__send-btn"
