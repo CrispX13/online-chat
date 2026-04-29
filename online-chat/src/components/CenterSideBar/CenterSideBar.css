@@ -1509,3 +1509,17 @@
   cursor: default;
   box-shadow: none;
 }
+
+.SearchMessage {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.SearchMessage--error {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: rgba(161, 53, 68, 0.18);
+  color: #ffd5db;
+  font-size: 14px;
+}

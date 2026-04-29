@@ -116,6 +116,9 @@ export default function Message({ info, index }) {
   const avatarSrc = `/api/profile/${info.fromUserId}/avatar`;
 
   const isSearchResult = info.messageText?.startsWith("Результаты поиска по запросу:");
+  const isSearchFailed =
+  info.messageText === "SEARCH_FAILED" ||
+  info.messageText?.startsWith("Поиск не удался");
   
   return (
     <>
@@ -146,6 +149,10 @@ export default function Message({ info, index }) {
         {isSearchResult ? (
           <div className="message__text SearchMessage">
             {renderSearchMessage(info.messageText)}
+          </div>
+        ) : isSearchFailed ? (
+          <div className="message__text SearchMessage SearchMessage--error">
+            Поиск не удался. Попробуйте изменить запрос или повторить позже.
           </div>
         ) : (
           <p className="message__text">{info.messageText}</p>
